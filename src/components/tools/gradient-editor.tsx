@@ -12,6 +12,7 @@ import { Copy, RefreshCw, PlusCircle, Trash2, Pipette } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton
 
 interface ColorStop {
   id: string;
@@ -33,6 +34,11 @@ export function GradientEditor() {
   ]);
   const [previewStyle, setPreviewStyle] = useState<React.CSSProperties>({});
   const [generatedCss, setGeneratedCss] = useState('');
+  const [isClient, setIsClient] = useState(false); // Flag for client-side rendering
+
+  useEffect(() => {
+    setIsClient(true); // Set to true once component mounts on client
+  }, []);
 
   const generateGradientCss = useCallback(() => {
     const stops = colorStops
@@ -49,17 +55,19 @@ export function GradientEditor() {
   }, [gradientType, angle, colorStops]);
 
   useEffect(() => {
-    const css = generateGradientCss();
-    setPreviewStyle({ background: css });
-    setGeneratedCss(`background-image: ${css};`);
-  }, [generateGradientCss]);
+    // This effect should only run client-side as it depends on colorStops which might be dynamic
+    if (isClient) {
+      const css = generateGradientCss();
+      setPreviewStyle({ background: css });
+      setGeneratedCss(`background-image: ${css};`);
+    }
+  }, [generateGradientCss, isClient, colorStops]); // Added colorStops to dependency array
 
   const addColorStop = () => {
     if (colorStops.length >= 5) { // Limit color stops for simplicity
         toast({ title: "Limit Reached", description: "You can add a maximum of 5 color stops.", variant: "destructive"});
         return;
     }
-    // Add new stop slightly offset from the last one, or in the middle if possible
     const lastPosition = colorStops.length > 0 ? colorStops[colorStops.length - 1].position : 0;
     const newPosition = Math.min(100, lastPosition < 90 ? Math.floor(lastPosition + (100-lastPosition)/2) : 50);
     
@@ -81,11 +89,13 @@ export function GradientEditor() {
   };
   
   const handleCopyCss = () => {
-    navigator.clipboard.writeText(generatedCss);
-    toast({
-      title: "CSS Copied!",
-      description: "Gradient CSS copied to clipboard.",
-    });
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(generatedCss);
+      toast({
+        title: "CSS Copied!",
+        description: "Gradient CSS copied to clipboard.",
+      });
+    }
   };
 
   const resetValues = () => {
@@ -100,6 +110,19 @@ export function GradientEditor() {
       description: "Gradient values reset to defaults.",
     });
   };
+
+  const ColorStopSkeleton = () => (
+    <div className="p-3 bg-background rounded-md shadow-sm border border-border/50 space-y-2">
+      <div className="flex items-center justify-between gap-3 mb-2">
+        <Skeleton className="h-9 w-12 rounded-sm" />
+        <div className="flex-1 space-y-1">
+          <Skeleton className="h-4 w-full" />
+        </div>
+        <Skeleton className="h-8 w-8 rounded-md" />
+      </div>
+      <Skeleton className="h-3 w-1/2 mx-auto" />
+    </div>
+  );
 
   return (
     <Card className="border-accent/30 shadow-lg bg-card/80 mt-8">
@@ -116,7 +139,7 @@ export function GradientEditor() {
         <div className="space-y-6">
           <div>
             <Label className="text-sm font-medium">Gradient Type</Label>
-            <RadioGroup defaultValue="linear" onValueChange={(value: 'linear' | 'radial') => setGradientType(value)} className="mt-2 flex gap-4">
+            <RadioGroup defaultValue="linear" value={gradientType} onValueChange={(value: 'linear' | 'radial') => setGradientType(value)} className="mt-2 flex gap-4">
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="linear" id="g-linear" />
                 <Label htmlFor="g-linear" className="font-normal">Linear</Label>
@@ -151,37 +174,44 @@ export function GradientEditor() {
                 </Button>
             </div>
             <div className="space-y-4 max-h-60 overflow-y-auto pr-2 rounded-md bg-muted/30 p-3 border">
-              {colorStops.map((stop, index) => (
-                <div key={stop.id} className="p-3 bg-background rounded-md shadow-sm border border-border/50">
-                  <div className="flex items-center justify-between gap-3 mb-2">
-                     <Input
-                        type="color"
-                        value={stop.color}
-                        onChange={(e) => updateColorStop(stop.id, 'color', e.target.value)}
-                        className="p-0.5 h-9 w-12 rounded-sm border-input"
-                      />
-                    <div className="flex-1">
-                        <Label htmlFor={`pos-${stop.id}`} className="text-xs font-normal sr-only">Position ({stop.position}%)</Label>
-                        <Slider
-                            id={`pos-${stop.id}`}
-                            value={[stop.position]}
-                            onValueChange={(val) => updateColorStop(stop.id, 'position', val[0])}
-                            min={0}
-                            max={100}
-                            step={1}
-                            className="[&>span]:bg-accent"
+              {!isClient ? (
+                <>
+                  <ColorStopSkeleton />
+                  <ColorStopSkeleton />
+                </>
+              ) : (
+                colorStops.map((stop) => (
+                  <div key={stop.id} className="p-3 bg-background rounded-md shadow-sm border border-border/50">
+                    <div className="flex items-center justify-between gap-3 mb-2">
+                       <Input
+                          type="color"
+                          value={stop.color}
+                          onChange={(e) => updateColorStop(stop.id, 'color', e.target.value)}
+                          className="p-0.5 h-9 w-12 rounded-sm border-input"
                         />
+                      <div className="flex-1">
+                          <Label htmlFor={`pos-${stop.id}`} className="text-xs font-normal sr-only">Position ({stop.position}%)</Label>
+                          <Slider
+                              id={`pos-${stop.id}`}
+                              value={[stop.position]}
+                              onValueChange={(val) => updateColorStop(stop.id, 'position', val[0])}
+                              min={0}
+                              max={100}
+                              step={1}
+                              className="[&>span]:bg-accent"
+                          />
+                      </div>
+                       <Button variant="ghost" size="icon" onClick={() => removeColorStop(stop.id)} className="h-8 w-8 text-destructive/70 hover:text-destructive hover:bg-destructive/10" disabled={colorStops.length <= 2}>
+                          <Trash2 className="w-4 h-4" />
+                      </Button>
                     </div>
-                     <Button variant="ghost" size="icon" onClick={() => removeColorStop(stop.id)} className="h-8 w-8 text-destructive/70 hover:text-destructive hover:bg-destructive/10" disabled={colorStops.length <= 2}>
-                        <Trash2 className="w-4 h-4" />
-                    </Button>
+                    <p className="text-xs text-muted-foreground text-center">{stop.color} at {stop.position}%</p>
                   </div>
-                  <p className="text-xs text-muted-foreground text-center">{stop.color} at {stop.position}%</p>
-                </div>
-              ))}
+                ))
+              )}
             </div>
-             {colorStops.length >= 5 && <p className="text-xs text-destructive text-center mt-1">Maximum 5 color stops.</p>}
-             {colorStops.length <= 2 && <p className="text-xs text-destructive text-center mt-1">Minimum 2 color stops.</p>}
+             {isClient && colorStops.length >= 5 && <p className="text-xs text-destructive text-center mt-1">Maximum 5 color stops.</p>}
+             {isClient && colorStops.length <= 2 && <p className="text-xs text-destructive text-center mt-1">Minimum 2 color stops.</p>}
           </div>
         </div>
 
