@@ -245,6 +245,7 @@ const tutorialsData: Tutorial[] = [
   font-weight: bold;
 }`
             }</CodeBlock>
+             <P>By combining <Code>justify-content</Code>, <Code>align-items</Code>, and <Code>align-content</Code>, you can achieve a vast array of layouts. Experiment with different values to see their effects!</P>
           </>
         ),
       },
@@ -343,6 +344,7 @@ const tutorialsData: Tutorial[] = [
 */`
             }</CodeBlock>
             <P>These are just a few examples. Flexbox is incredibly versatile and can be used for a wide range of layout tasks, from small component details to overall page structures. Experiment with these properties to get a feel for their power!</P>
+            <P>Continue exploring! Flexbox is a fundamental part of modern web design. The more you use it, the more intuitive it will become.</P>
           </>
         ),
       },
@@ -376,7 +378,6 @@ export default function TutorialPage() {
   const params = useParams();
   const router = useRouter();
   
-  // Ensure params is not null and slug is a string before using it
   const slug = params?.slug as string | undefined;
 
   const [tutorial, setTutorial] = useState<Tutorial | null>(null);
@@ -393,13 +394,9 @@ export default function TutorialPage() {
         router.push("/learn"); 
       }
     } else if (params && Object.keys(params).length > 0 && !slug) {
-      // If params exist but slug is not extracted as expected (e.g. if [slug] was not found)
-      // This case might indicate an issue with routing or params structure not matching [slug]
-      // For safety, redirect or show an error.
       router.push("/learn");
     }
-    // Only run when slug or router changes. If params is included and it's a new object each render, it could cause infinite loops.
-  }, [slug, router, params]); // Added params to dependency array as per React's rules for exhaustive-deps, carefully.
+  }, [slug, router, params]);
 
   useEffect(() => {
     const contentArea = document.getElementById("tutorial-content-area");
@@ -409,9 +406,9 @@ export default function TutorialPage() {
   }, [currentChapterIndex, slug]);
 
 
-  if (!tutorial || !slug) { // Also check if slug is available
+  if (!tutorial || !slug) {
     return (
-      <div className="flex items-center justify-center h-[calc(100vh-10rem)]">
+      <div className="flex items-center justify-center h-[calc(100vh-(var(--header-height,4rem))-var(--bottom-nav-height,5rem))]">
         <LayoutGrid className="w-12 h-12 animate-spin text-primary" />
         <p className="ml-4 text-xl text-muted-foreground">Loading Tutorial...</p>
       </div>
@@ -440,9 +437,9 @@ export default function TutorialPage() {
   const TutorialIcon = tutorial.icon;
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-[calc(100vh-var(--header-height,8rem)-5rem)] gap-0"> {/* Adjusted min-height for nav bar */}
+    <div className="flex flex-col lg:flex-row min-h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem))] gap-0">
       {/* Sidebar for Desktop / Accordion Trigger for Mobile */}
-      <aside className="lg:w-80 lg:border-r border-border bg-card lg:sticky lg:top-[var(--header-height,4rem)] lg:h-[calc(100vh-var(--header-height,4rem)-5rem)]"> {/* Adjusted sticky top and height */}
+      <aside className="lg:w-80 lg:border-r border-border bg-card lg:sticky lg:top-[var(--header-height,4rem)] lg:h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem))]">
         <div className="p-4 border-b border-border flex items-center justify-between h-16">
           <Link href="/learn" className="text-primary hover:underline flex items-center text-sm">
             <ChevronLeft className="w-4 h-4 mr-1" /> Back to Learn
@@ -511,7 +508,10 @@ export default function TutorialPage() {
 
       {/* Main Content Area */}
       <main className="flex-1 bg-background">
-         <ScrollArea id="tutorial-content-area" className="h-[calc(100vh-var(--header-height,4rem)-5rem-4rem)] lg:h-[calc(100vh-var(--header-height,4rem)-5rem)] p-4 sm:p-6 md:p-8"> {/* Adjusted for footer/nav and pagination */}
+         <ScrollArea 
+            id="tutorial-content-area" 
+            className="h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem)-var(--pagination-height,4rem))] lg:h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem))] p-3 sm:p-4 md:p-6"
+          >
           <Card className="rounded-xl shadow-lg overflow-hidden bg-card border border-border/50">
             <CardHeader className="bg-gradient-to-r from-primary/5 via-transparent to-accent/5 p-6 border-b border-border/50">
               <CardTitle className="text-2xl sm:text-3xl font-bold text-primary-dark">{currentChapter.title}</CardTitle>
@@ -524,7 +524,11 @@ export default function TutorialPage() {
             </CardContent>
           </Card>
 
-          <div className="mt-8 flex justify-between items-center sticky bottom-0 bg-background py-4 border-t border-border lg:border-t-0 lg:static lg:py-0 lg:bg-transparent">
+          {/* Sticky Pagination Bar - ensure it has a defined height for scroll area calculation */}
+          <div 
+            className="mt-8 flex justify-between items-center sticky bottom-0 bg-background py-4 border-t border-border lg:border-t-0 lg:static lg:py-0 lg:bg-transparent"
+            style={{ ['--pagination-height' as string]: '4rem' }} // Matches calculation
+          >
             <Button
               onClick={prevChapter}
               disabled={currentChapterIndex === 0}
