@@ -3,10 +3,10 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BookOpenText, Puzzle, Brain, CheckCircle, ListChecks, Zap, PlayCircle, Target, Wind, Palette, Layers3, ArrowRight, GraduationCap, Goal, Lightbulb, Navigation, GalleryVerticalEnd, PanelTopOpen, Sparkles as SparklesIcon } from "lucide-react";
+import { BookOpenText, Puzzle, Brain, CheckCircle, ListChecks, PlayCircle, Target, Wind, Palette, Layers3, ArrowRight, GraduationCap, Goal, Lightbulb, Navigation, GalleryVerticalEnd, PanelTopOpen, Sparkles as SparklesIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { useToast } from "@/hooks/use-toast";
+// import { useToast } from "@/hooks/use-toast"; // Removed as handleFeatureClick is removed
 import {
   Accordion,
   AccordionContent,
@@ -25,25 +25,25 @@ const tutorialTopics = [
 ];
 
 const exerciseTopics = [
-  { 
-    id: "style-nav", 
-    title: "Style a Navigation Bar", 
+  {
+    id: "style-nav",
+    title: "Style a Navigation Bar",
     icon: Navigation,
-    difficulty: "Easy", 
+    difficulty: "Easy",
     description: "Build a responsive navigation bar using Flexbox, a common component in web design.",
-    concepts: ["Flexbox", "Basic Styling", "Responsive"], 
+    concepts: ["Flexbox", "Basic Styling", "Responsive"],
     learningGoals: [
       "Use flex properties to align items in a row.",
       "Space items evenly in a navigation bar.",
       "Apply basic styling for links and hover effects.",
       "Make the navigation bar collapse on smaller screens (conceptual)."
-    ] 
+    ]
   },
-  { 
+  {
     id: "product-card",
-    title: "Create a Product Card", 
+    title: "Create a Product Card",
     icon: GalleryVerticalEnd,
-    difficulty: "Medium", 
+    difficulty: "Medium",
     description: "Design and implement a visually appealing product card, a staple in e-commerce UIs.",
     concepts: ["Box Model", "Typography", "Flexbox/Grid", "Images"],
     learningGoals: [
@@ -53,11 +53,11 @@ const exerciseTopics = [
       "Arrange elements within the card using Flexbox or Grid."
     ]
   },
-  { 
+  {
     id: "modal-dialog",
-    title: "Implement a Modal Dialog", 
+    title: "Implement a Modal Dialog",
     icon: PanelTopOpen,
-    difficulty: "Hard", 
+    difficulty: "Hard",
     description: "Develop a modal dialog box that appears over the main content, often used for alerts or forms.",
     concepts: ["Positioning", "Transitions", "z-index", "Accessibility (ARIA)"],
     learningGoals: [
@@ -70,15 +70,16 @@ const exerciseTopics = [
 ];
 
 export default function LearnPage() {
-  const { toast } = useToast();
+  // const { toast } = useToast(); // Removed
 
-  const handleFeatureClick = (featureName: string) => {
-    toast({
-      title: "Interactive Exercise Coming Soon!",
-      description: `The interactive environment for "${featureName}" is under development. Check back soon!`,
-      duration: 3000,
-    });
-  };
+  // Removed handleFeatureClick as it's no longer used on this page
+  // const handleFeatureClick = (featureName: string) => {
+  //   toast({
+  //     title: "Interactive Exercise Coming Soon!",
+  //     description: `The interactive environment for "${featureName}" is under development. Check back soon!`,
+  //     duration: 3000,
+  //   });
+  // };
 
   return (
     <div className="space-y-12 md:space-y-16">
@@ -118,7 +119,7 @@ export default function LearnPage() {
                     <ul className="space-y-1.5 mb-4">
                       {topic.chapters.map(chapter => (
                          <li key={chapter} className="flex items-center gap-2 text-sm">
-                           <PlayCircle className="w-4 h-4 text-primary/80 shrink-0"/> 
+                           <PlayCircle className="w-4 h-4 text-primary/80 shrink-0"/>
                            <span className="text-muted-foreground">{chapter}</span>
                          </li>
                       ))}
@@ -182,13 +183,16 @@ export default function LearnPage() {
                         </ul>
                       </div>
                     </CardContent>
-                    <CardFooter className="p-4 bg-accent/5 border-t border-accent/20">
-                      <Button 
-                        className="w-full text-sm bg-accent hover:bg-accent/90 text-accent-foreground" 
-                        onClick={() => handleFeatureClick(exercise.title)}
+                    <CardFooter className="p-4 bg-accent/5 border-t border-accent/15">
+                      <Button
+                        asChild
+                        className="w-full text-sm bg-accent hover:bg-accent/90 text-accent-foreground"
+                        // onClick prop removed to ensure Link navigation works
                       >
-                        <SparklesIcon className="mr-2 h-4 w-4"/>
-                        Start Exercise
+                        <Link href={`/learn/exercises/${exercise.id}`}>
+                          <SparklesIcon className="mr-2 h-4 w-4"/>
+                          Start Exercise
+                        </Link>
                       </Button>
                     </CardFooter>
                   </Card>
@@ -215,7 +219,7 @@ export default function LearnPage() {
           </Card>
         </div>
       </div>
-      
+
       <div className="text-center mt-12 md:mt-16 p-8 bg-gradient-to-br from-primary/5 via-background to-accent/5 rounded-3xl shadow-inner border border-border/50">
         <CheckCircle className="w-12 h-12 text-primary mx-auto mb-4 animate-bounce" />
         <h2 className="text-3xl font-semibold mb-3 text-primary-dark">Your Learning Journey Starts Here!</h2>
@@ -226,4 +230,3 @@ export default function LearnPage() {
     </div>
   );
 }
-
