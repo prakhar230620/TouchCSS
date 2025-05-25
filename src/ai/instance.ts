@@ -15,5 +15,6 @@ export const ai = genkit({
     googleAI(),
     NextJsPlugin(), // Initialize NextJsPlugin with the ai instance
   ],
-  model: 'googleai/gemini-2.0-flash',
+  model: 'googleai/gemini-1.5-flash-latest', // Updated to a standard, robust model
 });
+
