@@ -7,12 +7,19 @@ import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { BoxShadowEditor } from "@/components/tools/box-shadow-editor";
-import { GradientEditor } from "@/components/tools/gradient-editor"; // New import
+import { GradientEditor } from "@/components/tools/gradient-editor";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { useState, useEffect } from 'react';
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function BuildPage() {
   const { toast } = useToast();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleFeatureClick = (featureName: string) => {
     toast({
@@ -42,21 +49,21 @@ export default function BuildPage() {
           <div className="flex items-center gap-4 mb-3">
             <div className="p-3 bg-primary/10 rounded-xl text-primary shadow-sm"><Layers className="w-8 h-8" /></div>
             <div>
-              <CardTitle className="text-2xl font-semibold text-primary-dark">Visual CSS Editors</CardTitle>
+              <CardTitle className="text-2xl font-semibold text-primary">Visual CSS Editors</CardTitle>
               <CardDescription className="text-base text-muted-foreground">Fine-tune styles with intuitive visual controls. Perfect for shadows, gradients, transforms, and more.</CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent className="p-6 pt-0 space-y-8">
-          <BoxShadowEditor />
-          <GradientEditor /> 
+          {isClient ? <BoxShadowEditor /> : <Skeleton className="h-[360px] w-full rounded-lg" />}
+          {isClient ? <GradientEditor /> : <Skeleton className="h-[500px] w-full rounded-lg mt-8" />}
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
             <Card className="rounded-xl shadow-lg hover:shadow-secondary/20 transition-shadow duration-300 bg-card/80 border border-secondary/30">
                 <CardHeader className="p-4">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-secondary/10 rounded-lg text-secondary-dark shadow-sm"><Maximize className="w-6 h-6"/></div>
-                        <CardTitle className="text-lg font-semibold text-secondary-darker">Transform Editor</CardTitle>
+                        <div className="p-2 bg-secondary/10 rounded-lg text-secondary shadow-sm"><Maximize className="w-6 h-6"/></div>
+                        <CardTitle className="text-lg font-semibold text-secondary-foreground">Transform Editor</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
@@ -70,8 +77,8 @@ export default function BuildPage() {
             <Card className="rounded-xl shadow-lg hover:shadow-secondary/20 transition-shadow duration-300 bg-card/80 border border-secondary/30">
                 <CardHeader className="p-4">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-secondary/10 rounded-lg text-secondary-dark shadow-sm"><Type className="w-6 h-6"/></div>
-                        <CardTitle className="text-lg font-semibold text-secondary-darker">Typography Controls</CardTitle>
+                        <div className="p-2 bg-secondary/10 rounded-lg text-secondary shadow-sm"><Type className="w-6 h-6"/></div>
+                        <CardTitle className="text-lg font-semibold text-secondary-foreground">Typography Controls</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
@@ -85,8 +92,8 @@ export default function BuildPage() {
             <Card className="rounded-xl shadow-lg hover:shadow-secondary/20 transition-shadow duration-300 bg-card/80 border border-secondary/30 sm:col-span-2">
                 <CardHeader className="p-4">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-secondary/10 rounded-lg text-secondary-dark shadow-sm"><CircleDot className="w-6 h-6"/></div>
-                        <CardTitle className="text-lg font-semibold text-secondary-darker">Filter Effects Editor</CardTitle>
+                        <div className="p-2 bg-secondary/10 rounded-lg text-secondary shadow-sm"><CircleDot className="w-6 h-6"/></div>
+                        <CardTitle className="text-lg font-semibold text-secondary-foreground">Filter Effects Editor</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
@@ -107,9 +114,9 @@ export default function BuildPage() {
         <Card className="rounded-2xl shadow-xl hover:shadow-secondary/15 transition-shadow duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-card via-card to-secondary/5">
           <CardHeader className="p-6">
             <div className="flex items-center gap-4 mb-3">
-               <div className="p-3 bg-secondary/10 rounded-xl text-secondary-dark shadow-sm"><Rows className="w-8 h-8" /></div>
+               <div className="p-3 bg-secondary/10 rounded-xl text-secondary shadow-sm"><Rows className="w-8 h-8" /></div>
               <div>
-                <CardTitle className="text-2xl font-semibold text-secondary-darker">Live Component Builder</CardTitle>
+                <CardTitle className="text-2xl font-semibold text-secondary-foreground">Live Component Builder</CardTitle>
                 <CardDescription className="text-base text-muted-foreground">Assemble UI components and customize their styles visually. Export HTML + CSS.</CardDescription>
               </div>
             </div>
@@ -125,9 +132,9 @@ export default function BuildPage() {
               </div>
             </div>
             <div className="flex justify-around items-center text-xs text-muted-foreground pt-2 gap-4">
-                <span className="flex items-center gap-1.5 p-2 bg-muted/50 rounded-md"><Settings className="w-4 h-4 text-secondary-dark"/>Configure</span>
-                <span className="flex items-center gap-1.5 p-2 bg-muted/50 rounded-md"><Eye className="w-4 h-4 text-secondary-dark"/>Live Preview</span>
-                <span className="flex items-center gap-1.5 p-2 bg-muted/50 rounded-md"><Code className="w-4 h-4 text-secondary-dark"/>Export Code</span>
+                <span className="flex items-center gap-1.5 p-2 bg-muted/50 rounded-md"><Settings className="w-4 h-4 text-secondary"/>Configure</span>
+                <span className="flex items-center gap-1.5 p-2 bg-muted/50 rounded-md"><Eye className="w-4 h-4 text-secondary"/>Live Preview</span>
+                <span className="flex items-center gap-1.5 p-2 bg-muted/50 rounded-md"><Code className="w-4 h-4 text-secondary"/>Export Code</span>
             </div>
             <Button className="w-full mt-3 text-base py-3 bg-secondary hover:bg-secondary/90 text-secondary-foreground" onClick={() => handleFeatureClick("Component Builder")}>
               <Paintbrush className="mr-2"/> Start Building Components
@@ -138,9 +145,9 @@ export default function BuildPage() {
         <Card className="rounded-2xl shadow-xl hover:shadow-accent/15 transition-shadow duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-card via-card to-accent/5">
           <CardHeader className="p-6">
             <div className="flex items-center gap-4 mb-3">
-              <div className="p-3 bg-accent/10 rounded-xl text-accent-dark shadow-sm"><Palette className="w-8 h-8" /></div>
+              <div className="p-3 bg-accent/10 rounded-xl text-accent shadow-sm"><Palette className="w-8 h-8" /></div>
               <div>
-                <CardTitle className="text-2xl font-semibold text-accent-darker">Global Style Theme Generator</CardTitle>
+                <CardTitle className="text-2xl font-semibold text-accent-foreground">Global Style Theme Generator</CardTitle>
                 <CardDescription className="text-base text-muted-foreground">Create custom design systems: pick fonts, define color palettes, set spacing, and generate theme files.</CardDescription>
               </div>
             </div>
@@ -150,8 +157,8 @@ export default function BuildPage() {
               <div className="flex items-center justify-between">
                 <Label className="text-sm font-medium">Primary Color:</Label>
                 <div className="flex items-center gap-2">
-                   <Input type="color" defaultValue="#7C3AED" className="h-8 w-10 p-0.5 rounded-md border-input" disabled />
-                   <span className="text-xs font-mono p-1.5 bg-muted rounded-md">#7C3AED</span>
+                   <Input type="color" defaultValue="#EC4899" className="h-8 w-10 p-0.5 rounded-md border-input" disabled />
+                   <span className="text-xs font-mono p-1.5 bg-muted rounded-md">#EC4899</span>
                 </div>
               </div>
               <div className="flex items-center justify-between">
@@ -174,9 +181,9 @@ export default function BuildPage() {
       <Card className="rounded-2xl shadow-xl hover:shadow-destructive/10 transition-shadow duration-300 transform hover:-translate-y-1 bg-gradient-to-tr from-card via-card to-destructive/5">
           <CardHeader className="p-6">
             <div className="flex items-center gap-4 mb-3">
-              <div className="p-3 bg-destructive/5 rounded-xl text-destructive-dark shadow-sm"><SquareTerminal className="w-8 h-8" /></div>
+              <div className="p-3 bg-destructive/5 rounded-xl text-destructive shadow-sm"><SquareTerminal className="w-8 h-8" /></div>
               <div>
-                <CardTitle className="text-2xl font-semibold text-destructive-darker">CSS Experiment Sandbox</CardTitle>
+                <CardTitle className="text-2xl font-semibold text-destructive-foreground">CSS Experiment Sandbox</CardTitle>
                 <CardDescription className="text-base text-muted-foreground">A blank canvas for free play. Drag UI elements, apply styles visually, and test ideas quickly without constraints.</CardDescription>
               </div>
             </div>
@@ -195,7 +202,7 @@ export default function BuildPage() {
                     <Button variant="ghost" size="icon" disabled><Eye className="w-4 h-4"/></Button>
                 </div>
              </div>
-            <Button variant="ghost" className="w-full mt-3 text-base py-3 text-destructive-darker hover:bg-destructive/10 hover:text-destructive-darker" onClick={() => handleFeatureClick("Experiment Mode")}>
+            <Button variant="ghost" className="w-full mt-3 text-base py-3 text-destructive hover:text-destructive/20 hover:text-destructive" onClick={() => handleFeatureClick("Experiment Mode")}>
               Enter Sandbox Mode
             </Button>
           </CardContent>
@@ -204,7 +211,7 @@ export default function BuildPage() {
 
       <div className="text-center mt-12 md:mt-16 p-8 bg-gradient-to-br from-primary/5 via-background to-accent/5 rounded-3xl shadow-inner border border-border/30">
         <Sparkles className="w-12 h-12 text-primary mx-auto mb-4 animate-bounce" />
-        <h2 className="text-3xl font-semibold mb-3 text-primary-dark">Unleash Your Creativity!</h2>
+        <h2 className="text-3xl font-semibold mb-3 text-primary">Unleash Your Creativity!</h2>
         <p className="text-muted-foreground max-w-lg mx-auto text-lg">
           Our workshop is buzzing as we craft these powerful building tools. Get ready to design and innovate like never before!
         </p>
