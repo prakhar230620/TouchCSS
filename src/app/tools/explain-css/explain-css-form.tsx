@@ -8,7 +8,7 @@ import { Form, FormControl, FormDescription as ShadcnFormDescription, FormField,
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Wand2, AlertTriangle, CheckCircle2, Sparkles } from "lucide-react";
+import { Loader2, Wand2, AlertTriangle, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -54,13 +54,20 @@ export function ExplainCssForm() {
       });
 
       if (!response.ok) {
-        let errorData;
+        let errorDetail = `HTTP error! status: ${response.status}`;
         try {
-          errorData = await response.json();
+          const errorData = await response.json();
+          errorDetail = errorData.message || errorData.error || errorDetail;
         } catch (e) {
-          throw new Error(response.statusText || `HTTP error! status: ${response.status}`);
+          // If response is not JSON, use the status text or the generic message
+          errorDetail = response.statusText || errorDetail;
+          console.error("AI CSS Explainer: Failed to parse error response as JSON. Status:", response.status, "Response Text:", await response.text().catch(() => "Could not read response text."));
         }
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        // For common server errors, provide a hint about API key or server issues.
+        if (response.status === 500 || response.status === 401 || response.status === 403) {
+            console.error(`AI CSS Explainer: Server error ${response.status}. This might be due to an issue with the Genkit flow execution, the AI model, or API key configuration.`);
+        }
+        throw new Error(errorDetail);
       }
 
       const result = await response.json() as ExplainCssOutput;
@@ -85,8 +92,9 @@ export function ExplainCssForm() {
             Error Generating Explanation
           </div>
         ),
-        description: errorMessage,
+        description: "Could not get explanation. " + errorMessage + (errorMessage.includes("HTTP error") ? " Please ensure the server is running and accessible." : " Check console for details."),
       });
+      console.error("AI CSS Explainer Error:", err);
     } finally {
       setIsLoading(false);
     }
