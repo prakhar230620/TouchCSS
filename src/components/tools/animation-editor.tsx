@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Copy, RefreshCw, Film, Play, Square } from 'lucide-react';
+import { Copy, RefreshCw, Film, Play, Square, Trash2 } from 'lucide-react'; // Added Trash2
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -247,5 +247,3 @@ export function AnimationEditor() {
     </Card>
   );
 }
-
-    
