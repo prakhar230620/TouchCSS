@@ -10,9 +10,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ChevronLeft, Eye, EyeOff, Sparkles, Lightbulb, Copy, CheckCircle, Target as TargetIcon, Info, Loader2, Code2Icon } from "lucide-react";
+import { ChevronLeft, Eye, EyeOff, Sparkles, Lightbulb, Copy, CheckCircle, Target as TargetIcon, Info, Loader2, Code2Icon, AlertTriangle as AlertTriangleIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge"; // Added import for Badge
 
 // Types
 interface Exercise {
@@ -31,7 +32,7 @@ interface Exercise {
   };
   solutionCss: string;
   hints?: string[];
-  icon: React.ElementType; // Added for consistency with learn page
+  icon: React.ElementType;
 }
 
 interface ExerciseData {
@@ -260,7 +261,7 @@ const exerciseData: ExerciseData = {
 `,
     targetOutput: {
       desktopImage: "https://placehold.co/500x300.png",
-      desktopHint: "Modal dialog overlaying page content, centered",
+      desktopHint: "Modal dialog overlaying page content centered",
     },
     solutionCss: `
 /* For demonstration, we'll assume the modal is always visible. JS would toggle a class. */
@@ -410,22 +411,28 @@ const ImageContainer: React.FC<{ src: string; alt: string; width: number; height
 export default function ExercisePage() {
   const router = useRouter();
   const params = useParams();
+  const { toast } = useToast();
 
   const [currentExercise, setCurrentExercise] = useState<Exercise | null | undefined>(undefined); // undefined: loading, null: not found
   const [showSolution, setShowSolution] = useState(false);
-  const [showHints, setShowHints] = useState(false);
-  const { toast } = useToast();
+  // const [showHints, setShowHints] = useState(false); // Kept for future use
+
+  const slug = params?.id;
+  const exerciseId = Array.isArray(slug) ? slug[0] : slug;
 
   useEffect(() => {
-    if (params.id) {
-      const exerciseId = Array.isArray(params.id) ? params.id[0] : (params.id as string);
-      const foundExercise = exerciseData[exerciseId];
+    if (exerciseId) {
+      const foundExercise = exerciseData[exerciseId as string];
       setCurrentExercise(foundExercise || null);
+    } else if (params && Object.keys(params).length > 0 && !exerciseId) {
+       // If params exist but id is somehow not derived, consider it not found or redirect.
+       setCurrentExercise(null);
     } else {
-      // params.id might not be available on initial render
+      // Initial render before params are available, or if no ID in URL
       setCurrentExercise(undefined);
     }
-  }, [params.id]);
+  }, [exerciseId, params]);
+
 
   if (currentExercise === undefined) {
     return (
@@ -439,7 +446,7 @@ export default function ExercisePage() {
   if (currentExercise === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-var(--header-height,8rem)-var(--bottom-nav-height,5rem))] p-4 text-center">
-        <AlertTriangle className="w-12 h-12 text-destructive mb-4" />
+        <AlertTriangleIcon className="w-12 h-12 text-destructive mb-4" />
         <p className="text-xl font-semibold text-destructive">Exercise Not Found</p>
         <p className="text-muted-foreground mt-2">The exercise you are looking for does not exist or could not be loaded.</p>
         <Button asChild variant="link" className="mt-6 text-primary">
@@ -463,10 +470,10 @@ export default function ExercisePage() {
     return (
       <Badge
         className={cn(
-          "text-xs font-semibold",
-          difficulty === "Easy" && "border-green-400 bg-green-500/10 text-green-700 dark:text-green-400",
-          difficulty === "Medium" && "border-yellow-400 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
-          difficulty === "Hard" && "border-red-400 bg-red-500/10 text-red-700 dark:text-red-400"
+          "text-xs font-semibold px-2.5 py-1",
+          difficulty === "Easy" && "border-green-400/50 bg-green-500/10 text-green-700 dark:text-green-400",
+          difficulty === "Medium" && "border-yellow-400/50 bg-yellow-500/10 text-yellow-700 dark:text-yellow-400",
+          difficulty === "Hard" && "border-red-400/50 bg-red-500/10 text-red-700 dark:text-red-400"
         )}
         variant="outline"
       >
@@ -485,7 +492,7 @@ export default function ExercisePage() {
         </Link>
       </Button>
 
-      <Card className="overflow-hidden shadow-xl rounded-2xl border-primary/20">
+      <Card className="overflow-hidden shadow-xl rounded-2xl border-primary/20 bg-card">
         <CardHeader className="bg-primary/5 p-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
@@ -608,4 +615,4 @@ export default function ExercisePage() {
 }
 
 
-    
+      
