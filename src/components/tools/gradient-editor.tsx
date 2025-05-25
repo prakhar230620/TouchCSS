@@ -19,13 +19,17 @@ interface ColorStop {
   position: number; // 0-100
 }
 
+// Define fixed IDs for initial stops
+const INITIAL_STOP_1_ID = 'initial-color-stop-1';
+const INITIAL_STOP_2_ID = 'initial-color-stop-2';
+
 export function GradientEditor() {
   const { toast } = useToast();
   const [gradientType, setGradientType] = useState<'linear' | 'radial'>('linear');
   const [angle, setAngle] = useState(90); // For linear gradient
   const [colorStops, setColorStops] = useState<ColorStop[]>([
-    { id: crypto.randomUUID(), color: '#7C3AED', position: 0 }, // Primary
-    { id: crypto.randomUUID(), color: '#F59E0B', position: 100 }, // Accent
+    { id: INITIAL_STOP_1_ID, color: '#7C3AED', position: 0 }, // Primary
+    { id: INITIAL_STOP_2_ID, color: '#F59E0B', position: 100 }, // Accent
   ]);
   const [previewStyle, setPreviewStyle] = useState<React.CSSProperties>({});
   const [generatedCss, setGeneratedCss] = useState('');
@@ -88,8 +92,8 @@ export function GradientEditor() {
     setGradientType('linear');
     setAngle(90);
     setColorStops([
-        { id: crypto.randomUUID(), color: '#7C3AED', position: 0 },
-        { id: crypto.randomUUID(), color: '#F59E0B', position: 100 },
+        { id: INITIAL_STOP_1_ID, color: '#7C3AED', position: 0 },
+        { id: INITIAL_STOP_2_ID, color: '#F59E0B', position: 100 },
     ]);
     toast({
       title: "Editor Reset",
