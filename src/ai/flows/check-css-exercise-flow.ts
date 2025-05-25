@@ -82,7 +82,7 @@ Structure your response strictly according to the 'CheckCssExerciseOutputSchema'
 
 const checkCssExerciseFlow = ai.defineFlow(
   {
-    name: 'checkCssExerciseFlow',
+    name: 'checkCssExerciseFlow', // Ensured name is exact
     inputSchema: CheckCssExerciseInputSchema,
     outputSchema: CheckCssExerciseOutputSchema,
   },

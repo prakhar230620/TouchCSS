@@ -33,7 +33,8 @@ interface Exercise {
   };
   solutionCss: string;
   hints?: string[];
-  icon: React.ElementType; // Added for consistency if used
+  icon: React.ElementType;
+  targetDescription: string; // Added for AI prompt
 }
 
 interface ExerciseData {
@@ -45,7 +46,7 @@ const exerciseData: ExerciseData = {
   "style-nav": {
     id: "style-nav",
     title: "Style a Navigation Bar",
-    icon: Code2Icon, // Placeholder, ideally import specific icon
+    icon: Code2Icon,
     difficulty: "Easy",
     description: "Build a responsive navigation bar using Flexbox, a common component in web design.",
     concepts: ["Flexbox", "Basic Styling", "Responsive"],
@@ -71,6 +72,7 @@ const exerciseData: ExerciseData = {
       mobileImage: "https://placehold.co/300x200.png",
       mobileHint: "Mobile navigation bar conceptually stacked or with a hamburger menu icon."
     },
+    targetDescription: "A responsive navigation bar where the logo is on the left, and navigation links (Home, About, Services, Contact) are on the right. Links should have hover effects. On smaller screens, the layout might stack or change.",
     solutionCss: `
 .navbar {
   display: flex;
@@ -138,7 +140,7 @@ const exerciseData: ExerciseData = {
   "product-card": {
     id: "product-card",
     title: "Create a Product Card",
-    icon: Code2Icon, // Placeholder
+    icon: Code2Icon,
     difficulty: "Medium",
     description: "Design and implement a visually appealing product card, a staple in e-commerce UIs.",
     concepts: ["Box Model", "Typography", "Flexbox/Grid", "Images"],
@@ -161,6 +163,7 @@ const exerciseData: ExerciseData = {
       desktopImage: "https://placehold.co/350x450.png",
       desktopHint: "Styled product card with an image, title, price, description, and an 'Add to Cart' button. Should have clear visual hierarchy and good spacing.",
     },
+    targetDescription: "A well-styled product card that includes an image at the top, followed by a product title, price, a short description, and an 'Add to Cart' button at the bottom. The card should have padding, a border, and a subtle box shadow. Text should be styled for hierarchy.",
     solutionCss: `
 .product-card {
   width: 300px;
@@ -237,7 +240,7 @@ const exerciseData: ExerciseData = {
   "modal-dialog": {
     id: "modal-dialog",
     title: "Implement a Modal Dialog",
-    icon: Code2Icon, // Placeholder
+    icon: Code2Icon,
     difficulty: "Hard",
     description: "Develop a modal dialog box that appears over the main content, often used for alerts or forms.",
     concepts: ["Positioning", "Transitions", "z-index", "Accessibility (ARIA basics)"],
@@ -264,6 +267,7 @@ const exerciseData: ExerciseData = {
       desktopImage: "https://placehold.co/500x300.png",
       desktopHint: "A modal dialog box centered on the screen, with a semi-transparent overlay behind it. The modal contains a title, description, and action buttons.",
     },
+    targetDescription: "A centered modal dialog box that overlays the page content. It should have a semi-transparent backdrop. The modal itself contains a title, a paragraph of text, a close button (typically '×') in the top-right, and a primary action button.",
     solutionCss: `
 /* For demonstration, we'll assume the modal is always visible. JS would toggle a class. */
 .modal-overlay {
@@ -421,7 +425,7 @@ const AiFeedbackDisplay: React.FC<{ feedback: CheckCssExerciseOutput }> = ({ fee
         <CardTitle className="text-xl flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-primary"/> AI Feedback
         </CardTitle>
-        {feedback.score && (
+        {feedback.score !== undefined && ( // Check if score is defined
           <CardDescription>
             Overall Score: <span className="font-semibold">{feedback.score}/100</span>
           </CardDescription>
@@ -484,14 +488,11 @@ export default function ExercisePage() {
     if (exerciseId) {
       const foundExercise = exerciseData[exerciseId as string];
       setCurrentExercise(foundExercise || null);
-      // Reset state when exercise changes
       setUserCss("");
       setAiFeedback(null);
       setShowSolution(false);
     } else if (params && Object.keys(params).length > 0 && !exerciseId) {
        setCurrentExercise(null);
-    } else {
-      setCurrentExercise(undefined);
     }
   }, [exerciseId, params]);
 
@@ -522,14 +523,14 @@ export default function ExercisePage() {
 
   const handleSubmitAttempt = async () => {
     setIsCheckingSolution(true);
-    setAiFeedback(null); // Clear previous feedback
+    setAiFeedback(null); 
     
     const input: CheckCssExerciseInput = {
         userCss: userCss,
         initialHtml: exercise.initialHtml,
         solutionCss: exercise.solutionCss,
         learningGoals: exercise.learningGoals,
-        targetDescription: exercise.targetOutput.desktopHint, // Using desktopHint as target description
+        targetDescription: exercise.targetDescription, 
         exerciseTitle: exercise.title
     };
 
@@ -553,18 +554,20 @@ export default function ExercisePage() {
         });
 
     } catch (err) {
+        console.error("AI Check API Call Failed:", err); // Added console.error for detailed logging
         const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred during AI check.";
         toast({
             variant: "destructive",
             title: "AI Check Failed",
             description: errorMessage,
         });
-         setAiFeedback({ // Provide a fallback error structure for display
+         setAiFeedback({ 
             overallAssessment: "Needs Improvement",
             detailedFeedback: `An error occurred while checking your solution: ${errorMessage}`,
             metLearningGoals: [],
-            missedOrPartialGoals: [],
+            missedOrPartialGoals: exercise.learningGoals, // Populate with original goals
             suggestionsForImprovement: ["Please try submitting again later."],
+            score: 0
         });
     } finally {
         setIsCheckingSolution(false);
