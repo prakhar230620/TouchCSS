@@ -408,7 +408,7 @@ export default function AdditionalFeaturesPage() {
       </header>
 
       <Tabs defaultValue="hover-effects" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 gap-2 mb-6">
+        <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 gap-2 mb-6">
           <TabsTrigger value="hover-effects"><MousePointerClick className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Hover Effects</TabsTrigger>
           <TabsTrigger value="transitions"><Move className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Transitions</TabsTrigger>
           <TabsTrigger value="animations"><Film className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Animations</TabsTrigger>
