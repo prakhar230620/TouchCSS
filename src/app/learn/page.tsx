@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { cn } from "@/lib/utils";
 
 
 const tutorialTopics = [
@@ -225,3 +226,4 @@ export default function LearnPage() {
     </div>
   );
 }
+
