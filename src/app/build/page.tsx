@@ -2,12 +2,16 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DraftingCompass, Rows, Palette, SquareTerminal, Layers, SlidersHorizontal, Type, Code, Eye, Zap, Settings, Move, Maximize, CircleDot, Sparkles, Pipette, Bot, Paintbrush, MountainSnow, Shapes, Blend } from "lucide-react"; // Added MountainSnow, Shapes, Blend
+import { DraftingCompass, Rows, Palette, SquareTerminal, Layers, SlidersHorizontal, Type, Code, Eye, Zap, Settings, Move, Maximize, CircleDot, Sparkles, Pipette, Bot, Paintbrush, MountainSnow, Shapes, Blend, Film, Scaling, Wand2, CaseSensitive } from "lucide-react";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { BoxShadowEditor } from "@/components/tools/box-shadow-editor";
 import { GradientEditor } from "@/components/tools/gradient-editor";
+import { TransformEditor } from "@/components/tools/transform-editor";
+import { TypographyEditor } from "@/components/tools/typography-editor";
+import { FilterEffectsEditor } from "@/components/tools/filter-effects-editor";
+import { AnimationEditor } from "@/components/tools/animation-editor";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from 'react';
@@ -58,63 +62,17 @@ export default function BuildPage() {
           {isClient ? <BoxShadowEditor /> : <Skeleton className="h-[390px] w-full rounded-lg" />}
           {isClient ? <GradientEditor /> : <Skeleton className="h-[500px] w-full rounded-lg mt-8" />}
           
-          {isClient ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm pt-4">
-              <Card className="rounded-xl shadow-lg hover:shadow-secondary/20 transition-shadow duration-300 bg-card/80 border border-secondary/30">
-                  <CardHeader className="p-4">
-                      <div className="flex items-center gap-3">
-                          <div className="p-2 bg-secondary-light rounded-lg text-secondary-dark shadow-sm"><Shapes className="w-6 h-6"/></div>
-                          <CardTitle className="text-lg font-semibold text-secondary-darker">Transform Editor</CardTitle>
-                      </div>
-                  </CardHeader>
-                  <CardContent className="p-4 pt-0">
-                      <p className="text-xs text-muted-foreground mb-3">Adjust 2D & 3D transforms like translate, rotate, scale, and skew with live previews.</p>
-                      <Button variant="outline" className="w-full text-xs" onClick={() => handleFeatureClick("Transform Editor")}>
-                          Open Editor (Soon)
-                      </Button>
-                  </CardContent>
-              </Card>
-
-              <Card className="rounded-xl shadow-lg hover:shadow-secondary/20 transition-shadow duration-300 bg-card/80 border border-secondary/30">
-                  <CardHeader className="p-4">
-                      <div className="flex items-center gap-3">
-                          <div className="p-2 bg-secondary-light rounded-lg text-secondary-dark shadow-sm"><Type className="w-6 h-6"/></div>
-                          <CardTitle className="text-lg font-semibold text-secondary-darker">Typography Controls</CardTitle>
-                      </div>
-                  </CardHeader>
-                  <CardContent className="p-4 pt-0">
-                      <p className="text-xs text-muted-foreground mb-3">Manage font families, sizes, weights, letter spacing, and line heights visually.</p>
-                      <Button variant="outline" className="w-full text-xs" onClick={() => handleFeatureClick("Typography Editor")}>
-                          Open Editor (Soon)
-                      </Button>
-                  </CardContent>
-              </Card>
-
-              <Card className="rounded-xl shadow-lg hover:shadow-secondary/20 transition-shadow duration-300 bg-card/80 border border-secondary/30 sm:col-span-2">
-                  <CardHeader className="p-4">
-                      <div className="flex items-center gap-3">
-                          <div className="p-2 bg-secondary-light rounded-lg text-secondary-dark shadow-sm"><Blend className="w-6 h-6"/></div>
-                          <CardTitle className="text-lg font-semibold text-secondary-darker">Filter Effects Editor</CardTitle>
-                      </div>
-                  </CardHeader>
-                  <CardContent className="p-4 pt-0">
-                      <p className="text-xs text-muted-foreground mb-3">Apply and adjust CSS filters like blur, brightness, contrast, sepia, hue-rotate, and more.</p>
-                      <Button variant="outline" className="w-full text-xs" onClick={() => handleFeatureClick("Filter Effects Editor")}>
-                          Open Editor (Soon)
-                      </Button>
-                  </CardContent>
-              </Card>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm pt-4">
-              <Skeleton className="h-[150px] w-full rounded-xl" />
-              <Skeleton className="h-[150px] w-full rounded-xl" />
-              <Skeleton className="h-[150px] w-full rounded-xl sm:col-span-2" />
-            </div>
-          )}
+          {/* New Editors placeholders */}
+          <div className="mt-12 space-y-10">
+            <h3 className="text-xl font-semibold text-primary-dark border-b pb-2 mb-6">Advanced Visual Editors</h3>
+            {isClient ? <TransformEditor /> : <Skeleton className="h-[420px] w-full rounded-lg" />}
+            {isClient ? <TypographyEditor /> : <Skeleton className="h-[420px] w-full rounded-lg mt-8" />}
+            {isClient ? <FilterEffectsEditor /> : <Skeleton className="h-[420px] w-full rounded-lg mt-8" />}
+            {isClient ? <AnimationEditor /> : <Skeleton className="h-[420px] w-full rounded-lg mt-8" />}
+          </div>
         </CardContent>
         <CardFooter className="p-4 bg-primary/5 rounded-b-2xl mt-2">
-            <p className="text-xs text-muted-foreground text-center w-full">More advanced visual editors are on the way!</p>
+            <p className="text-xs text-muted-foreground text-center w-full">More features and refinements are on the way!</p>
         </CardFooter>
       </Card>
 
@@ -173,8 +131,8 @@ export default function BuildPage() {
                 <div className="flex items-center justify-between">
                   <Label className="text-sm font-medium">Primary Color:</Label>
                   <div className="flex items-center gap-2">
-                     <Input type="color" defaultValue="#EC4899" className="h-8 w-10 p-0.5 rounded-md border-input" disabled />
-                     <span className="text-xs font-mono p-1.5 bg-muted rounded-md">#EC4899</span>
+                     <Input type="color" defaultValue="#0D9488" className="h-8 w-10 p-0.5 rounded-md border-input" disabled />
+                     <span className="text-xs font-mono p-1.5 bg-muted rounded-md">#0D9488</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -183,7 +141,7 @@ export default function BuildPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <Label className="text-sm font-medium">Border Radius:</Label>
-                  <Button variant="outline" size="sm" className="text-xs" disabled>0.75rem</Button>
+                  <Button variant="outline" size="sm" className="text-xs" disabled>0.8rem</Button>
                 </div>
                 <Image src="https://placehold.co/400x200.png" alt="Theme Preview Placeholder" width={400} height={200} className="rounded-lg border-2 border-border mt-3 shadow-sm" data-ai-hint="website color theme palette"/>
               </div>
@@ -217,7 +175,7 @@ export default function BuildPage() {
                       <Button variant="outline" size="sm" className="text-xs" disabled><Layers className="mr-1.5 w-3.5 h-3.5"/> Elements</Button>
                       <Button variant="outline" size="sm" className="text-xs" disabled><SlidersHorizontal className="mr-1.5 w-3.5 h-3.5"/> Styles</Button>
                   </div>
-                  <MountainSnow className="w-16 h-16 text-muted-foreground/70 my-4"/> {/* Changed Icon */}
+                  <Sparkles className="w-16 h-16 text-destructive/70 my-4"/> 
                   <p className="text-muted-foreground font-medium">Your Creative CSS Playground</p>
                   <p className="text-xs text-muted-foreground mt-1">Drag, drop, style, and innovate.</p>
                    <div className="absolute bottom-4 right-4 flex gap-2">
@@ -250,3 +208,4 @@ export default function BuildPage() {
 }
     
 
+    
