@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import type { CanvasComponent } from './live-component-builder';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Code, ClipboardCopy, CheckCircle } from 'lucide-react';
+import { Code, ClipboardCopy, CheckCircle, Code2 } from 'lucide-react'; // Added Code2
 import { useToast } from '@/hooks/use-toast';
 import {
   Dialog,
@@ -109,5 +109,3 @@ export function CodeExporter({ components }: CodeExporterProps) {
     </Dialog>
   );
 }
-
-    
