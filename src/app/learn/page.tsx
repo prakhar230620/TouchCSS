@@ -2,7 +2,7 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpenText, Puzzle, Brain, CheckCircle, ListChecks, Zap, PlayCircle, Target, Wind, Palette, Layers3D } from "lucide-react";
+import { BookOpenText, Puzzle, Brain, CheckCircle, ListChecks, Zap, PlayCircle, Target, Wind, Palette, Layers3 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
@@ -15,7 +15,7 @@ import {
 
 
 const tutorialTopics = [
-  { id: "flexbox", title: "Understanding Flexbox Layouts", icon: Layers3D, description: "Master one-dimensional layouts for flexible UIs.", chapters: ["Introduction to Flexbox", "Flex Containers & Items", "Aligning & Justifying Content", "Practical Examples"] },
+  { id: "flexbox", title: "Understanding Flexbox Layouts", icon: Layers3, description: "Master one-dimensional layouts for flexible UIs.", chapters: ["Introduction to Flexbox", "Flex Containers & Items", "Aligning & Justifying Content", "Practical Examples"] },
   { id: "grid", title: "Mastering CSS Grid Systems", icon: ListChecks, description: "Learn two-dimensional layouts for complex designs.", chapters: ["Grid Basics", "Defining Grid Areas", "Responsive Grids", "Grid vs. Flexbox"] },
   { id: "animations", title: "CSS Animations & Transitions", icon: Wind, description: "Bring your UIs to life with smooth animations.", chapters: ["Keyframes & Animation Properties", "Transition Effects", "Performance Considerations", "Creative Use Cases"] },
   { id: "responsive", title: "Responsive Design Principles", icon: Target, description: "Build websites that adapt to any screen size.", chapters: ["Media Queries", "Fluid Grids & Images", "Mobile-First Approach", "Viewport Configuration"] },
@@ -122,7 +122,7 @@ export default function LearnPage() {
               <CardDescription className="text-base">Get any CSS snippet explained in plain English by our AI assistant.</CardDescription>
             </CardHeader>
             <CardContent className="text-center p-6 pt-0">
-              <Image src="https://placehold.co/300x150.png?text=AI+Explainer" alt="AI Explainer Illustration" width={300} height={150} className="rounded-lg mx-auto mb-4 border shadow-sm" data-ai-hint="AI interface abstract" />
+              <Image src="https://placehold.co/300x150.png" alt="AI Explainer Illustration" width={300} height={150} className="rounded-lg mx-auto mb-4 border shadow-sm" data-ai-hint="AI interface abstract" />
               <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-base">
                 <Link href="/tools/explain-css">Try the AI Explainer <Zap className="ml-2 h-5 w-5"/></Link>
               </Button>
