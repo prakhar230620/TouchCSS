@@ -10,10 +10,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ChevronLeft, Eye, EyeOff, Sparkles, Lightbulb, Copy, CheckCircle, Target as TargetIcon, Info, Loader2, Code2Icon, AlertTriangle as AlertTriangleIcon } from "lucide-react";
+import { ChevronLeft, Eye, EyeOff, Sparkles, Lightbulb, Copy, CheckCircle, Target as TargetIcon, Info, Loader2, Code2Icon, AlertTriangle as AlertTriangleIcon, CheckSquare, XSquare, HelpCircleIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge"; // Added import for Badge
+import { Badge } from "@/components/ui/badge";
+import type { CheckCssExerciseInput, CheckCssExerciseOutput } from "@/ai/flows/check-css-exercise-flow";
 
 // Types
 interface Exercise {
@@ -32,7 +33,7 @@ interface Exercise {
   };
   solutionCss: string;
   hints?: string[];
-  icon: React.ElementType;
+  icon: React.ElementType; // Added for consistency if used
 }
 
 interface ExerciseData {
@@ -52,7 +53,7 @@ const exerciseData: ExerciseData = {
       "Use flex properties to align items in a row.",
       "Space items evenly in a navigation bar.",
       "Apply basic styling for links and hover effects.",
-      "Make the navigation bar collapse on smaller screens (conceptual)."
+      "Understand how to conceptually make the navigation bar responsive (media query structure, even if not fully implemented in this step)."
     ],
     initialHtml: `
 <nav class="navbar">
@@ -66,9 +67,9 @@ const exerciseData: ExerciseData = {
 </nav>`,
     targetOutput: {
       desktopImage: "https://placehold.co/600x100.png",
-      desktopHint: "Desktop navigation bar styled",
+      desktopHint: "Desktop navigation bar styled with logo on left, links on right, even spacing, and hover effects.",
       mobileImage: "https://placehold.co/300x200.png",
-      mobileHint: "Mobile navigation bar stacked or with hamburger"
+      mobileHint: "Mobile navigation bar conceptually stacked or with a hamburger menu icon."
     },
     solutionCss: `
 .navbar {
@@ -158,7 +159,7 @@ const exerciseData: ExerciseData = {
 </div>`,
     targetOutput: {
       desktopImage: "https://placehold.co/350x450.png",
-      desktopHint: "Styled product card with image, title, price, description and button",
+      desktopHint: "Styled product card with an image, title, price, description, and an 'Add to Cart' button. Should have clear visual hierarchy and good spacing.",
     },
     solutionCss: `
 .product-card {
@@ -243,9 +244,9 @@ const exerciseData: ExerciseData = {
     learningGoals: [
       "Use `position: fixed` or `position: absolute` to overlay content.",
       "Center the modal on the screen.",
-      "Create smooth show/hide transitions (conceptual, JS often handles state).",
+      "Create a semi-transparent backdrop for the modal.",
       "Manage stacking order with `z-index`.",
-      "Understand basic accessibility considerations like `role=\"dialog\"`."
+      "Understand basic accessibility considerations like `role=\"dialog\"` (already in HTML)."
     ],
     initialHtml: `
 <div class="modal-overlay">
@@ -261,7 +262,7 @@ const exerciseData: ExerciseData = {
 `,
     targetOutput: {
       desktopImage: "https://placehold.co/500x300.png",
-      desktopHint: "Modal dialog overlaying page content centered",
+      desktopHint: "A modal dialog box centered on the screen, with a semi-transparent overlay behind it. The modal contains a title, description, and action buttons.",
     },
     solutionCss: `
 /* For demonstration, we'll assume the modal is always visible. JS would toggle a class. */
@@ -399,7 +400,7 @@ const CodeBlock: React.FC<{ language: string; children: string; className?: stri
   );
 };
 
-// Helper: ImageContainer - Basic version for exercises
+// Helper: ImageContainer
 const ImageContainer: React.FC<{ src: string; alt: string; width: number; height: number; "data-ai-hint": string; caption?: string; className?: string }> = ({ src, alt, width, height, "data-ai-hint": aiHint, caption, className }) => (
   <figure className={cn("my-4 flex flex-col items-center", className)}>
     <Image src={src} alt={alt} width={width} height={height} className="rounded-lg border-2 border-border shadow-md object-contain" data-ai-hint={aiHint} />
@@ -407,15 +408,74 @@ const ImageContainer: React.FC<{ src: string; alt: string; width: number; height
   </figure>
 );
 
+// Component to display AI Feedback
+const AiFeedbackDisplay: React.FC<{ feedback: CheckCssExerciseOutput }> = ({ feedback }) => {
+  let assessmentColor = "text-foreground";
+  if (feedback.overallAssessment === "Correct" || feedback.overallAssessment === "Good Alternative") assessmentColor = "text-green-600 dark:text-green-500";
+  else if (feedback.overallAssessment === "Partially Correct") assessmentColor = "text-yellow-600 dark:text-yellow-500";
+  else if (feedback.overallAssessment === "Needs Improvement") assessmentColor = "text-red-600 dark:text-red-500";
+
+  return (
+    <Card className="mt-6 border-primary/30 shadow-lg">
+      <CardHeader className="bg-primary/5">
+        <CardTitle className="text-xl flex items-center gap-2">
+          <Sparkles className="w-5 h-5 text-primary"/> AI Feedback
+        </CardTitle>
+        {feedback.score && (
+          <CardDescription>
+            Overall Score: <span className="font-semibold">{feedback.score}/100</span>
+          </CardDescription>
+        )}
+      </CardHeader>
+      <CardContent className="p-6 space-y-4">
+        <div>
+          <h4 className="font-semibold text-md mb-1">Assessment: <span className={cn("font-bold", assessmentColor)}>{feedback.overallAssessment}</span></h4>
+          <p className="text-sm text-muted-foreground whitespace-pre-wrap">{feedback.detailedFeedback}</p>
+        </div>
+
+        {feedback.metLearningGoals.length > 0 && (
+          <div>
+            <h4 className="font-semibold text-md mb-1 flex items-center gap-1.5"><CheckSquare className="w-4 h-4 text-green-600"/>Met Learning Goals:</h4>
+            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+              {feedback.metLearningGoals.map((goal, i) => <li key={`met-${i}`}>{goal}</li>)}
+            </ul>
+          </div>
+        )}
+
+        {feedback.missedOrPartialGoals.length > 0 && (
+          <div>
+            <h4 className="font-semibold text-md mb-1 flex items-center gap-1.5"><XSquare className="w-4 h-4 text-red-600"/>Goals to Review:</h4>
+            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+              {feedback.missedOrPartialGoals.map((goal, i) => <li key={`missed-${i}`}>{goal}</li>)}
+            </ul>
+          </div>
+        )}
+        
+        {feedback.suggestionsForImprovement.length > 0 && (
+           <div>
+            <h4 className="font-semibold text-md mb-1 flex items-center gap-1.5"><Lightbulb className="w-4 h-4 text-yellow-500"/>Suggestions:</h4>
+            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+              {feedback.suggestionsForImprovement.map((suggestion, i) => <li key={`suggestion-${i}`}>{suggestion}</li>)}
+            </ul>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
 
 export default function ExercisePage() {
   const router = useRouter();
   const params = useParams();
   const { toast } = useToast();
 
-  const [currentExercise, setCurrentExercise] = useState<Exercise | null | undefined>(undefined); // undefined: loading, null: not found
+  const [currentExercise, setCurrentExercise] = useState<Exercise | null | undefined>(undefined);
   const [showSolution, setShowSolution] = useState(false);
-  // const [showHints, setShowHints] = useState(false); // Kept for future use
+  const [userCss, setUserCss] = useState("");
+  const [isCheckingSolution, setIsCheckingSolution] = useState(false);
+  const [aiFeedback, setAiFeedback] = useState<CheckCssExerciseOutput | null>(null);
+
 
   const slug = params?.id;
   const exerciseId = Array.isArray(slug) ? slug[0] : slug;
@@ -424,11 +484,13 @@ export default function ExercisePage() {
     if (exerciseId) {
       const foundExercise = exerciseData[exerciseId as string];
       setCurrentExercise(foundExercise || null);
+      // Reset state when exercise changes
+      setUserCss("");
+      setAiFeedback(null);
+      setShowSolution(false);
     } else if (params && Object.keys(params).length > 0 && !exerciseId) {
-       // If params exist but id is somehow not derived, consider it not found or redirect.
        setCurrentExercise(null);
     } else {
-      // Initial render before params are available, or if no ID in URL
       setCurrentExercise(undefined);
     }
   }, [exerciseId, params]);
@@ -456,15 +518,58 @@ export default function ExercisePage() {
     );
   }
 
-  const exercise = currentExercise; // For convenience
+  const exercise = currentExercise;
 
-  const handleSubmitAttempt = () => {
-    toast({
-        title: "Submission Received (Conceptual)",
-        description: "Live checking and feedback features are coming soon!",
-        variant: "default"
-    });
-  }
+  const handleSubmitAttempt = async () => {
+    setIsCheckingSolution(true);
+    setAiFeedback(null); // Clear previous feedback
+    
+    const input: CheckCssExerciseInput = {
+        userCss: userCss,
+        initialHtml: exercise.initialHtml,
+        solutionCss: exercise.solutionCss,
+        learningGoals: exercise.learningGoals,
+        targetDescription: exercise.targetOutput.desktopHint, // Using desktopHint as target description
+        exerciseTitle: exercise.title
+    };
+
+    try {
+        const response = await fetch('/api/flows/checkCssExerciseFlow', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(input)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
+            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json() as CheckCssExerciseOutput;
+        setAiFeedback(result);
+        toast({
+            title: "AI Analysis Complete!",
+            description: "Check the feedback below.",
+        });
+
+    } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred during AI check.";
+        toast({
+            variant: "destructive",
+            title: "AI Check Failed",
+            description: errorMessage,
+        });
+         setAiFeedback({ // Provide a fallback error structure for display
+            overallAssessment: "Needs Improvement",
+            detailedFeedback: `An error occurred while checking your solution: ${errorMessage}`,
+            metLearningGoals: [],
+            missedOrPartialGoals: [],
+            suggestionsForImprovement: ["Please try submitting again later."],
+        });
+    } finally {
+        setIsCheckingSolution(false);
+    }
+  };
 
   const DifficultyBadge: React.FC<{ difficulty: "Easy" | "Medium" | "Hard" }> = ({ difficulty }) => {
     return (
@@ -561,12 +666,29 @@ export default function ExercisePage() {
                 placeholder="Write your CSS solution here..."
                 className="min-h-[200px] font-mono text-sm bg-background/70 border-input focus:border-primary"
                 aria-label="CSS Solution Input"
+                value={userCss}
+                onChange={(e) => setUserCss(e.target.value)}
               />
-              <Button onClick={handleSubmitAttempt} className="mt-3 w-full sm:w-auto bg-primary hover:bg-primary/90">
-                <Sparkles className="mr-2 h-4 w-4"/>Submit My Attempt
+              <Button onClick={handleSubmitAttempt} className="mt-3 w-full sm:w-auto bg-primary hover:bg-primary/90" disabled={isCheckingSolution || userCss.trim().length < 10}>
+                {isCheckingSolution ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin"/>Checking...</>
+                ) : (
+                    <><Sparkles className="mr-2 h-4 w-4"/>Check My Attempt with AI</>
+                )}
               </Button>
-               <p className="text-xs text-muted-foreground mt-2">Note: Live checking is coming soon. Use this space for practice.</p>
             </section>
+
+            {isCheckingSolution && (
+                <div className="flex items-center justify-center p-4 bg-muted/50 rounded-md">
+                    <Loader2 className="w-6 h-6 animate-spin text-primary mr-3" />
+                    <p className="text-muted-foreground">AI is analyzing your solution...</p>
+                </div>
+            )}
+
+            {aiFeedback && !isCheckingSolution && (
+                <AiFeedbackDisplay feedback={aiFeedback} />
+            )}
+
 
             {exercise.hints && exercise.hints.length > 0 && (
                  <Accordion type="single" collapsible className="w-full">
@@ -606,13 +728,10 @@ export default function ExercisePage() {
         <CardFooter className="p-4 bg-secondary/20 rounded-b-2xl">
             <p className="text-xs text-muted-foreground flex items-center gap-1.5">
                 <Info className="w-3.5 h-3.5"/>
-                Practice regularly to master these concepts!
+                Practice regularly to master these concepts! Use the AI check for guidance.
             </p>
         </CardFooter>
       </Card>
     </div>
   );
 }
-
-
-      
