@@ -6,6 +6,7 @@ import { BottomNavigation } from "@/components/layout/bottom-navigation";
 import { Toaster } from "@/components/ui/toaster";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
+import OfflinePage from "./offline";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,12 +72,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         <SidebarProvider defaultOpen={false}> {/* Sidebar can be integrated later if needed */}
-          <div className="relative flex flex-col min-h-screen">
-            <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 sm:pb-22"> {/* Adjusted padding-bottom */}
+          <div className="relative flex flex-col min-h-screen">            <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 sm:pb-22"> {/* Adjusted padding-bottom */}
               {children}
-            </main>            <BottomNavigation />
+            </main>
+            <BottomNavigation />
             <Toaster />
             <PWAInstallPrompt />
+            <OfflinePage />
           </div>
         </SidebarProvider>
       </body>

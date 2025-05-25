@@ -3,9 +3,33 @@
   "short_name": "TouchCSS",
   "description": "Visually build CSS and learn interactively.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "any",
   "background_color": "#ECEFF1",
   "theme_color": "#3F51B5",
+  "categories": ["education", "development", "productivity"],
+  "screenshots": [
+    {
+      "src": "/icons/splash-1242x2208.png",
+      "sizes": "1242x2208",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "TouchCSS Studio on mobile"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Visual Editors",
+      "url": "/build",
+      "description": "Open visual CSS editors"
+    },
+    {
+      "name": "Learn CSS",
+      "url": "/learn",
+      "description": "Start learning CSS"
+    }
+  ],
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
