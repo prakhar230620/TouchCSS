@@ -14,6 +14,6 @@ export const ai = genkit({
     googleAI(), // This will use GOOGLE_API_KEY from .env
     NextJsPlugin(),
   ],
-  logLevel: 'debug', // Recommended for development
-  enableTracingAndMetrics: true, // Recommended for development
+  // logLevel: 'debug', // Removed for simplification
+  // enableTracingAndMetrics: true, // Removed for simplification
 });

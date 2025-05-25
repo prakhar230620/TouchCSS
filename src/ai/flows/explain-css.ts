@@ -25,7 +25,7 @@ const explainCssPrompt = ai.definePrompt({
   name: 'explainCssPrompt',
   input: {schema: ExplainCssInputSchema},
   output: {schema: ExplainCssOutputSchema},
-  model: 'googleai/gemini-1.5-flash-latest', // Specify the model
+  model: 'googleai/gemini-1.5-flash-latest', // Explicitly define the model here
   prompt: `You are an expert CSS programming tutor. Your goal is to explain the provided CSS code snippet in plain, easy-to-understand English.
 Be concise but thorough. Address the following for each rule or significant part of the CSS:
 1.  What element(s) does the selector target?
@@ -41,8 +41,6 @@ CSS code to explain:
 \`\`\`
 
 Provide your explanation below:`,
-  // Optional: Configure safety settings to be less restrictive if needed for code examples.
-  // Refer to Genkit documentation for details on safety settings.
   config: {
     safetySettings: [
       { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
@@ -60,15 +58,15 @@ export const explainCssFlow = ai.defineFlow(
     outputSchema: ExplainCssOutputSchema,
   },
   async (input: ExplainCssInput) => {
-    console.log('explainCssFlow invoked with input:', input.cssCode); // Server-side log
+    console.log('explainCssFlow invoked on server with input code length:', input.cssCode.length);
 
     const {output} = await explainCssPrompt(input);
 
-    if (!output) {
-      console.error('AI failed to provide an explanation. Input was:', input.cssCode);
-      throw new Error("The AI failed to provide an explanation for the CSS code. The model might have returned an empty response or an error.");
+    if (!output || !output.explanation) {
+      console.error('AI failed to provide an explanation. Input CSS was:', input.cssCode.substring(0, 100) + "...");
+      throw new Error("The AI failed to provide an explanation for the CSS code. The model might have returned an empty or invalid response.");
     }
-    console.log('AI explanation generated:', output.explanation.substring(0,100) + "...");
+    console.log('AI explanation generated, first 100 chars:', output.explanation.substring(0,100) + "...");
     return output;
   }
 );
