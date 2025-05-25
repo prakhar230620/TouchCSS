@@ -12,7 +12,7 @@ import { ChevronLeft, ChevronRight, LayoutGrid, Layers3, ListChecks, Wind, Targe
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton"; // Added import
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface TutorialChapter {
   id: string;
@@ -28,7 +28,7 @@ interface Tutorial {
   chapters: TutorialChapter[];
 }
 
-// Helper component for code blocks
+// Helper components for rich content
 const CodeBlock: React.FC<{ language: string; children: string; className?: string }> = ({ language, children, className }) => {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
@@ -82,6 +82,7 @@ const Tip: React.FC<{ children: ReactNode; className?: string }> = ({children, c
   </div>
 );
 
+// Interactive Flex Container for demos
 const InteractiveFlexContainer: React.FC<{
   containerProps: React.CSSProperties;
   items: { style?: React.CSSProperties; text: string }[];
@@ -827,7 +828,7 @@ export default function TutorialPage() {
                 id="tutorial-content-area" 
                 className="flex-grow" // Takes up available space
             >
-              <Card className="rounded-none lg:rounded-xl shadow-none lg:shadow-lg overflow-visible bg-card border-0 lg:border border-border/50 m-0 lg:m-2">
+              <Card className="rounded-none lg:rounded-xl shadow-none lg:shadow-lg overflow-hidden bg-card border-0 lg:border border-border/50 m-0 lg:m-2">
                 <CardHeader className="bg-gradient-to-r from-primary/5 via-transparent to-accent/5 p-4 sm:p-6 border-b border-border/50">
                   <CardTitle className="text-2xl sm:text-3xl font-bold text-primary-dark">{currentChapter.title}</CardTitle>
                   <CardDescription className="text-muted-foreground mt-1.5">
