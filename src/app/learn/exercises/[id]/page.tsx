@@ -10,11 +10,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ChevronLeft, Eye, EyeOff, Sparkles, Lightbulb, Copy, CheckCircle, Target as TargetIcon, Info, Loader2, Code2Icon, AlertTriangle as AlertTriangleIcon, CheckSquare, XSquare, HelpCircleIcon } from "lucide-react";
+import { ChevronLeft, Eye, EyeOff, Sparkles, Lightbulb, Copy, CheckCircle, Target as TargetIcon, Info, Loader2, Code2Icon, AlertTriangle as AlertTriangleIcon, CheckSquare, XSquare, HelpCircleIcon, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import type { CheckCssExerciseInput, CheckCssExerciseOutput } from "@/ai/flows/check-css-exercise-flow";
 
 // Types
 interface Exercise {
@@ -34,8 +33,15 @@ interface Exercise {
   solutionCss: string;
   hints?: string[];
   icon: React.ElementType;
-  targetDescription: string; // Added for AI prompt
+  targetDescription: string; 
 }
+
+interface CustomFeedback {
+  assessment: "Correct" | "Partially Correct" | "Needs Improvement" | "Good Effort" | "Not Attempted";
+  feedbackPoints: string[];
+  score: number; // Score from 0 to 100
+}
+
 
 interface ExerciseData {
   [key: string]: Exercise;
@@ -412,54 +418,36 @@ const ImageContainer: React.FC<{ src: string; alt: string; width: number; height
   </figure>
 );
 
-// Component to display AI Feedback
-const AiFeedbackDisplay: React.FC<{ feedback: CheckCssExerciseOutput }> = ({ feedback }) => {
+// Component to display Custom Feedback
+const FeedbackDisplay: React.FC<{ feedback: CustomFeedback }> = ({ feedback }) => {
   let assessmentColor = "text-foreground";
-  if (feedback.overallAssessment === "Correct" || feedback.overallAssessment === "Good Alternative") assessmentColor = "text-green-600 dark:text-green-500";
-  else if (feedback.overallAssessment === "Partially Correct") assessmentColor = "text-yellow-600 dark:text-yellow-500";
-  else if (feedback.overallAssessment === "Needs Improvement") assessmentColor = "text-red-600 dark:text-red-500";
+  if (feedback.assessment === "Correct") assessmentColor = "text-green-600 dark:text-green-500";
+  else if (feedback.assessment === "Partially Correct" || feedback.assessment === "Good Effort") assessmentColor = "text-yellow-600 dark:text-yellow-500";
+  else if (feedback.assessment === "Needs Improvement" || feedback.assessment === "Not Attempted") assessmentColor = "text-red-600 dark:text-red-500";
 
   return (
     <Card className="mt-6 border-primary/30 shadow-lg">
       <CardHeader className="bg-primary/5">
         <CardTitle className="text-xl flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-primary"/> AI Feedback
+          <Zap className="w-5 h-5 text-primary"/> Solution Feedback
         </CardTitle>
-        {feedback.score !== undefined && ( // Check if score is defined
-          <CardDescription>
-            Overall Score: <span className="font-semibold">{feedback.score}/100</span>
+         <CardDescription>
+            Score: <span className="font-semibold">{feedback.score}/100</span>
           </CardDescription>
-        )}
       </CardHeader>
       <CardContent className="p-6 space-y-4">
         <div>
-          <h4 className="font-semibold text-md mb-1">Assessment: <span className={cn("font-bold", assessmentColor)}>{feedback.overallAssessment}</span></h4>
-          <p className="text-sm text-muted-foreground whitespace-pre-wrap">{feedback.detailedFeedback}</p>
+          <h4 className="font-semibold text-md mb-1">Assessment: <span className={cn("font-bold", assessmentColor)}>{feedback.assessment}</span></h4>
         </div>
 
-        {feedback.metLearningGoals.length > 0 && (
+        {feedback.feedbackPoints.length > 0 && (
           <div>
-            <h4 className="font-semibold text-md mb-1 flex items-center gap-1.5"><CheckSquare className="w-4 h-4 text-green-600"/>Met Learning Goals:</h4>
+            <h4 className="font-semibold text-md mb-1 flex items-center gap-1.5">
+              {feedback.score > 70 ? <CheckSquare className="w-4 h-4 text-green-600"/> : <Lightbulb className="w-4 h-4 text-yellow-500"/>}
+              Key Points:
+            </h4>
             <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-              {feedback.metLearningGoals.map((goal, i) => <li key={`met-${i}`}>{goal}</li>)}
-            </ul>
-          </div>
-        )}
-
-        {feedback.missedOrPartialGoals.length > 0 && (
-          <div>
-            <h4 className="font-semibold text-md mb-1 flex items-center gap-1.5"><XSquare className="w-4 h-4 text-red-600"/>Goals to Review:</h4>
-            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-              {feedback.missedOrPartialGoals.map((goal, i) => <li key={`missed-${i}`}>{goal}</li>)}
-            </ul>
-          </div>
-        )}
-        
-        {feedback.suggestionsForImprovement.length > 0 && (
-           <div>
-            <h4 className="font-semibold text-md mb-1 flex items-center gap-1.5"><Lightbulb className="w-4 h-4 text-yellow-500"/>Suggestions:</h4>
-            <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-              {feedback.suggestionsForImprovement.map((suggestion, i) => <li key={`suggestion-${i}`}>{suggestion}</li>)}
+              {feedback.feedbackPoints.map((point, i) => <li key={`feedback-${i}`}>{point}</li>)}
             </ul>
           </div>
         )}
@@ -467,6 +455,106 @@ const AiFeedbackDisplay: React.FC<{ feedback: CheckCssExerciseOutput }> = ({ fee
     </Card>
   );
 };
+
+// Simple rule-based checker
+function evaluateUserSolution(userCss: string, exercise: Exercise): CustomFeedback {
+  const feedbackPoints: string[] = [];
+  let score = 0;
+  const maxScore = 100;
+  const normalizedUserCss = userCss.toLowerCase().replace(/\s+/g, ' ');
+  const normalizedSolutionCss = exercise.solutionCss.toLowerCase().replace(/\s+/g, ' ');
+
+  if (normalizedUserCss.trim().length < 10) {
+    return {
+      assessment: "Not Attempted",
+      feedbackPoints: ["Your CSS solution appears to be too short or empty. Please write some CSS!"],
+      score: 0,
+    };
+  }
+
+  // Check 1: Basic length and effort (10 points)
+  if (normalizedUserCss.length > 20) {
+    score += 10;
+    feedbackPoints.push("Good effort! You've written a reasonable amount of CSS.");
+  } else {
+    feedbackPoints.push("Consider adding more CSS to address the exercise requirements.");
+  }
+
+  // Check 2: Presence of key selectors from initial HTML (30 points)
+  // This is a very naive check. A real parser would be needed for accuracy.
+  const htmlSelectors = (exercise.initialHtml.match(/class="([^"]+)"/g) || [])
+    .map(c => `.${c.slice(7, -1).split(' ')[0]}`) // Get first class if multiple
+    .concat((exercise.initialHtml.match(/<([a-zA-Z0-9]+)/g) || []).map(tag => tag.slice(1))); // Get tags
+
+  let foundSelectors = 0;
+  const uniqueHtmlSelectors = [...new Set(htmlSelectors.filter(s => s.length > 1 && s !== '.navbar ul li a'))]; // Filter out generic ones for this example
+
+  uniqueHtmlSelectors.forEach(selector => {
+    if (normalizedUserCss.includes(selector.toLowerCase())) {
+      foundSelectors++;
+      feedbackPoints.push(`Styling for '${selector}' detected.`);
+    } else {
+      feedbackPoints.push(`Consider adding styles for '${selector}'.`);
+    }
+  });
+  if (uniqueHtmlSelectors.length > 0) {
+     score += Math.min(30, Math.round((foundSelectors / uniqueHtmlSelectors.length) * 30));
+  }
+
+
+  // Check 3: Check for specific learning goals (e.g., flexbox for nav exercise) (40 points)
+  let goalsMet = 0;
+  if (exercise.id === "style-nav") {
+    if (normalizedUserCss.includes("display: flex")) { goalsMet++; feedbackPoints.push("Used 'display: flex' - Great for layout!"); score += 10; }
+    if (normalizedUserCss.includes("justify-content")) { goalsMet++; feedbackPoints.push("Used 'justify-content' for alignment."); score += 10;}
+    if (normalizedUserCss.includes("align-items")) { goalsMet++; feedbackPoints.push("Used 'align-items' for cross-axis alignment."); score += 10;}
+    if (normalizedUserCss.includes(":hover")) { goalsMet++; feedbackPoints.push("Hover effects implemented."); score += 10;}
+  } else if (exercise.id === "product-card") {
+    if (normalizedUserCss.includes("border:")) { goalsMet++; feedbackPoints.push("Card border detected."); score += 10; }
+    if (normalizedUserCss.includes("padding:")) { goalsMet++; feedbackPoints.push("Padding applied for spacing."); score += 10;}
+    if (normalizedUserCss.includes("box-shadow:")) { goalsMet++; feedbackPoints.push("Box shadow adds depth!"); score += 10;}
+    if (normalizedUserCss.includes("button")) { goalsMet++; feedbackPoints.push("Button styling found."); score += 10;}
+  } else if (exercise.id === "modal-dialog") {
+     if (normalizedUserCss.includes("position: fixed") || normalizedUserCss.includes("position: absolute")) { goalsMet++; feedbackPoints.push("Correct positioning for overlay/modal detected."); score += 10;}
+     if (normalizedUserCss.includes("z-index")) { goalsMet++; feedbackPoints.push("Used 'z-index' for stacking order."); score += 10;}
+     if (normalizedUserCss.includes("background-color: rgba")) { goalsMet++; feedbackPoints.push("Transparent backdrop likely implemented."); score += 10;}
+     if (normalizedUserCss.includes(".close-button")) { goalsMet++; feedbackPoints.push("Close button styling found."); score += 10;}
+  }
+  // Ensure score does not exceed this section's max
+  score = Math.min(score, 10 + (uniqueHtmlSelectors.length > 0 ? 30 : 0) + 40);
+
+
+  // Check 4: Compare overall structure or length to solution (very rough) (20 points)
+  const lengthRatio = normalizedUserCss.length / (normalizedSolutionCss.length || 1);
+  if (lengthRatio > 0.5 && lengthRatio < 2.0) { // Arbitrary range
+    score += 10;
+    feedbackPoints.push("Solution length is comparable to the model solution.");
+  }
+  if (normalizedUserCss.includes("@media")) {
+    score += 10;
+    feedbackPoints.push("Media query found for responsiveness!");
+  }
+  score = Math.min(score, maxScore); // Cap score at 100
+
+  let assessment: CustomFeedback["assessment"] = "Needs Improvement";
+  if (score >= 90) assessment = "Correct";
+  else if (score >= 70) assessment = "Partially Correct";
+  else if (score >= 40) assessment = "Good Effort";
+
+  if (feedbackPoints.length === 0) {
+      feedbackPoints.push("No specific feedback points, try to match the target output closely.");
+  }
+  if (score < 70 && exercise.hints && exercise.hints.length > 0) {
+      feedbackPoints.push(`Hint: ${exercise.hints[0]}`); // Add one hint
+  }
+
+
+  return {
+    assessment,
+    feedbackPoints,
+    score,
+  };
+}
 
 
 export default function ExercisePage() {
@@ -477,8 +565,7 @@ export default function ExercisePage() {
   const [currentExercise, setCurrentExercise] = useState<Exercise | null | undefined>(undefined);
   const [showSolution, setShowSolution] = useState(false);
   const [userCss, setUserCss] = useState("");
-  const [isCheckingSolution, setIsCheckingSolution] = useState(false);
-  const [aiFeedback, setAiFeedback] = useState<CheckCssExerciseOutput | null>(null);
+  const [customFeedback, setCustomFeedback] = useState<CustomFeedback | null>(null);
 
 
   const slug = params?.id;
@@ -489,7 +576,7 @@ export default function ExercisePage() {
       const foundExercise = exerciseData[exerciseId as string];
       setCurrentExercise(foundExercise || null);
       setUserCss("");
-      setAiFeedback(null);
+      setCustomFeedback(null); // Reset feedback when exercise changes
       setShowSolution(false);
     } else if (params && Object.keys(params).length > 0 && !exerciseId) {
        setCurrentExercise(null);
@@ -521,57 +608,14 @@ export default function ExercisePage() {
 
   const exercise = currentExercise;
 
-  const handleSubmitAttempt = async () => {
-    setIsCheckingSolution(true);
-    setAiFeedback(null); 
-    
-    const input: CheckCssExerciseInput = {
-        userCss: userCss,
-        initialHtml: exercise.initialHtml,
-        solutionCss: exercise.solutionCss,
-        learningGoals: exercise.learningGoals,
-        targetDescription: exercise.targetDescription, 
-        exerciseTitle: exercise.title
-    };
-
-    try {
-        const response = await fetch('/api/flows/checkCssExerciseFlow', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(input)
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json() as CheckCssExerciseOutput;
-        setAiFeedback(result);
-        toast({
-            title: "AI Analysis Complete!",
-            description: "Check the feedback below.",
-        });
-
-    } catch (err) {
-        console.error("AI Check API Call Failed:", err); // Added console.error for detailed logging
-        const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred during AI check.";
-        toast({
-            variant: "destructive",
-            title: "AI Check Failed",
-            description: errorMessage,
-        });
-         setAiFeedback({ 
-            overallAssessment: "Needs Improvement",
-            detailedFeedback: `An error occurred while checking your solution: ${errorMessage}`,
-            metLearningGoals: [],
-            missedOrPartialGoals: exercise.learningGoals, // Populate with original goals
-            suggestionsForImprovement: ["Please try submitting again later."],
-            score: 0
-        });
-    } finally {
-        setIsCheckingSolution(false);
-    }
+  const handleCheckSolution = () => {
+    if (!currentExercise) return;
+    const feedback = evaluateUserSolution(userCss, currentExercise);
+    setCustomFeedback(feedback);
+    toast({
+        title: "Solution Checked!",
+        description: `Your score: ${feedback.score}/100. See feedback below.`,
+    });
   };
 
   const DifficultyBadge: React.FC<{ difficulty: "Easy" | "Medium" | "Hard" }> = ({ difficulty }) => {
@@ -672,24 +716,13 @@ export default function ExercisePage() {
                 value={userCss}
                 onChange={(e) => setUserCss(e.target.value)}
               />
-              <Button onClick={handleSubmitAttempt} className="mt-3 w-full sm:w-auto bg-primary hover:bg-primary/90" disabled={isCheckingSolution || userCss.trim().length < 10}>
-                {isCheckingSolution ? (
-                    <><Loader2 className="mr-2 h-4 w-4 animate-spin"/>Checking...</>
-                ) : (
-                    <><Sparkles className="mr-2 h-4 w-4"/>Check My Attempt with AI</>
-                )}
+              <Button onClick={handleCheckSolution} className="mt-3 w-full sm:w-auto bg-primary hover:bg-primary/90" disabled={userCss.trim().length < 10}>
+                <Zap className="mr-2 h-4 w-4"/>Check My Solution
               </Button>
             </section>
 
-            {isCheckingSolution && (
-                <div className="flex items-center justify-center p-4 bg-muted/50 rounded-md">
-                    <Loader2 className="w-6 h-6 animate-spin text-primary mr-3" />
-                    <p className="text-muted-foreground">AI is analyzing your solution...</p>
-                </div>
-            )}
-
-            {aiFeedback && !isCheckingSolution && (
-                <AiFeedbackDisplay feedback={aiFeedback} />
+            {customFeedback && (
+                <FeedbackDisplay feedback={customFeedback} />
             )}
 
 
@@ -731,7 +764,7 @@ export default function ExercisePage() {
         <CardFooter className="p-4 bg-secondary/20 rounded-b-2xl">
             <p className="text-xs text-muted-foreground flex items-center gap-1.5">
                 <Info className="w-3.5 h-3.5"/>
-                Practice regularly to master these concepts! Use the AI check for guidance.
+                Practice regularly to master these concepts! Use the checker for guidance.
             </p>
         </CardFooter>
       </Card>
