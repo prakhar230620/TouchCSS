@@ -183,7 +183,7 @@ const tutorialsData: Tutorial[] = [
             
             <H3><Code>justify-content</Code> (Main Axis Alignment)</H3>
             <P>This property aligns flex items along the main axis of the current line of the flex container. The main axis is determined by <Code>flex-direction</Code>.</P>
-            <ImageContainer src="https://placehold.co/600x250.png" alt="justify-content examples" width={600} height={250} data-ai-hint="justify content" caption="Examples of justify-content: flex-start, center, space-between." />
+            <ImageContainer src="https://placehold.co/600x350.png" alt="justify-content examples" width={600} height={350} data-ai-hint="justify content flexbox" caption="Examples of justify-content: flex-start, center, space-between, space-around, space-evenly." />
             <UL>
               <LI><Code>flex-start</Code> (default): Items are packed toward the start of the main axis.</LI>
               <LI><Code>flex-end</Code>: Items are packed toward the end of the main axis.</LI>
@@ -195,7 +195,7 @@ const tutorialsData: Tutorial[] = [
 
             <H3><Code>align-items</Code> (Cross Axis Alignment - Single Line)</H3>
             <P>This property aligns flex items along the cross axis of the current line. The cross axis is perpendicular to the main axis.</P>
-            <ImageContainer src="https://placehold.co/600x250.png" alt="align-items examples" width={600} height={250} data-ai-hint="align items" caption="Examples of align-items: flex-start, center, stretch."/>
+            <ImageContainer src="https://placehold.co/600x300.png" alt="align-items examples" width={600} height={300} data-ai-hint="align items flexbox" caption="Examples of align-items: flex-start, center, stretch, baseline."/>
             <UL>
               <LI><Code>stretch</Code> (default): Items stretch to fill the container's cross-axis size (respecting min/max-width/height).</LI>
               <LI><Code>flex-start</Code>: Items are packed toward the start of the cross axis.</LI>
@@ -206,7 +206,7 @@ const tutorialsData: Tutorial[] = [
 
             <H3><Code>align-content</Code> (Cross Axis Alignment - Multiple Lines)</H3>
             <P>This property aligns a flex container's lines within when there is extra space in the cross-axis, similar to how <Code>justify-content</Code> aligns individual items within the main-axis. <Strong>This property only takes effect on multi-line flexible containers</Strong> (where <Code>flex-wrap: wrap;</Code> or <Code>flex-wrap: wrap-reverse;</Code> is set and there are multiple lines of items).</P>
-            <ImageContainer src="https://placehold.co/500x300.png" alt="align-content example" width={500} height={300} data-ai-hint="align content" caption="align-content distributes space between multiple lines of flex items."/>
+            <ImageContainer src="https://placehold.co/500x350.png" alt="align-content example" width={500} height={350} data-ai-hint="align content flexbox" caption="align-content distributes space between multiple lines of flex items."/>
             <UL>
                 <LI><Code>stretch</Code> (default): Lines stretch to take up the remaining space.</LI>
                 <LI><Code>flex-start</Code>: Lines packed to the start of the container.</LI>
@@ -235,14 +235,16 @@ const tutorialsData: Tutorial[] = [
 
 .item {
   width: 80px; /* Example width */
-  height: 80px; /* Example height */
+  /* Height can be different for items to show alignment */
+  padding: 10px;
   background-color: hsl(var(--primary) / 0.2); /* Lighter primary */
   border: 1px solid hsl(var(--primary));
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* Center text within items */
+  justify-content: center; /* Center text within items */
   color: hsl(var(--primary-foreground));
   font-weight: bold;
+  text-align: center;
 }`
             }</CodeBlock>
              <P>By combining <Code>justify-content</Code>, <Code>align-items</Code>, and <Code>align-content</Code>, you can achieve a vast array of layouts. Experiment with different values to see their effects!</P>
@@ -258,6 +260,7 @@ const tutorialsData: Tutorial[] = [
             
             <H3>Example 1: Perfectly Centering an Item</H3>
             <P>To perfectly center an item (both horizontally and vertically) within its parent container is a classic layout challenge made simple with Flexbox.</P>
+            <ImageContainer src="https://placehold.co/400x200.png" alt="Perfectly centered item using Flexbox" width={400} height={200} data-ai-hint="flexbox center item" caption="A blue box perfectly centered within a gray container." />
             <div className="my-6 p-4 border rounded-lg bg-background shadow-md">
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '150px', border: '1px dashed hsl(var(--border))', backgroundColor: 'hsl(var(--muted)/0.5)'}}>
                 <div style={{ padding: '20px', backgroundColor: 'hsl(var(--accent)/0.8)', border: '1px solid hsl(var(--accent))', color: 'hsl(var(--accent-foreground))', borderRadius: 'var(--radius)' }}>Centered Content</div>
@@ -277,70 +280,105 @@ const tutorialsData: Tutorial[] = [
   align-items: center;    /* Centers vertically (along the cross axis) */
   height: 200px;          /* Give parent some height to see vertical centering */
   border: 1px solid #ccc; /* For visualization */
+  background-color: #f0f0f0; /* For visualization */
 }
 
 .child-element {
   padding: 20px;
   background-color: lightblue; /* For visualization */
+  border: 1px solid blue;
 }`
             }</CodeBlock>
 
             <H3>Example 2: Responsive Navigation Bar</H3>
-            <P>Creating a basic horizontal navigation bar where items are spaced out and adapt nicely.</P>
+            <P>Creating a basic horizontal navigation bar where items are spaced out and adapt nicely. We can distribute items or group some to one side and others to the opposite.</P>
+            <ImageContainer src="https://placehold.co/600x150.png" alt="Responsive navigation bar with Flexbox" width={600} height={150} data-ai-hint="flexbox navigation bar" caption="A navigation bar with logo on left and links on right." />
              <div className="my-6 p-4 border rounded-lg bg-background shadow-md">
-              <nav style={{ display: 'flex', justifyContent: 'space-around', backgroundColor: 'hsl(var(--muted))', padding: '10px', borderRadius: 'var(--radius)'}}>
-                <a href="#" style={{padding: '8px 12px', textDecoration: 'none', color: 'hsl(var(--foreground))', borderRadius: 'calc(var(--radius) - 4px)'}}>Home</a>
-                <a href="#" style={{padding: '8px 12px', textDecoration: 'none', color: 'hsl(var(--foreground))', borderRadius: 'calc(var(--radius) - 4px)'}}>About</a>
-                <a href="#" style={{padding: '8px 12px', textDecoration: 'none', color: 'hsl(var(--foreground))', borderRadius: 'calc(var(--radius) - 4px)'}}>Services</a>
-                <a href="#" style={{padding: '8px 12px', textDecoration: 'none', color: 'hsl(var(--foreground))', borderRadius: 'calc(var(--radius) - 4px)'}}>Contact</a>
+              <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'hsl(var(--muted))', padding: '10px', borderRadius: 'var(--radius)'}}>
+                <div style={{fontWeight: 'bold', color: 'hsl(var(--primary))'}}>Logo</div>
+                <div style={{display: 'flex', gap: '10px'}}>
+                  <a href="#" style={{padding: '8px 12px', textDecoration: 'none', color: 'hsl(var(--foreground))', borderRadius: 'calc(var(--radius) - 4px)'}}>Home</a>
+                  <a href="#" style={{padding: '8px 12px', textDecoration: 'none', color: 'hsl(var(--foreground))', borderRadius: 'calc(var(--radius) - 4px)'}}>About</a>
+                  <a href="#" style={{padding: '8px 12px', textDecoration: 'none', color: 'hsl(var(--foreground))', borderRadius: 'calc(var(--radius) - 4px)'}}>Services</a>
+                  <a href="#" style={{padding: '8px 12px', textDecoration: 'none', color: 'hsl(var(--foreground))', borderRadius: 'calc(var(--radius) - 4px)'}}>Contact</a>
+                </div>
               </nav>
             </div>
             <CodeBlock language="html">{
 `<!-- HTML -->
 <nav class="navbar">
-  <a href="#">Home</a>
-  <a href="#">About</a>
-  <a href="#">Services</a>
-  <a href="#">Contact</a>
+  <div class="logo">MyLogo</div>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Services</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
 </nav>`
             }</CodeBlock>
             <CodeBlock language="css">{
 `/* CSS */
 .navbar {
   display: flex;
-  background-color: #f0f0f0; /* Light gray background */
-  padding: 10px;
+  justify-content: space-between; /* Pushes logo to left, links to right */
+  align-items: center;          /* Vertically aligns items in the center */
+  background-color: #f0f0f0;
+  padding: 10px 20px;
   border-radius: 8px;
 }
 
-.navbar a {
-  padding: 10px 15px;
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav-links {
+  display: flex; /* Makes li items flex items */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  margin-left: 20px; /* Space between link items */
+}
+
+.nav-links a {
   text-decoration: none;
-  color: #333; /* Dark text */
+  color: #333;
+  padding: 8px 12px;
   border-radius: 6px;
   transition: background-color 0.3s ease;
 }
 
-.navbar a:hover {
-  background-color: #ddd; /* Slightly darker on hover */
+.nav-links a:hover {
+  background-color: #ddd;
 }
 
-/* Spacing items: */
-
-/* Option 1: Using justify-content for dynamic spacing */
-/* .navbar { justify-content: space-around; } /* Or space-between */
-
-/* Option 2: Using margins for fixed spacing (often preferred for navs) */
-.navbar a:not(:last-child) {
-  margin-right: 10px; /* Space between items */
-}
-
-/* Option 3: Using flex-grow on items to fill space */
+/* For simpler navs where items are just direct children: */
 /*
-.navbar a {
-  flex-grow: 1;
-  text-align: center; /* If items should take equal width */
-/* }
+.navbar-simple {
+  display: flex;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.navbar-simple a {
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-simple a:hover {
+  background-color: #ddd;
+}
+.navbar-simple a:not(:last-child) {
+  margin-right: 10px; 
+}
 */`
             }</CodeBlock>
             <P>These are just a few examples. Flexbox is incredibly versatile and can be used for a wide range of layout tasks, from small component details to overall page structures. Experiment with these properties to get a feel for their power!</P>
@@ -378,7 +416,9 @@ export default function TutorialPage() {
   const params = useParams();
   const router = useRouter();
   
-  const slug = params?.slug as string | undefined;
+  const slugFromParams = params?.slug;
+  const slug = Array.isArray(slugFromParams) ? slugFromParams[0] : slugFromParams;
+
 
   const [tutorial, setTutorial] = useState<Tutorial | null>(null);
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
@@ -394,6 +434,7 @@ export default function TutorialPage() {
         router.push("/learn"); 
       }
     } else if (params && Object.keys(params).length > 0 && !slug) {
+      // If params object exists but slug is undefined/empty (e.g. route was /learn/tutorials/)
       router.push("/learn");
     }
   }, [slug, router, params]);
@@ -510,9 +551,9 @@ export default function TutorialPage() {
       <main className="flex-1 bg-background">
          <ScrollArea 
             id="tutorial-content-area" 
-            className="h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem)-var(--pagination-height,4rem))] lg:h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem))] p-3 sm:p-4 md:p-6"
+            className="h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem)-var(--pagination-height,4rem))] lg:h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem))]"
           >
-          <Card className="rounded-xl shadow-lg overflow-hidden bg-card border border-border/50">
+          <Card className="rounded-xl shadow-lg overflow-hidden bg-card border border-border/50 m-0 lg:m-2">
             <CardHeader className="bg-gradient-to-r from-primary/5 via-transparent to-accent/5 p-6 border-b border-border/50">
               <CardTitle className="text-2xl sm:text-3xl font-bold text-primary-dark">{currentChapter.title}</CardTitle>
               <CardDescription className="text-muted-foreground mt-1.5">
@@ -526,8 +567,8 @@ export default function TutorialPage() {
 
           {/* Sticky Pagination Bar - ensure it has a defined height for scroll area calculation */}
           <div 
-            className="mt-8 flex justify-between items-center sticky bottom-0 bg-background py-4 border-t border-border lg:border-t-0 lg:static lg:py-0 lg:bg-transparent"
-            style={{ ['--pagination-height' as string]: '4rem' }} // Matches calculation
+            className="mt-auto flex justify-between items-center sticky bottom-0 bg-background/80 backdrop-blur-sm py-3 px-4 border-t border-border lg:border-t-0 lg:static lg:py-4 lg:px-6 lg:bg-transparent"
+            style={{ ['--pagination-height' as string]: '4rem' }} // Matches calculation for scroll area on mobile
           >
             <Button
               onClick={prevChapter}
@@ -556,6 +597,5 @@ export default function TutorialPage() {
     </div>
   );
 }
-
 
     
