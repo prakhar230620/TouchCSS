@@ -8,7 +8,7 @@
  * - ConvertCssToTailwindOutput - The return type for the convertCssToTailwind function.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai} from '@/ai/instance'; // Changed import from @/ai/genkit to @/ai/instance
 import {z} from 'genkit';
 
 const ConvertCssToTailwindInputSchema = z.object({
@@ -56,6 +56,9 @@ const convertCssToTailwindFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+        throw new Error("The AI failed to provide Tailwind classes for the CSS input.");
+    }
+    return output;
   }
 );

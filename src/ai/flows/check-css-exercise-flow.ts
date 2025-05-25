@@ -8,7 +8,7 @@
  * - CheckCssExerciseOutput - The return type for the checkCssExercise function.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai} from '@/ai/instance'; // Changed import from @/ai/genkit to @/ai/instance
 import {z} from 'genkit';
 
 const CheckCssExerciseInputSchema = z.object({

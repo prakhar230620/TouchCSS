@@ -1,4 +1,5 @@
-// use server'
+
+'use server'; // Corrected: 'use server' should be a string literal
 
 /**
  * @fileOverview Explains CSS snippets in plain English.
@@ -8,7 +9,7 @@
  * - ExplainCssOutput - The return type for the explainCss function.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai} from '@/ai/instance'; // Changed import from @/ai/genkit to @/ai/instance
 import {z} from 'genkit';
 
 const ExplainCssInputSchema = z.object({
@@ -40,6 +41,9 @@ const explainCssFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+        throw new Error("The AI failed to provide an explanation for the CSS code.");
+    }
+    return output;
   }
 );
