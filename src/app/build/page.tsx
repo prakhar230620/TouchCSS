@@ -6,7 +6,9 @@ import { DraftingCompass, Rows, Palette, SquareTerminal, Layers, SlidersHorizont
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
-import { BoxShadowEditor } from "@/components/tools/box-shadow-editor"; // New Import
+import { BoxShadowEditor } from "@/components/tools/box-shadow-editor";
+import { Label } from "@/components/ui/label"; // Added import
+import { Input } from "@/components/ui/input"; // Added import for consistency as Input is used nearby
 
 export default function BuildPage() {
   const { toast } = useToast();
@@ -192,5 +194,7 @@ export default function BuildPage() {
     </div>
   );
 }
+
+    
 
     
