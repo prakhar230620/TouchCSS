@@ -4,22 +4,55 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Code, Zap, MousePointerClick, Film, ToyBrick, Palette as PaletteIcon, Move, Variable as VariableIcon, Settings2 } from "lucide-react";
+import { Code, Zap, MousePointerClick, Film, ToyBrick, Palette as PaletteIcon, Move, Variable as VariableIcon, Settings2, Lightbulb, Copy, CheckCircle } from "lucide-react";
 import React, { useState } from 'react';
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast"; // Added import
 
 const CodeBlock: React.FC<{ language: string; children: string; className?: string }> = ({ language, children, className }) => {
+  const { toast } = useToast();
   const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    navigator.clipboard.writeText(children.trim());
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+
+  const handleCopy = async () => {
+    const textToCopy = children.trim();
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(textToCopy);
+      } else {
+        // Fallback for insecure contexts or old browsers
+        const textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        textArea.style.position = "fixed"; // Prevent scrolling to bottom of page in MS Edge.
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+      }
+      setCopied(true);
+      toast({
+        title: <div className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-green-500" />Copied to clipboard!</div>,
+        description: "CSS code has been copied.",
+        duration: 2000,
+      });
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+      toast({
+        title: "Copy Failed",
+        description: "Could not copy the code. Please try again or copy manually.",
+        variant: "destructive",
+        duration: 3000,
+      });
+    }
   };
   return (
     <div className={cn("my-4 rounded-lg bg-muted/70 shadow-sm border border-border/50 overflow-hidden", className)}>
       <div className="flex items-center justify-between px-4 py-2 bg-muted/30 border-b border-border/50">
         <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{language}</span>
         <Button variant="ghost" size="sm" onClick={handleCopy} className="text-xs h-7 text-muted-foreground hover:text-foreground hover:bg-muted">
+          {copied ? <CheckCircle className="mr-1.5 h-3.5 w-3.5 text-green-500" /> : <Copy className="mr-1.5 h-3.5 w-3.5" />}
           {copied ? "Copied!" : "Copy"}
         </Button>
       </div>
@@ -79,7 +112,7 @@ const HoverEffectsSection = () => (
         <h3 className="text-lg font-semibold mb-2">3. Shadow & Glow Effects</h3>
         <p className="text-sm text-muted-foreground mb-2">Enhance depth and focus with shadows.</p>
         <div className="flex gap-4 items-center justify-center p-6 bg-background rounded-lg border shadow-inner">
-          <div 
+          <div
             className="w-24 h-24 bg-primary rounded-lg flex items-center justify-center text-primary-foreground text-sm transition-all duration-300 ease-out hover:shadow-2xl hover:shadow-primary/50"
             data-ai-hint="interactive box hover"
           >
@@ -110,7 +143,7 @@ const TransitionsSection = () => {
   const applyTransition = (example: typeof transitionExamples[0]) => {
     setCurrentTransition(example.css);
     // Reset first to trigger transition if properties are the same
-    setTransitionTargetStyle({}); 
+    setTransitionTargetStyle({});
     setTimeout(() => {
       setTransitionTargetStyle(example.styleChange);
     }, 50); // Small delay to ensure reset is processed
@@ -127,11 +160,11 @@ const TransitionsSection = () => {
     </CardHeader>
     <CardContent className="space-y-6">
       <p className="text-sm text-muted-foreground">Transitions provide a way to control animation speed when changing CSS properties. Instead of property changes taking effect immediately, you can cause changes in a property's value to occur over a period of time.</p>
-      
+
       <div className="border p-4 rounded-lg bg-background shadow-inner">
         <h4 className="text-md font-semibold mb-2">Interactive Demo:</h4>
         <div className="flex items-center justify-center h-32 bg-muted rounded-md mb-4">
-          <div 
+          <div
             className="w-24 h-16 bg-primary rounded-md flex items-center justify-center text-primary-foreground text-xs"
             style={{ transition: currentTransition, ...transitionTargetStyle }}
             data-ai-hint="transition effect box"
@@ -188,7 +221,7 @@ const AnimationsSection = () => (
     </CardHeader>
     <CardContent className="space-y-6">
       <p className="text-sm text-muted-foreground">While transitions are for simple state changes, CSS animations allow for more complex sequences. You define stages (keyframes) of an animation and then apply it to an element.</p>
-      
+
       <div className="border p-4 rounded-lg bg-background shadow-inner">
         <h4 className="text-md font-semibold mb-2">Example Animations:</h4>
         <div className="grid sm:grid-cols-2 gap-6 items-center justify-center py-6">
@@ -210,8 +243,8 @@ const AnimationsSection = () => (
                 from { transform: translateX(-50px); opacity: 0; }
                 to { transform: translateX(0); opacity: 1; }
               }
-              .slide-in-demo { 
-                animation: slideInEffect 0.7s ease-out forwards; 
+              .slide-in-demo {
+                animation: slideInEffect 0.7s ease-out forwards;
                 background-color: hsl(var(--accent));
                 color: hsl(var(--accent-foreground));
                 padding: 0.5rem 1rem;
@@ -266,7 +299,7 @@ const CustomPropertiesSection = () => (
     </CardHeader>
     <CardContent className="space-y-6">
       <p className="text-sm text-muted-foreground">Custom properties (also known as CSS Variables) allow you to store specific values to be reused throughout a document. They are set using custom property notation (e.g., <code className="font-semibold text-foreground">--main-color: black;</code>) and are accessed using the <code className="font-semibold text-foreground">var()</code> function (e.g., <code className="font-semibold text-foreground">color: var(--main-color);</code>).</p>
-      
+
       <div>
         <h3 className="text-lg font-semibold mb-2">Defining Custom Properties</h3>
         <p className="text-sm text-muted-foreground mb-2">Custom properties are typically defined on the <code className="text-foreground">:root</code> pseudo-class to make them globally available, or on specific elements for local scope.</p>
@@ -345,7 +378,7 @@ const MoreFeaturesSection = () => (
     </CardHeader>
     <CardContent className="space-y-6">
       <p className="text-sm text-muted-foreground">CSS is a vast and ever-evolving language. Beyond the topics covered, here are some other advanced areas that offer exciting possibilities for web UIs:</p>
-      
+
       <div>
         <h3 className="text-lg font-semibold mb-1 text-secondary-darker">Container Queries</h3>
         <p className="text-sm text-muted-foreground">Container Queries (<code className="text-foreground">@container</code>) allow you to style elements based on the size or characteristics of their nearest query container, rather than the entire viewport. This is a game-changer for creating truly modular and context-aware components.</p>
@@ -364,7 +397,7 @@ const MoreFeaturesSection = () => (
 @container my-card (min-width: 400px) {
   .card-content {
     /* Styles for when the .card-container is at least 400px wide */
-    display: flex; 
+    display: flex;
     gap: 1rem;
   }
 }`}</CodeBlock>
@@ -380,7 +413,7 @@ const MoreFeaturesSection = () => (
         <h3 className="text-lg font-semibold mb-1 text-secondary-darker">3D Transforms</h3>
         <p className="text-sm text-muted-foreground">While 2D transforms (<code className="text-foreground">translate</code>, <code className="text-foreground">scale</code>, <code className="text-foreground">rotate</code>, <code className="text-foreground">skew</code>) are common, CSS also supports 3D transformations. This allows you to create depth and perspective effects on the web page using functions like <code className="text-foreground">rotate3d()</code>, <code className="text-foreground">translate3d()</code>, <code className="text-foreground">scale3d()</code>, and properties like <code className="text-foreground">perspective</code> and <code className="text-foreground">transform-style</code>.</p>
       </div>
-      
+
       <div>
         <h3 className="text-lg font-semibold mb-1 text-secondary-darker">Advanced Selectors & Specificity</h3>
         <p className="text-sm text-muted-foreground">Mastering selectors like <code className="text-foreground">:is()</code>, <code className="text-foreground">:where()</code>, <code className="text-foreground">:has()</code>, and understanding CSS specificity deeply allows for more precise and maintainable stylesheets. Check out our dedicated tutorial on this topic!</p>
@@ -408,13 +441,25 @@ export default function AdditionalFeaturesPage() {
       </header>
 
       <Tabs defaultValue="hover-effects" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 md:grid-cols-5 gap-2 mb-6">
-          <TabsTrigger value="hover-effects"><MousePointerClick className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Hover Effects</TabsTrigger>
-          <TabsTrigger value="transitions"><Move className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Transitions</TabsTrigger>
-          <TabsTrigger value="animations"><Film className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Animations</TabsTrigger>
-          <TabsTrigger value="custom-properties"><VariableIcon className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Custom Props</TabsTrigger>
-          <TabsTrigger value="more-features"><Zap className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>More Concepts</TabsTrigger>
-        </TabsList>
+        <div className="overflow-x-auto py-1 mb-6">
+          <TabsList className="gap-2"> {/* Removed grid, w-full from TabsList, relies on default inline-flex */}
+            <TabsTrigger value="hover-effects" className="whitespace-nowrap flex-shrink-0">
+              <MousePointerClick className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Hover Effects
+            </TabsTrigger>
+            <TabsTrigger value="transitions" className="whitespace-nowrap flex-shrink-0">
+              <Move className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Transitions
+            </TabsTrigger>
+            <TabsTrigger value="animations" className="whitespace-nowrap flex-shrink-0">
+              <Film className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Animations
+            </TabsTrigger>
+            <TabsTrigger value="custom-properties" className="whitespace-nowrap flex-shrink-0">
+              <VariableIcon className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Custom Props
+            </TabsTrigger>
+            <TabsTrigger value="more-features" className="whitespace-nowrap flex-shrink-0">
+              <Zap className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>More Concepts
+            </TabsTrigger>
+          </TabsList>
+        </div>
         <TabsContent value="hover-effects">
           <HoverEffectsSection />
         </TabsContent>
@@ -433,7 +478,7 @@ export default function AdditionalFeaturesPage() {
       </Tabs>
 
        <div className="text-center mt-12 md:mt-16 p-8 bg-gradient-to-br from-primary/5 via-background to-accent/5 rounded-3xl shadow-inner border border-border/30">
-        <PaletteIcon className="w-12 h-12 text-primary mx-auto mb-4 animate-bounce" />
+        <Lightbulb className="w-12 h-12 text-primary mx-auto mb-4 animate-bounce" />
         <h2 className="text-3xl font-semibold mb-3 text-primary-dark">Master the Art of CSS!</h2>
         <p className="text-muted-foreground max-w-lg mx-auto text-lg">
           Continue exploring, experimenting, and building beautiful, responsive web experiences.
@@ -442,3 +487,4 @@ export default function AdditionalFeaturesPage() {
     </div>
   );
 }
+

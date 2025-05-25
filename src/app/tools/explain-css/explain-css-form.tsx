@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { ExplainCssInput, ExplainCssOutput } from "@/ai/flows/explain-css"; // Ensure path is correct
@@ -37,82 +36,48 @@ export function ExplainCssForm() {
     defaultValues: {
       cssCode: "",
     },
-    mode: "onChange", // Validate on change for better UX
+    mode: "onChange",
   });
 
   async function onSubmit(values: ExplainCssFormValues) {
     setIsLoading(true);
     setError(null);
     setExplanation(null);
-    console.log("Submitting CSS for explanation:", values.cssCode);
 
     try {
-      const input: ExplainCssInput = { cssCode: values.cssCode };
-      // The API route is based on the flow name
       const response = await fetch('/api/flows/explainCssFlow', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(input),
+        body: JSON.stringify({ cssCode: values.cssCode }),
       });
-
-      console.log("Response status:", response.status);
-
 
       if (!response.ok) {
-        let errorDetail = `HTTP error! status: ${response.status}`;
-        let responseText = "Could not retrieve response body.";
-
+        const errorText = await response.text();
+        let errorMessage = `Error: ${response.status}`;
+        
         try {
-          responseText = await response.text(); // Attempt to get raw response text
-          console.log("Raw error response text:", responseText.substring(0, 500) + "...");
-          const errorData = JSON.parse(responseText); // Try to parse as JSON
-          errorDetail = errorData.message || errorData.error || errorData.details || errorDetail;
-        } catch (e) {
-          // Parsing as JSON failed or reading text failed.
-          errorDetail = response.statusText || errorDetail;
-           if (response.status === 404) {
-             console.error(`AI CSS Explainer: API route /api/flows/explainCssFlow not found (404). Raw response hint: ${responseText.substring(0, 200)}...`);
-             errorDetail = `API route not found (404). Please ensure the server is running correctly and the Genkit flow is registered. Check server logs.`;
-          } else {
-             console.error(`AI CSS Explainer: Failed to parse error response as JSON. Status: ${response.status}. Response Text: ${responseText.substring(0,500)}...`);
-          }
+          const errorJson = JSON.parse(errorText);
+          errorMessage = errorJson.details || errorJson.error || errorMessage;
+        } catch {
+          errorMessage = `Server error (${response.status}). Please try again.`;
         }
         
-        if (response.status === 500 || response.status === 401 || response.status === 403) {
-            console.error(`AI CSS Explainer: Server error ${response.status}. This might be due to an issue with the Genkit flow execution, the AI model, or API key configuration. Details: ${errorDetail}`);
-            errorDetail = `A server error occurred (${response.status}). This could be due to API key issues or the AI model. Please check server logs. Details: ${errorDetail}`;
-        }
-        throw new Error(errorDetail);
+        throw new Error(errorMessage);
       }
 
-      const result = await response.json() as ExplainCssOutput;
+      const result = await response.json();
       setExplanation(result.explanation);
-      toast({
-        title: (
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-accent" />
-            Explanation Generated!
-          </div>
-        ),
-        description: "The AI has successfully explained the CSS code.",
-      });
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred.";
+      
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       setError(errorMessage);
       toast({
+        title: "Error",
+        description: errorMessage,
         variant: "destructive",
-        title: (
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5" />
-            Error Generating Explanation
-          </div>
-        ),
-        description: "Could not get explanation. " + errorMessage,
-        duration: 7000, // Longer duration for error messages
       });
-      console.error("AI CSS Explainer Error (onSubmit catch block):", err);
     } finally {
       setIsLoading(false);
     }
