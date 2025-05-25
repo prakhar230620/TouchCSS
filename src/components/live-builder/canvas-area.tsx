@@ -20,9 +20,11 @@ export function CanvasArea({ components, selectedComponentId, onSelectComponent 
   };
   
   const renderComponent = (component: CanvasComponent) => {
-    const commonProps = {
-      key: component.id,
-      style: component.styles,
+    // Destructure key from the rest of the common props
+    const { id: key, ...restOfComponentProps } = component;
+
+    const commonPropsBase = {
+      style: restOfComponentProps.styles,
       className: cn(
         "relative transition-all duration-100 ease-in-out", // Added relative for potential future absolute positioning of handles
         selectedComponentId === component.id ? 'outline outline-2 outline-accent outline-offset-2 shadow-lg' : 'hover:shadow-md',
@@ -40,11 +42,11 @@ export function CanvasArea({ components, selectedComponentId, onSelectComponent 
 
     switch (component.type) {
       case 'Box':
-        return <div {...commonProps}>{/* Can add children concept later */}</div>;
+        return <div key={key} {...commonPropsBase}>{/* Can add children concept later */}</div>;
       case 'Text':
-        return <p {...commonProps}>{component.props.textContent || 'Text'}</p>;
+        return <p key={key} {...commonPropsBase}>{component.props.textContent || 'Text'}</p>;
       case 'Button':
-        return <button {...commonProps} type="button">{component.props.buttonText || 'Button'}</button>;
+        return <button key={key} {...commonPropsBase} type="button">{component.props.buttonText || 'Button'}</button>;
       default:
         return null;
     }
@@ -65,5 +67,3 @@ export function CanvasArea({ components, selectedComponentId, onSelectComponent 
     </div>
   );
 }
-
-    
