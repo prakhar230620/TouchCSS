@@ -828,7 +828,7 @@ export default function TutorialPage() {
                 id="tutorial-content-area" 
                 className="flex-grow" // Takes up available space
             >
-              <Card className="rounded-none lg:rounded-xl shadow-none lg:shadow-lg overflow-hidden bg-card border-0 lg:border border-border/50 m-0 lg:m-2">
+              <Card className="w-full rounded-none lg:rounded-xl shadow-none lg:shadow-lg overflow-hidden bg-card border-0 lg:border border-border/50 m-0 lg:m-2">
                 <CardHeader className="bg-gradient-to-r from-primary/5 via-transparent to-accent/5 p-4 sm:p-6 border-b border-border/50">
                   <CardTitle className="text-2xl sm:text-3xl font-bold text-primary-dark">{currentChapter.title}</CardTitle>
                   <CardDescription className="text-muted-foreground mt-1.5">
@@ -836,7 +836,7 @@ export default function TutorialPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6 text-foreground leading-relaxed">
-                  <div className="prose prose-sm sm:prose-base dark:prose-invert !max-w-none">
+                  <div className="w-full prose prose-sm sm:prose-base dark:prose-invert !max-w-none overflow-x-hidden">
                     {currentChapter.content}
                   </div>
                 </CardContent>
