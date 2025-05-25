@@ -20,6 +20,7 @@ export function BoxShadowEditor() {
   const [shadowOpacity, setShadowOpacity] = useState(0.2); // Opacity from 0 to 1
 
   const [generatedCss, setGeneratedCss] = useState('');
+  const [shadowValue, setShadowValue] = useState(''); // For the style prop
   const { toast } = useToast();
 
   useEffect(() => {
@@ -29,7 +30,10 @@ export function BoxShadowEditor() {
     const b = parseInt(colorHex.substring(4, 6), 16);
     
     const rgbaColor = `rgba(${r}, ${g}, ${b}, ${shadowOpacity.toFixed(2)})`;
-    const css = `box-shadow: ${offsetX}px ${offsetY}px ${blurRadius}px ${spreadRadius}px ${rgbaColor};`;
+    const currentShadowValue = `${offsetX}px ${offsetY}px ${blurRadius}px ${spreadRadius}px ${rgbaColor}`;
+    
+    setShadowValue(currentShadowValue);
+    const css = `box-shadow: ${currentShadowValue};`;
     setGeneratedCss(css);
   }, [offsetX, offsetY, blurRadius, spreadRadius, shadowColor, shadowOpacity]);
 
@@ -142,7 +146,7 @@ export function BoxShadowEditor() {
 
         <div className="space-y-4">
           <div className="flex items-center justify-center rounded-lg bg-background h-48 shadow-inner border border-border"
-               style={{ boxShadow: generatedCss.replace('box-shadow: ', '') }}
+               style={{ boxShadow: shadowValue }}
                data-ai-hint="box shadow preview"
           >
             <p className="text-sm text-muted-foreground p-4 text-center select-none">
@@ -168,5 +172,3 @@ export function BoxShadowEditor() {
     </Card>
   );
 }
-
-    
