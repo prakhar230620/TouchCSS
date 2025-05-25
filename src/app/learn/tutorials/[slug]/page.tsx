@@ -434,7 +434,6 @@ export default function TutorialPage() {
         router.push("/learn"); 
       }
     } else if (params && Object.keys(params).length > 0 && !slug) {
-      // If params object exists but slug is undefined/empty (e.g. route was /learn/tutorials/)
       router.push("/learn");
     }
   }, [slug, router, params]);
@@ -560,15 +559,15 @@ export default function TutorialPage() {
                 Chapter {currentChapterIndex + 1} of {tutorial.chapters.length} in "{tutorial.title}"
               </CardDescription>
             </CardHeader>
-            <CardContent className="p-6 prose prose-sm sm:prose-base max-w-none dark:prose-invert text-foreground leading-relaxed">
+            <CardContent className="p-6 prose prose-sm sm:prose-base !max-w-none dark:prose-invert text-foreground leading-relaxed">
               {currentChapter.content}
             </CardContent>
           </Card>
 
-          {/* Sticky Pagination Bar - ensure it has a defined height for scroll area calculation */}
+          {/* Sticky Pagination Bar */}
           <div 
-            className="mt-auto flex justify-between items-center sticky bottom-0 bg-background/80 backdrop-blur-sm py-3 px-4 border-t border-border lg:border-t-0 lg:static lg:py-4 lg:px-6 lg:bg-transparent"
-            style={{ ['--pagination-height' as string]: '4rem' }} // Matches calculation for scroll area on mobile
+            className="flex justify-between items-center sticky bottom-0 bg-background/80 backdrop-blur-sm py-3 px-4 border-t border-border lg:static lg:py-4 lg:px-6 lg:bg-transparent lg:border-t-0"
+            style={{ ['--pagination-height' as string]: '4rem' }} 
           >
             <Button
               onClick={prevChapter}
@@ -597,5 +596,3 @@ export default function TutorialPage() {
     </div>
   );
 }
-
-    
