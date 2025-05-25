@@ -1,6 +1,7 @@
 {
-  "name": "nextn",
+  "name": "touchcss-studio",
   "version": "0.1.0",
+  "description": "Visually build CSS and learn interactively with TouchCSS Studio.",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack -p 9002",
