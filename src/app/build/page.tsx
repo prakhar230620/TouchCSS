@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { DraftingCompass, Rows, Palette, SquareTerminal, Layers, SlidersHorizontal, Type, Code, Eye, Zap, Settings, Move, Maximize, CircleDot, Sparkles, Pipette, Bot, Paintbrush, MountainSnow, Shapes, Blend, Film, Scaling, Wand2, CaseSensitive, Grid, Sigma } from "lucide-react";
+import { DraftingCompass, Rows, Palette, SquareTerminal, Layers, SlidersHorizontal, Type, Code, Eye, Zap, Settings, Move, Maximize, CircleDot, Sparkles, Pipette, Bot, Paintbrush, MountainSnow, Shapes, Blend, Film, Scaling, Wand2, CaseSensitive, Grid, Sigma, Palette as PaletteIcon } from "lucide-react";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
@@ -14,7 +14,6 @@ import { TransformEditor } from "@/components/tools/transform-editor";
 import { TypographyEditor } from "@/components/tools/typography-editor";
 import { FilterEffectsEditor } from "@/components/tools/filter-effects-editor";
 import { AnimationEditor } from "@/components/tools/animation-editor";
-import { LiveComponentBuilder } from "@/components/live-builder/live-component-builder"; // New Import
 import { useState, useEffect } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -48,26 +47,6 @@ export default function BuildPage() {
         </p>
       </header>
 
-      {/* Live Component Builder Card */}
-      <Card className="rounded-2xl shadow-xl hover:shadow-primary/15 transition-shadow duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-card via-card to-primary/5">
-        <CardHeader className="p-6">
-          <div className="flex items-center gap-4 mb-3">
-             <div className="p-3 bg-primary/10 rounded-xl text-primary shadow-sm"><Grid className="w-8 h-8" /></div>
-            <div>
-              <CardTitle className="text-2xl font-semibold text-primary-dark">Live Component Builder</CardTitle>
-              <CardDescription className="text-base text-muted-foreground">Assemble UI components and customize their styles visually. Export HTML + CSS.</CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="p-6 pt-0">
-          {isClient ? <LiveComponentBuilder /> : <Skeleton className="h-[600px] w-full rounded-lg" />}
-        </CardContent>
-         <CardFooter className="p-4 bg-primary/5 rounded-b-2xl mt-2">
-            <p className="text-xs text-muted-foreground text-center w-full">Drag elements, style them, and see your creation come alive!</p>
-        </CardFooter>
-      </Card>
-
-
       {/* Visual CSS Editors Card */}
       <Card className="rounded-2xl shadow-xl hover:shadow-secondary/15 transition-shadow duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-card via-card to-secondary/5">
         <CardHeader className="p-6">
@@ -100,7 +79,7 @@ export default function BuildPage() {
         <Card className="rounded-2xl shadow-xl hover:shadow-accent/15 transition-shadow duration-300 transform hover:-translate-y-1 bg-gradient-to-br from-card via-card to-accent/5">
           <CardHeader className="p-6">
             <div className="flex items-center gap-4 mb-3">
-              <div className="p-3 bg-accent/10 rounded-xl text-accent-dark shadow-sm"><Palette className="w-8 h-8" /></div>
+              <div className="p-3 bg-accent/10 rounded-xl text-accent-dark shadow-sm"><PaletteIcon className="w-8 h-8" /></div>
               <div>
                 <CardTitle className="text-2xl font-semibold text-accent-darker">Global Style Theme Generator</CardTitle>
                 <CardDescription className="text-base text-muted-foreground">Create custom design systems: pick fonts, define color palettes, set spacing, and generate theme files.</CardDescription>
