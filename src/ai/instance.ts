@@ -1,4 +1,3 @@
-
 'use server';
 /**
  * @fileOverview Centralized Genkit AI instance creation.
@@ -12,10 +11,9 @@ import {NextJsPlugin} from '@genkit-ai/next';
 
 export const ai = genkit({
   plugins: [
-    googleAI(),
-    NextJsPlugin(), // Initialize NextJsPlugin with the ai instance
+    googleAI(), // This will use GOOGLE_API_KEY from .env
+    NextJsPlugin(),
   ],
-  // Removed global model configuration to simplify initialization
-  // model: 'googleai/gemini-1.5-flash-latest', 
+  logLevel: 'debug', // Recommended for development
+  enableTracingAndMetrics: true, // Recommended for development
 });
-

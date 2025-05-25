@@ -1,7 +1,7 @@
 
 "use client";
 
-import type { ExplainCssInput, ExplainCssOutput } from "@/ai/flows/explain-css";
+import type { ExplainCssInput, ExplainCssOutput } from "@/ai/flows/explain-css"; // Ensure path is correct
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription as ShadcnFormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -14,9 +14,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
+// Use the schema directly from the flow file if it's exported, or redefine if necessary.
+// For consistency, ensure this matches ExplainCssInputSchema from the flow.
 const formSchema = z.object({
-  cssCode: z.string().min(10, {
-    message: "CSS code must be at least 10 characters.",
+  cssCode: z.string().min(5, {
+    message: "CSS code must be at least 5 characters.",
   }).max(3000, {
     message: "CSS code must not exceed 3000 characters.",
   }),
@@ -35,16 +37,18 @@ export function ExplainCssForm() {
     defaultValues: {
       cssCode: "",
     },
-    mode: "onChange",
+    mode: "onChange", // Validate on change for better UX
   });
 
   async function onSubmit(values: ExplainCssFormValues) {
     setIsLoading(true);
     setError(null);
     setExplanation(null);
+    console.log("Submitting CSS for explanation:", values.cssCode);
 
     try {
       const input: ExplainCssInput = { cssCode: values.cssCode };
+      // The API route is based on the flow name
       const response = await fetch('/api/flows/explainCssFlow', {
         method: 'POST',
         headers: {
@@ -53,30 +57,32 @@ export function ExplainCssForm() {
         body: JSON.stringify(input),
       });
 
+      console.log("Response status:", response.status);
+
+
       if (!response.ok) {
         let errorDetail = `HTTP error! status: ${response.status}`;
-        let responseText = "Could not retrieve response body."; // Default for safety
+        let responseText = "Could not retrieve response body.";
 
         try {
           responseText = await response.text(); // Attempt to get raw response text
-          // Try to parse as JSON if possible, server might send error details in JSON
-          const errorData = JSON.parse(responseText);
-          errorDetail = errorData.message || errorData.error || errorDetail;
+          console.log("Raw error response text:", responseText.substring(0, 500) + "...");
+          const errorData = JSON.parse(responseText); // Try to parse as JSON
+          errorDetail = errorData.message || errorData.error || errorData.details || errorDetail;
         } catch (e) {
           // Parsing as JSON failed or reading text failed.
-          // Use statusText if available, otherwise stick to the basic error.
-          // If responseText was successfully read but wasn't JSON, it's still useful for debugging.
           errorDetail = response.statusText || errorDetail;
-          if (response.status === 404) {
+           if (response.status === 404) {
              console.error(`AI CSS Explainer: API route /api/flows/explainCssFlow not found (404). Raw response hint: ${responseText.substring(0, 200)}...`);
-             errorDetail = `API route not found (404). Please ensure the server is running correctly and the Genkit flow is registered.`;
+             errorDetail = `API route not found (404). Please ensure the server is running correctly and the Genkit flow is registered. Check server logs.`;
           } else {
-             console.error(`AI CSS Explainer: Failed to parse error response. Status: ${response.status}. Raw Response Text: ${responseText.substring(0,500)}...`);
+             console.error(`AI CSS Explainer: Failed to parse error response as JSON. Status: ${response.status}. Response Text: ${responseText.substring(0,500)}...`);
           }
         }
         
         if (response.status === 500 || response.status === 401 || response.status === 403) {
-            console.error(`AI CSS Explainer: Server error ${response.status}. This might be due to an issue with the Genkit flow execution, the AI model, or API key configuration.`);
+            console.error(`AI CSS Explainer: Server error ${response.status}. This might be due to an issue with the Genkit flow execution, the AI model, or API key configuration. Details: ${errorDetail}`);
+            errorDetail = `A server error occurred (${response.status}). This could be due to API key issues or the AI model. Please check server logs. Details: ${errorDetail}`;
         }
         throw new Error(errorDetail);
       }
@@ -104,8 +110,9 @@ export function ExplainCssForm() {
           </div>
         ),
         description: "Could not get explanation. " + errorMessage,
+        duration: 7000, // Longer duration for error messages
       });
-      console.error("AI CSS Explainer Error (onSubmit):", err);
+      console.error("AI CSS Explainer Error (onSubmit catch block):", err);
     } finally {
       setIsLoading(false);
     }
@@ -151,7 +158,7 @@ export function ExplainCssForm() {
             ) : (
               <>
                 <Wand2 className="mr-2 h-5 w-5" />
-                Explain CSS
+                Explain CSS with AI
               </>
             )}
           </Button>

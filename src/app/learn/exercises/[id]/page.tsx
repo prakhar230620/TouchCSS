@@ -36,6 +36,7 @@ interface Exercise {
   targetDescription: string; 
 }
 
+// Simple Custom Feedback (Non-AI)
 interface CustomFeedback {
   assessment: "Correct" | "Partially Correct" | "Needs Improvement" | "Good Effort" | "Not Attempted";
   feedbackPoints: string[];
@@ -456,7 +457,7 @@ const FeedbackDisplay: React.FC<{ feedback: CustomFeedback }> = ({ feedback }) =
   );
 };
 
-// Simple rule-based checker
+// Simple rule-based checker (Non-AI)
 function evaluateUserSolution(userCss: string, exercise: Exercise): CustomFeedback {
   const feedbackPoints: string[] = [];
   let score = 0;
@@ -481,16 +482,16 @@ function evaluateUserSolution(userCss: string, exercise: Exercise): CustomFeedba
   }
 
   // Check 2: Presence of key selectors from initial HTML (30 points)
-  // This is a very naive check. A real parser would be needed for accuracy.
   const htmlSelectors = (exercise.initialHtml.match(/class="([^"]+)"/g) || [])
-    .map(c => `.${c.slice(7, -1).split(' ')[0]}`) // Get first class if multiple
-    .concat((exercise.initialHtml.match(/<([a-zA-Z0-9]+)/g) || []).map(tag => tag.slice(1))); // Get tags
+    .map(c => `.${c.slice(7, -1).split(' ')[0]}`)
+    .concat((exercise.initialHtml.match(/<([a-zA-Z0-9]+)/g) || []).map(tag => tag.slice(1)));
 
   let foundSelectors = 0;
-  const uniqueHtmlSelectors = [...new Set(htmlSelectors.filter(s => s.length > 1 && s !== '.navbar ul li a'))]; // Filter out generic ones for this example
+  const uniqueHtmlSelectors = [...new Set(htmlSelectors.filter(s => s.length > 1 && !['.navbar ul li a', 'body', 'html', 'div', 'img', 'h3', 'p', 'button', 'h2', 'nav', 'ul', 'li', 'a'].includes(s.toLowerCase())))];
+
 
   uniqueHtmlSelectors.forEach(selector => {
-    if (normalizedUserCss.includes(selector.toLowerCase())) {
+    if (normalizedUserCss.includes(selector.toLowerCase() + ' ') || normalizedUserCss.includes(selector.toLowerCase() + '{')) {
       foundSelectors++;
       feedbackPoints.push(`Styling for '${selector}' detected.`);
     } else {
@@ -503,37 +504,43 @@ function evaluateUserSolution(userCss: string, exercise: Exercise): CustomFeedba
 
 
   // Check 3: Check for specific learning goals (e.g., flexbox for nav exercise) (40 points)
-  let goalsMet = 0;
+  let goalsMetScore = 0;
+  const maxGoalScore = 40;
+  let tempGoalScore = 0;
+
   if (exercise.id === "style-nav") {
-    if (normalizedUserCss.includes("display: flex")) { goalsMet++; feedbackPoints.push("Used 'display: flex' - Great for layout!"); score += 10; }
-    if (normalizedUserCss.includes("justify-content")) { goalsMet++; feedbackPoints.push("Used 'justify-content' for alignment."); score += 10;}
-    if (normalizedUserCss.includes("align-items")) { goalsMet++; feedbackPoints.push("Used 'align-items' for cross-axis alignment."); score += 10;}
-    if (normalizedUserCss.includes(":hover")) { goalsMet++; feedbackPoints.push("Hover effects implemented."); score += 10;}
+    if (normalizedUserCss.includes("display: flex")) { tempGoalScore += 10; feedbackPoints.push("Used 'display: flex' - Great for layout!"); }
+    if (normalizedUserCss.includes("justify-content")) { tempGoalScore += 10; feedbackPoints.push("Used 'justify-content' for alignment."); }
+    if (normalizedUserCss.includes("align-items")) { tempGoalScore += 10; feedbackPoints.push("Used 'align-items' for cross-axis alignment.");}
+    if (normalizedUserCss.includes(":hover")) { tempGoalScore += 10; feedbackPoints.push("Hover effects implemented."); }
   } else if (exercise.id === "product-card") {
-    if (normalizedUserCss.includes("border:")) { goalsMet++; feedbackPoints.push("Card border detected."); score += 10; }
-    if (normalizedUserCss.includes("padding:")) { goalsMet++; feedbackPoints.push("Padding applied for spacing."); score += 10;}
-    if (normalizedUserCss.includes("box-shadow:")) { goalsMet++; feedbackPoints.push("Box shadow adds depth!"); score += 10;}
-    if (normalizedUserCss.includes("button")) { goalsMet++; feedbackPoints.push("Button styling found."); score += 10;}
+    if (normalizedUserCss.includes("border:")) { tempGoalScore += 10; feedbackPoints.push("Card border detected.");  }
+    if (normalizedUserCss.includes("padding:")) { tempGoalScore += 10; feedbackPoints.push("Padding applied for spacing.");}
+    if (normalizedUserCss.includes("box-shadow:")) { tempGoalScore += 10; feedbackPoints.push("Box shadow adds depth!");}
+    if (normalizedUserCss.includes("button")) { tempGoalScore += 10; feedbackPoints.push("Button styling found.");}
   } else if (exercise.id === "modal-dialog") {
-     if (normalizedUserCss.includes("position: fixed") || normalizedUserCss.includes("position: absolute")) { goalsMet++; feedbackPoints.push("Correct positioning for overlay/modal detected."); score += 10;}
-     if (normalizedUserCss.includes("z-index")) { goalsMet++; feedbackPoints.push("Used 'z-index' for stacking order."); score += 10;}
-     if (normalizedUserCss.includes("background-color: rgba")) { goalsMet++; feedbackPoints.push("Transparent backdrop likely implemented."); score += 10;}
-     if (normalizedUserCss.includes(".close-button")) { goalsMet++; feedbackPoints.push("Close button styling found."); score += 10;}
+     if (normalizedUserCss.includes("position: fixed") || normalizedUserCss.includes("position: absolute")) { tempGoalScore += 10; feedbackPoints.push("Correct positioning for overlay/modal detected."); }
+     if (normalizedUserCss.includes("z-index")) { tempGoalScore += 10; feedbackPoints.push("Used 'z-index' for stacking order."); }
+     if (normalizedUserCss.includes("background-color: rgba")) { tempGoalScore += 10; feedbackPoints.push("Transparent backdrop likely implemented."); }
+     if (normalizedUserCss.includes(".close-button")) { tempGoalScore += 10; feedbackPoints.push("Close button styling found."); }
   }
-  // Ensure score does not exceed this section's max
-  score = Math.min(score, 10 + (uniqueHtmlSelectors.length > 0 ? 30 : 0) + 40);
+  goalsMetScore = Math.min(tempGoalScore, maxGoalScore);
+  score += goalsMetScore;
 
 
   // Check 4: Compare overall structure or length to solution (very rough) (20 points)
+  let structureScore = 0;
   const lengthRatio = normalizedUserCss.length / (normalizedSolutionCss.length || 1);
   if (lengthRatio > 0.5 && lengthRatio < 2.0) { // Arbitrary range
-    score += 10;
+    structureScore += 10;
     feedbackPoints.push("Solution length is comparable to the model solution.");
   }
   if (normalizedUserCss.includes("@media")) {
-    score += 10;
+    structureScore += 10;
     feedbackPoints.push("Media query found for responsiveness!");
   }
+  score += Math.min(structureScore, 20);
+  
   score = Math.min(score, maxScore); // Cap score at 100
 
   let assessment: CustomFeedback["assessment"] = "Needs Improvement";
@@ -565,7 +572,7 @@ export default function ExercisePage() {
   const [currentExercise, setCurrentExercise] = useState<Exercise | null | undefined>(undefined);
   const [showSolution, setShowSolution] = useState(false);
   const [userCss, setUserCss] = useState("");
-  const [customFeedback, setCustomFeedback] = useState<CustomFeedback | null>(null);
+  const [customFeedback, setCustomFeedback] = useState<CustomFeedback | null>(null); // For non-AI feedback
 
 
   const slug = params?.id;
@@ -576,7 +583,7 @@ export default function ExercisePage() {
       const foundExercise = exerciseData[exerciseId as string];
       setCurrentExercise(foundExercise || null);
       setUserCss("");
-      setCustomFeedback(null); // Reset feedback when exercise changes
+      setCustomFeedback(null); 
       setShowSolution(false);
     } else if (params && Object.keys(params).length > 0 && !exerciseId) {
        setCurrentExercise(null);
@@ -608,7 +615,8 @@ export default function ExercisePage() {
 
   const exercise = currentExercise;
 
-  const handleCheckSolution = () => {
+  // Handler for the custom (non-AI) solution checker
+  const handleCheckCustomSolution = () => {
     if (!currentExercise) return;
     const feedback = evaluateUserSolution(userCss, currentExercise);
     setCustomFeedback(feedback);
@@ -716,8 +724,8 @@ export default function ExercisePage() {
                 value={userCss}
                 onChange={(e) => setUserCss(e.target.value)}
               />
-              <Button onClick={handleCheckSolution} className="mt-3 w-full sm:w-auto bg-primary hover:bg-primary/90" disabled={userCss.trim().length < 10}>
-                <Zap className="mr-2 h-4 w-4"/>Check My Solution
+              <Button onClick={handleCheckCustomSolution} className="mt-3 w-full sm:w-auto bg-primary hover:bg-primary/90" disabled={userCss.trim().length < 10}>
+                <Sparkles className="mr-2 h-4 w-4"/>Check My Solution
               </Button>
             </section>
 

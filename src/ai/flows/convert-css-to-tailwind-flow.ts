@@ -1,3 +1,3 @@
-// This flow is being removed as its primary UI entry point (Export Page) is deprecated.
-// It can be re-added or adapted if a new UI for this functionality is created elsewhere.
+// This file is intentionally left blank as the CSS to Tailwind conversion feature and its UI (Export Page) have been removed.
+// It can be deleted from the project.
 export {};

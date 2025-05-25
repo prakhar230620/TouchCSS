@@ -1,8 +1,5 @@
-
 import { config } from 'dotenv';
-config();
+config(); // Load .env variables first
 
-import '@/ai/flows/explain-css.ts';
-// import '@/ai/flows/convert-css-to-tailwind-flow.ts'; // Removed as Export page is removed
-import '@/ai/flows/check-css-exercise-flow.ts';
-
+import '@/ai/flows/explain-css';
+// Import other flows here as they are created and re-implemented
