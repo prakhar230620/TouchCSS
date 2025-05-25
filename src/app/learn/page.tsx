@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { BookOpenText, Puzzle, Brain, CheckCircle, ListChecks, PlayCircle, Target, Wind, Palette, Layers3, ArrowRight, GraduationCap, Goal, Lightbulb, Navigation, GalleryVerticalEnd, PanelTopOpen, Sparkles as SparklesIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-// import { useToast } from "@/hooks/use-toast"; // Removed as handleFeatureClick is removed
 import {
   Accordion,
   AccordionContent,
@@ -70,16 +69,6 @@ const exerciseTopics = [
 ];
 
 export default function LearnPage() {
-  // const { toast } = useToast(); // Removed
-
-  // Removed handleFeatureClick as it's no longer used on this page
-  // const handleFeatureClick = (featureName: string) => {
-  //   toast({
-  //     title: "Interactive Exercise Coming Soon!",
-  //     description: `The interactive environment for "${featureName}" is under development. Check back soon!`,
-  //     duration: 3000,
-  //   });
-  // };
 
   return (
     <div className="space-y-12 md:space-y-16">
@@ -187,7 +176,6 @@ export default function LearnPage() {
                       <Button
                         asChild
                         className="w-full text-sm bg-accent hover:bg-accent/90 text-accent-foreground"
-                        // onClick prop removed to ensure Link navigation works
                       >
                         <Link href={`/learn/exercises/${exercise.id}`}>
                           <SparklesIcon className="mr-2 h-4 w-4"/>
@@ -230,3 +218,5 @@ export default function LearnPage() {
     </div>
   );
 }
+
+    
