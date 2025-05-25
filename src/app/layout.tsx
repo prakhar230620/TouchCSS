@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -17,9 +18,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "TouchCSS Studio",
-  description: "Visually build CSS and learn interactively with TouchCSS Studio.",
-  manifest: "/manifest.json",
-  themeColor: "#3F51B5",
+  description: "Visually build CSS, learn interactively, and export with TouchCSS Studio.",
+  manifest: "/manifest.json", // Assuming you might add a manifest later
+  themeColor: "#7C3AED", // Updated to a purple color, matching --primary
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: [
-    { rel: "apple-touch-icon", url: "/icons/icon-192x192.png" },
+    { rel: "apple-touch-icon", url: "/icons/icon-192x192.png" }, // Ensure these icons exist
     { rel: "icon", url: "/icons/icon-192x192.png" },
   ],
 };
@@ -44,11 +45,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-        <SidebarProvider defaultOpen={false}>
+        <SidebarProvider defaultOpen={false}> {/* Sidebar can be integrated later if needed */}
           <div className="relative flex flex-col min-h-screen">
-            <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-28">
-              {" "}
-              {/* pb-28 for bottom nav clearance */}
+            <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24 sm:pb-28"> {/* Adjusted padding-bottom */}
               {children}
             </main>
             <BottomNavigation />
