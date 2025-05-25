@@ -4,7 +4,7 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Code, Zap, MousePointerClick, Film, ToyBrick, Palette as PaletteIcon, Move } from "lucide-react";
+import { Code, Zap, MousePointerClick, Film, ToyBrick, Palette as PaletteIcon, Move, Variable as VariableIcon, Settings2 } from "lucide-react";
 import React, { useState } from 'react';
 import { cn } from "@/lib/utils";
 
@@ -255,26 +255,138 @@ const AnimationsSection = () => (
   </Card>
 );
 
+const CustomPropertiesSection = () => (
+  <Card className="shadow-lg">
+    <CardHeader>
+      <div className="flex items-center gap-3 mb-2">
+        <VariableIcon className="w-7 h-7 text-green-600" />
+        <CardTitle className="text-2xl text-green-700 dark:text-green-500">CSS Custom Properties (Variables)</CardTitle>
+      </div>
+      <CardDescription>Define reusable values in your stylesheets for easier theming and maintenance.</CardDescription>
+    </CardHeader>
+    <CardContent className="space-y-6">
+      <p className="text-sm text-muted-foreground">Custom properties (also known as CSS Variables) allow you to store specific values to be reused throughout a document. They are set using custom property notation (e.g., <code className="font-semibold text-foreground">--main-color: black;</code>) and are accessed using the <code className="font-semibold text-foreground">var()</code> function (e.g., <code className="font-semibold text-foreground">color: var(--main-color);</code>).</p>
+      
+      <div>
+        <h3 className="text-lg font-semibold mb-2">Defining Custom Properties</h3>
+        <p className="text-sm text-muted-foreground mb-2">Custom properties are typically defined on the <code className="text-foreground">:root</code> pseudo-class to make them globally available, or on specific elements for local scope.</p>
+        <CodeBlock language="css">{`
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --base-font-size: 16px;
+  --default-padding: 15px;
+  --border-radius: 5px;
+}
+
+/* Locally scoped variable */
+.card-component {
+  --card-background: white;
+  background-color: var(--card-background);
+}`}</CodeBlock>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-2">Using Custom Properties</h3>
+        <p className="text-sm text-muted-foreground mb-2">Use the <code className="text-foreground">var()</code> function to apply the value of a custom property. You can also provide a fallback value if the variable is not defined.</p>
+        <div className="p-6 bg-background rounded-lg border shadow-inner space-y-3">
+          <style>{`
+            .custom-prop-demo-box {
+              --box-bg: var(--demo-box-color, hsl(var(--primary))); /* Fallback to primary */
+              --box-text: hsl(var(--primary-foreground));
+              background-color: var(--box-bg);
+              color: var(--box-text);
+              padding: 1rem;
+              border-radius: var(--radius);
+              text-align: center;
+            }
+            .custom-prop-demo-box.themed {
+              --demo-box-color: hsl(var(--accent)); /* Override for this class */
+            }
+          `}</style>
+          <div className="custom-prop-demo-box" data-ai-hint="blue box">Default Themed Box</div>
+          <div className="custom-prop-demo-box themed" data-ai-hint="orange box">Accent Themed Box</div>
+        </div>
+        <CodeBlock language="css">{`
+.element {
+  color: var(--primary-color);
+  font-size: var(--base-font-size);
+  padding: var(--default-padding);
+  border: 1px solid var(--primary-color, black); /* Fallback to black */
+}
+
+body {
+  background-color: var(--bg-color, white); /* Use --bg-color or white if not set */
+}`}</CodeBlock>
+      </div>
+
+       <div>
+        <h3 className="text-lg font-semibold mb-2">Benefits of Custom Properties</h3>
+        <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+          <li><strong className="text-foreground">Theming:</strong> Easily change the look and feel of a site by updating a few root variables (e.g., for dark mode).</li>
+          <li><strong className="text-foreground">Readability and Maintainability:</strong> Makes CSS more understandable by giving semantic names to values.</li>
+          <li><strong className="text-foreground">DRY (Don't Repeat Yourself):</strong> Reduces repetition of common values.</li>
+          <li><strong className="text-foreground">Dynamic Changes with JavaScript:</strong> Custom property values can be read and updated with JavaScript.</li>
+        </ul>
+      </div>
+    </CardContent>
+  </Card>
+);
+
+
 const MoreFeaturesSection = () => (
   <Card className="shadow-lg">
     <CardHeader>
       <div className="flex items-center gap-3 mb-2">
         <Zap className="w-7 h-7 text-secondary" />
-        <CardTitle className="text-2xl text-secondary-dark">More Advanced Features</CardTitle>
+        <CardTitle className="text-2xl text-secondary-dark">More Advanced CSS Concepts</CardTitle>
       </div>
-      <CardDescription>Exploring further CSS capabilities (Conceptual).</CardDescription>
+      <CardDescription>A glimpse into other powerful CSS features to explore for modern web development.</CardDescription>
     </CardHeader>
-    <CardContent className="space-y-4">
-      <p className="text-sm text-muted-foreground">CSS is constantly evolving! Here are some more advanced areas you might explore:</p>
-      <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-        <li><strong className="text-foreground">Scroll-driven Animations:</strong> Animating elements based on scroll position. This is a newer feature with growing browser support, enabling very dynamic and engaging experiences.</li>
-        <li><strong className="text-foreground">Container Queries:</strong> Styling elements based on the size of their container, rather than just the viewport.</li>
-        <li><strong className="text-foreground">CSS Custom Properties (Variables):</strong> For more dynamic and themeable stylesheets.</li>
-        <li><strong className="text-foreground">Advanced Selectors & Pseudo-elements:</strong> For highly specific targeting and styling.</li>
-        <li><strong className="text-foreground">3D Transforms:</strong> Creating depth and perspective in your UI.</li>
-      </ul>
-      <p className="text-sm text-muted-foreground mt-4">These topics often require deeper dives and more complex examples. We'll be adding dedicated tutorials and tools for these in the future!</p>
-      <Button variant="outline" disabled>Explore Advanced (Coming Soon)</Button>
+    <CardContent className="space-y-6">
+      <p className="text-sm text-muted-foreground">CSS is a vast and ever-evolving language. Beyond the topics covered, here are some other advanced areas that offer exciting possibilities for web UIs:</p>
+      
+      <div>
+        <h3 className="text-lg font-semibold mb-1 text-secondary-darker">Container Queries</h3>
+        <p className="text-sm text-muted-foreground">Container Queries (<code className="text-foreground">@container</code>) allow you to style elements based on the size or characteristics of their nearest query container, rather than the entire viewport. This is a game-changer for creating truly modular and context-aware components.</p>
+        <CodeBlock language="css">{`
+/* Example: A card component that changes layout based on its container's width */
+.card-container {
+  container-type: inline-size; /* Define this as a query container */
+  container-name: my-card;
+}
+
+.card-content {
+  /* Default styles for smaller containers */
+  display: block;
+}
+
+@container my-card (min-width: 400px) {
+  .card-content {
+    /* Styles for when the .card-container is at least 400px wide */
+    display: flex; 
+    gap: 1rem;
+  }
+}`}</CodeBlock>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-1 text-secondary-darker">Scroll-driven Animations</h3>
+        <p className="text-sm text-muted-foreground">This emerging CSS feature allows you to link animations to the scroll position of an element or the entire viewport. You can create effects like parallax scrolling, progress bars that update on scroll, or elements that animate into view as the user scrolls, all without JavaScript.</p>
+        <p className="text-xs text-muted-foreground mt-1">Key properties include <code className="text-foreground">animation-timeline</code>, <code className="text-foreground">scroll-timeline</code>, and <code className="text-foreground">view-timeline</code>. Browser support is evolving, so check compatibility.</p>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-1 text-secondary-darker">3D Transforms</h3>
+        <p className="text-sm text-muted-foreground">While 2D transforms (<code className="text-foreground">translate</code>, <code className="text-foreground">scale</code>, <code className="text-foreground">rotate</code>, <code className="text-foreground">skew</code>) are common, CSS also supports 3D transformations. This allows you to create depth and perspective effects on the web page using functions like <code className="text-foreground">rotate3d()</code>, <code className="text-foreground">translate3d()</code>, <code className="text-foreground">scale3d()</code>, and properties like <code className="text-foreground">perspective</code> and <code className="text-foreground">transform-style</code>.</p>
+      </div>
+      
+      <div>
+        <h3 className="text-lg font-semibold mb-1 text-secondary-darker">Advanced Selectors & Specificity</h3>
+        <p className="text-sm text-muted-foreground">Mastering selectors like <code className="text-foreground">:is()</code>, <code className="text-foreground">:where()</code>, <code className="text-foreground">:has()</code>, and understanding CSS specificity deeply allows for more precise and maintainable stylesheets. Check out our dedicated tutorial on this topic!</p>
+      </div>
+
+      <p className="text-sm text-muted-foreground mt-4 border-t pt-4">These topics often involve more complex setups and a deeper understanding of CSS rendering. As you continue your CSS journey, exploring these areas will unlock even more creative potential!</p>
     </CardContent>
   </Card>
 );
@@ -296,11 +408,12 @@ export default function AdditionalFeaturesPage() {
       </header>
 
       <Tabs defaultValue="hover-effects" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-6">
-          <TabsTrigger value="hover-effects">Hover Effects</TabsTrigger>
-          <TabsTrigger value="transitions">Transitions</TabsTrigger>
-          <TabsTrigger value="animations">Animations</TabsTrigger>
-          <TabsTrigger value="more-features">More</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 gap-2 mb-6">
+          <TabsTrigger value="hover-effects"><MousePointerClick className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Hover Effects</TabsTrigger>
+          <TabsTrigger value="transitions"><Move className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Transitions</TabsTrigger>
+          <TabsTrigger value="animations"><Film className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Animations</TabsTrigger>
+          <TabsTrigger value="custom-properties"><VariableIcon className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>Custom Props</TabsTrigger>
+          <TabsTrigger value="more-features"><Zap className="mr-2 h-4 w-4 sm:hidden md:inline-block"/>More Concepts</TabsTrigger>
         </TabsList>
         <TabsContent value="hover-effects">
           <HoverEffectsSection />
@@ -310,6 +423,9 @@ export default function AdditionalFeaturesPage() {
         </TabsContent>
         <TabsContent value="animations">
           <AnimationsSection />
+        </TabsContent>
+        <TabsContent value="custom-properties">
+          <CustomPropertiesSection />
         </TabsContent>
         <TabsContent value="more-features">
           <MoreFeaturesSection />
