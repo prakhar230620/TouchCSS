@@ -2,7 +2,7 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpenText, Puzzle, Brain, CheckCircle, ListChecks, Zap, PlayCircle, Target, Wind, Palette, Layers3, ArrowRight } from "lucide-react";
+import { BookOpenText, Puzzle, Brain, CheckCircle, ListChecks, Zap, PlayCircle, Target, Wind, Palette, Layers3, ArrowRight, GraduationCap } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
