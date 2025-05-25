@@ -35,7 +35,7 @@ export function ExplainCssForm() {
     defaultValues: {
       cssCode: "",
     },
-    mode: "onChange", 
+    mode: "onChange",
   });
 
   async function onSubmit(values: ExplainCssFormValues) {
@@ -55,15 +55,26 @@ export function ExplainCssForm() {
 
       if (!response.ok) {
         let errorDetail = `HTTP error! status: ${response.status}`;
+        let responseText = "Could not retrieve response body."; // Default for safety
+
         try {
-          const errorData = await response.json();
+          responseText = await response.text(); // Attempt to get raw response text
+          // Try to parse as JSON if possible, server might send error details in JSON
+          const errorData = JSON.parse(responseText);
           errorDetail = errorData.message || errorData.error || errorDetail;
         } catch (e) {
-          // If response is not JSON, use the status text or the generic message
+          // Parsing as JSON failed or reading text failed.
+          // Use statusText if available, otherwise stick to the basic error.
+          // If responseText was successfully read but wasn't JSON, it's still useful for debugging.
           errorDetail = response.statusText || errorDetail;
-          console.error("AI CSS Explainer: Failed to parse error response as JSON. Status:", response.status, "Response Text:", await response.text().catch(() => "Could not read response text."));
+          if (response.status === 404) {
+             console.error(`AI CSS Explainer: API route /api/flows/explainCssFlow not found (404). Raw response hint: ${responseText.substring(0, 200)}...`);
+             errorDetail = `API route not found (404). Please ensure the server is running correctly and the Genkit flow is registered.`;
+          } else {
+             console.error(`AI CSS Explainer: Failed to parse error response. Status: ${response.status}. Raw Response Text: ${responseText.substring(0,500)}...`);
+          }
         }
-        // For common server errors, provide a hint about API key or server issues.
+        
         if (response.status === 500 || response.status === 401 || response.status === 403) {
             console.error(`AI CSS Explainer: Server error ${response.status}. This might be due to an issue with the Genkit flow execution, the AI model, or API key configuration.`);
         }
@@ -92,9 +103,9 @@ export function ExplainCssForm() {
             Error Generating Explanation
           </div>
         ),
-        description: "Could not get explanation. " + errorMessage + (errorMessage.includes("HTTP error") ? " Please ensure the server is running and accessible." : " Check console for details."),
+        description: "Could not get explanation. " + errorMessage,
       });
-      console.error("AI CSS Explainer Error:", err);
+      console.error("AI CSS Explainer Error (onSubmit):", err);
     } finally {
       setIsLoading(false);
     }
@@ -126,9 +137,9 @@ export function ExplainCssForm() {
               </FormItem>
             )}
           />
-          <Button 
-            type="submit" 
-            disabled={isLoading || !form.formState.isValid} 
+          <Button
+            type="submit"
+            disabled={isLoading || !form.formState.isValid}
             className="w-full sm:w-auto rounded-lg text-base py-3 px-6 sm:px-8 shadow-md hover:shadow-primary/30 transition-shadow duration-300 bg-primary hover:bg-primary/90"
             size="lg"
           >
