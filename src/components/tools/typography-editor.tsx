@@ -69,7 +69,7 @@ export function TypographyEditor() {
       `font-family: ${fontFamily};`,
       `font-size: ${fontSize}px;`,
       `font-weight: ${fontWeight};`,
-      `line-height: ${lineHeight};`,
+      `line-height: ${lineHeight.toFixed(1)};`,
       `letter-spacing: ${letterSpacing}px;`,
       `color: ${textColor};`,
       `text-align: ${textAlign};`,
@@ -109,13 +109,13 @@ export function TypographyEditor() {
       <CardHeader className="pb-4">
         <CardTitle className="text-xl flex items-center justify-between text-primary-dark">
           <span className="flex items-center gap-2"><CaseSensitive className="w-6 h-6"/> Typography Editor</span>
-          <Button variant="ghost" size="icon" onClick={resetValues} className="text-muted-foreground hover:text-primary">
+          <Button variant="ghost" size="icon" onClick={resetValues} className="text-muted-foreground hover:text-primary-dark">
             <RefreshCw className="w-5 h-5" />
           </Button>
         </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
-        <div className="space-y-4 p-1">
+        <div className="space-y-3 p-1 max-h-[350px] overflow-y-auto pr-2">
           <div>
             <Label htmlFor="fontFamily" className="text-xs">Font Family</Label>
             <Select value={fontFamily} onValueChange={setFontFamily}>
@@ -157,7 +157,7 @@ export function TypographyEditor() {
             </div>
             <div>
               <Label htmlFor="letterSpacing" className="text-xs">Letter Spacing ({letterSpacing}px)</Label>
-              <Slider id="letterSpacing" value={[letterSpacing]} onValueChange={(v) => setLetterSpacing(v[0])} min={-5} max={10} step={0.5} className="mt-1 [&>span]:bg-primary" />
+              <Slider id="letterSpacing" value={[letterSpacing]} onValueChange={(v) => setLetterSpacing(v[0])} min={-5} max={10} step={0.1} className="mt-1 [&>span]:bg-primary" />
             </div>
           </div>
 
@@ -203,11 +203,11 @@ export function TypographyEditor() {
 
         <div className="space-y-4">
           <div 
-            className="flex items-center justify-center rounded-lg bg-background h-48 shadow-inner border border-border p-4 overflow-hidden"
+            className="flex items-center justify-center rounded-lg bg-background h-48 shadow-inner border border-border p-4 overflow-auto" // Changed overflow-hidden to overflow-auto
             data-ai-hint="typography preview text"
           >
             <p style={previewStyle} className="break-words max-w-full">
-              The quick brown fox jumps over the lazy dog.
+              The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.
             </p>
           </div>
           
@@ -218,7 +218,7 @@ export function TypographyEditor() {
               value={generatedCss}
               readOnly
               className="mt-1 min-h-[120px] font-mono text-xs bg-muted/50"
-              rows={5}
+              rows={8} // Increased rows
             />
             <Button onClick={handleCopyCss} variant="outline" size="sm" className="mt-2 w-full sm:w-auto">
               <Copy className="mr-2 h-4 w-4" /> Copy CSS
@@ -229,5 +229,3 @@ export function TypographyEditor() {
     </Card>
   );
 }
-
-    

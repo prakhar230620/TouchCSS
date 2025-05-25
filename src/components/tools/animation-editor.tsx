@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Copy, RefreshCw, Film, Play, Square, Trash2 } from 'lucide-react'; // Added Trash2
+import { Copy, RefreshCw, Film, Play, Square, Trash2, PlusCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -19,12 +19,12 @@ interface Keyframe {
 }
 
 const initialKeyframes: Keyframe[] = [
-  { id: 'kf-start', percentage: 0, properties: 'transform: translateX(0px) rotate(0deg);\nopacity: 1;' },
-  { id: 'kf-end', percentage: 100, properties: 'transform: translateX(50px) rotate(45deg);\nopacity: 0.5;' },
+  { id: 'kf-start-anim', percentage: 0, properties: 'transform: translateX(0px) rotate(0deg) scale(1);\nopacity: 1;' },
+  { id: 'kf-end-anim', percentage: 100, properties: 'transform: translateX(50px) rotate(45deg) scale(1.2);\nopacity: 0.5;' },
 ];
 
 export function AnimationEditor() {
-  const [animationName, setAnimationName] = useState('myAnimation');
+  const [animationName, setAnimationName] = useState('myCoolAnimation');
   const [duration, setDuration] = useState(2); // seconds
   const [timingFunction, setTimingFunction] = useState('ease');
   const [delay, setDelay] = useState(0); // seconds
@@ -39,13 +39,13 @@ export function AnimationEditor() {
 
   useEffect(() => {
     const keyframesCss = keyframes
-      .sort((a, b) => a.percentage - b.percentage)
+      .sort((a, b) => a.percentage - b.percentage) // Ensure keyframes are sorted by percentage
       .map(kf => `  ${kf.percentage}% {\n    ${kf.properties.split('\n').map(p => `  ${p.trim()}`).join('\n    ')}\n  }`)
       .join('\n');
 
     const animationProperty = `${animationName} ${duration}s ${timingFunction} ${delay}s ${iterationCount} ${direction} ${fillMode}`;
     
-    const css = `@keyframes ${animationName} {\n${keyframesCss}\n}\n\n.animated-element {\n  animation: ${animationProperty};\n}`;
+    const css = `@keyframes ${animationName} {\n${keyframesCss}\n}\n\n.animated-element {\n  animation: ${animationProperty};\n  /* Add other base styles for .animated-element if needed, e.g., width, height */\n  width: 50px; /* Example base style */ \n  height: 50px; /* Example base style */\n}`;
     setGeneratedCss(css);
 
   }, [animationName, duration, timingFunction, delay, iterationCount, direction, fillMode, keyframes]);
@@ -61,14 +61,18 @@ export function AnimationEditor() {
   };
 
   const resetValues = () => {
-    setAnimationName('myAnimation');
+    setAnimationName('myCoolAnimation');
     setDuration(2);
     setTimingFunction('ease');
     setDelay(0);
     setIterationCount('1');
     setDirection('normal');
     setFillMode('forwards');
-    setKeyframes(initialKeyframes);
+    // Use new fixed IDs for initial keyframes upon reset
+    setKeyframes([
+      { id: 'kf-start-anim-reset', percentage: 0, properties: 'transform: translateX(0px) rotate(0deg) scale(1);\nopacity: 1;' },
+      { id: 'kf-end-anim-reset', percentage: 100, properties: 'transform: translateX(50px) rotate(45deg) scale(1.2);\nopacity: 0.5;' },
+    ]);
     triggerPreviewReset();
     toast({
       title: "Editor Reset",
@@ -77,7 +81,7 @@ export function AnimationEditor() {
   };
 
   const triggerPreviewReset = () => {
-    setPreviewKey(prev => prev + 1); // Change key to force re-render and restart animation
+    setPreviewKey(prev => prev + 1); 
   };
 
   const addKeyframe = () => {
@@ -86,7 +90,7 @@ export function AnimationEditor() {
       return;
     }
     const newPercentage = keyframes.length > 0 ? Math.min(100, keyframes[keyframes.length - 1].percentage + 20) : 50;
-    setKeyframes([...keyframes, { id: crypto.randomUUID(), percentage: newPercentage, properties: '/* Add styles here */' }]);
+    setKeyframes([...keyframes, { id: crypto.randomUUID(), percentage: newPercentage, properties: '/* Add styles here */\n/* e.g., transform: translateY(20px); */' }]);
   };
 
   const removeKeyframe = (id: string) => {
@@ -104,7 +108,7 @@ export function AnimationEditor() {
   };
 
 
-  const timingFunctions = ['ease', 'linear', 'ease-in', 'ease-out', 'ease-in-out', 'step-start', 'step-end'];
+  const timingFunctions = ['ease', 'linear', 'ease-in', 'ease-out', 'ease-in-out', 'step-start', 'step-end', 'cubic-bezier(0.1, 0.7, 1.0, 0.1)'];
   const directions = ['normal', 'reverse', 'alternate', 'alternate-reverse'];
   const fillModes = ['none', 'forwards', 'backwards', 'both'];
 
@@ -114,17 +118,17 @@ export function AnimationEditor() {
       <CardHeader className="pb-4">
         <CardTitle className="text-xl flex items-center justify-between text-destructive-darker">
           <span className="flex items-center gap-2"><Film className="w-6 h-6"/> Animation Editor</span>
-          <Button variant="ghost" size="icon" onClick={resetValues} className="text-muted-foreground hover:text-destructive">
+          <Button variant="ghost" size="icon" onClick={resetValues} className="text-muted-foreground hover:text-destructive-darker">
             <RefreshCw className="w-5 h-5" />
           </Button>
         </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
         {/* Controls Column */}
-        <div className="space-y-3 p-1 max-h-[450px] overflow-y-auto pr-2">
+        <div className="space-y-3 p-1 max-h-[420px] overflow-y-auto pr-2">
           <div>
             <Label htmlFor="animationName" className="text-xs">Animation Name</Label>
-            <Input id="animationName" type="text" value={animationName} onChange={e => setAnimationName(e.target.value.replace(/\s+/g, '-') || 'myAnimation')} className="mt-1 h-8 text-xs" />
+            <Input id="animationName" type="text" value={animationName} onChange={e => setAnimationName(e.target.value.replace(/[^a-zA-Z0-9-]/g, '') || 'myCoolAnimation')} className="mt-1 h-8 text-xs" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -167,8 +171,8 @@ export function AnimationEditor() {
           <div className="pt-2">
             <div className="flex justify-between items-center mb-1">
                 <Label className="text-xs font-medium">Keyframes</Label>
-                <Button variant="outline" size="xs" onClick={addKeyframe} className="text-xs h-6 border-destructive/50 text-destructive hover:bg-destructive/10 hover:text-destructive" disabled={keyframes.length >= 5}>
-                    Add Keyframe
+                <Button variant="outline" size="xs" onClick={addKeyframe} className="text-xs h-7 border-destructive/50 text-destructive hover:bg-destructive/10 hover:text-destructive-darker" disabled={keyframes.length >= 5}>
+                    <PlusCircle className="mr-1 h-3.5 w-3.5"/> Add
                 </Button>
             </div>
             <div className="space-y-2">
@@ -187,7 +191,7 @@ export function AnimationEditor() {
                     <Textarea 
                       value={kf.properties} 
                       onChange={e => updateKeyframe(kf.id, 'properties', e.target.value)} 
-                      className="flex-1 text-xs min-h-[40px] font-mono" 
+                      className="flex-1 text-xs min-h-[40px] font-mono resize-y" 
                       rows={2}
                       placeholder="e.g., transform: scale(1.2);"
                     />
@@ -203,25 +207,25 @@ export function AnimationEditor() {
 
         {/* Preview & Output Column */}
         <div className="space-y-4">
-          <div className="flex items-center justify-center rounded-lg bg-background h-48 shadow-inner border border-border p-4 relative">
-            <style>
+          <div className="flex items-center justify-center rounded-lg bg-background h-48 shadow-inner border border-border p-4 relative overflow-hidden">
+            <style key={`anim-style-${previewKey}`}> 
               {`
                 @keyframes ${animationName}-${previewKey} {
                   ${keyframes.map(kf => `${kf.percentage}% { ${kf.properties} }`).join('\n')}
                 }
-                .preview-animated-element-${previewKey} {
-                  animation-name: ${animationName}-${previewKey};
-                  animation-duration: ${duration}s;
-                  animation-timing-function: ${timingFunction};
-                  animation-delay: ${delay}s;
-                  animation-iteration-count: ${iterationCount};
-                  animation-direction: ${direction};
-                  animation-fill-mode: ${fillMode};
-                }
               `}
             </style>
             <Square 
-              className={`w-16 h-16 text-destructive preview-animated-element-${previewKey}`}
+              className={`w-12 h-12 text-destructive`} 
+              style={{
+                animationName: `${animationName}-${previewKey}`,
+                animationDuration: `${duration}s`,
+                animationTimingFunction: timingFunction,
+                animationDelay: `${delay}s`,
+                animationIterationCount: iterationCount,
+                animationDirection: direction,
+                animationFillMode: fillMode,
+              }}
               data-ai-hint="animation preview object"
             />
              <Button variant="outline" size="sm" onClick={triggerPreviewReset} className="absolute top-2 right-2 text-xs h-7">
@@ -236,7 +240,7 @@ export function AnimationEditor() {
               value={generatedCss}
               readOnly
               className="mt-1 min-h-[120px] font-mono text-xs bg-muted/50"
-              rows={6}
+              rows={8}
             />
             <Button onClick={handleCopyCss} variant="outline" size="sm" className="mt-2 w-full sm:w-auto">
               <Copy className="mr-2 h-4 w-4" /> Copy CSS

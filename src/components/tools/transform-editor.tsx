@@ -23,7 +23,7 @@ export function TransformEditor() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const transformValue = `translateX(${translateX}px) translateY(${translateY}px) scale(${scale}) rotate(${rotate}deg) skewX(${skewX}deg) skewY(${skewY}deg)`;
+    const transformValue = `translateX(${translateX}px) translateY(${translateY}px) scale(${scale.toFixed(2)}) rotate(${rotate}deg) skewX(${skewX}deg) skewY(${skewY}deg)`;
     setPreviewStyle({ transform: transformValue });
     setGeneratedCss(`transform: ${transformValue};`);
   }, [translateX, translateY, scale, rotate, skewX, skewY]);
@@ -56,13 +56,13 @@ export function TransformEditor() {
       <CardHeader className="pb-4">
         <CardTitle className="text-xl flex items-center justify-between text-secondary-darker">
           <span className="flex items-center gap-2"><Scaling className="w-6 h-6"/> Transform Editor</span>
-          <Button variant="ghost" size="icon" onClick={resetValues} className="text-muted-foreground hover:text-secondary">
+          <Button variant="ghost" size="icon" onClick={resetValues} className="text-muted-foreground hover:text-secondary-darker">
             <RefreshCw className="w-5 h-5" />
           </Button>
         </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
-        <div className="space-y-4 p-1">
+        <div className="space-y-3 p-1 max-h-[350px] overflow-y-auto pr-2">
           <div>
             <Label htmlFor="translateX" className="text-xs">Translate X ({translateX}px)</Label>
             <Slider id="translateX" value={[translateX]} onValueChange={(v) => setTranslateX(v[0])} min={-100} max={100} step={1} className="mt-1 [&>span]:bg-secondary-dark" />
@@ -73,7 +73,7 @@ export function TransformEditor() {
           </div>
           <div>
             <Label htmlFor="scale" className="text-xs">Scale ({scale.toFixed(2)})</Label>
-            <Slider id="scale" value={[scale]} onValueChange={(v) => setScale(v[0])} min={0.1} max={3} step={0.05} className="mt-1 [&>span]:bg-secondary-dark" />
+            <Slider id="scale" value={[scale]} onValueChange={(v) => setScale(v[0])} min={0.1} max={3} step={0.01} className="mt-1 [&>span]:bg-secondary-dark" />
           </div>
           <div>
             <Label htmlFor="rotate" className="text-xs">Rotate ({rotate}deg)</Label>
@@ -118,5 +118,3 @@ export function TransformEditor() {
     </Card>
   );
 }
-
-    

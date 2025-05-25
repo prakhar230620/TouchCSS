@@ -71,7 +71,7 @@ export function FilterEffectsEditor() {
       <CardHeader className="pb-4">
         <CardTitle className="text-xl flex items-center justify-between text-accent-darker">
           <span className="flex items-center gap-2"><Wand2 className="w-6 h-6"/> Filter Effects Editor</span>
-          <Button variant="ghost" size="icon" onClick={resetValues} className="text-muted-foreground hover:text-accent">
+          <Button variant="ghost" size="icon" onClick={resetValues} className="text-muted-foreground hover:text-accent-darker">
             <RefreshCw className="w-5 h-5" />
           </Button>
         </CardTitle>
@@ -80,7 +80,7 @@ export function FilterEffectsEditor() {
         <div className="space-y-3 p-1 max-h-[350px] overflow-y-auto pr-2">
           <div>
             <Label htmlFor="blur" className="text-xs">Blur ({blur}px)</Label>
-            <Slider id="blur" value={[blur]} onValueChange={(v) => setBlur(v[0])} min={0} max={20} step={0.5} className="mt-1 [&>span]:bg-accent" />
+            <Slider id="blur" value={[blur]} onValueChange={(v) => setBlur(v[0])} min={0} max={20} step={0.1} className="mt-1 [&>span]:bg-accent" />
           </div>
           <div>
             <Label htmlFor="brightness" className="text-xs">Brightness ({brightness}%)</Label>
@@ -104,7 +104,7 @@ export function FilterEffectsEditor() {
           </div>
            <div>
             <Label htmlFor="saturate" className="text-xs">Saturate ({saturate}%)</Label>
-            <Slider id="saturate" value={[saturate]} onValueChange={(v) => setSaturate(v[0])} min={0} max={200} step={1} className="mt-1 [&>span]:bg-accent" />
+            <Slider id="saturate" value={[saturate]} onValueChange={(v) => setSaturate(v[0])} min={0} max={300} step={1} className="mt-1 [&>span]:bg-accent" />
           </div>
            <div>
             <Label htmlFor="sepia" className="text-xs">Sepia ({sepia}%)</Label>
@@ -115,13 +115,13 @@ export function FilterEffectsEditor() {
         <div className="space-y-4">
           <div className="flex items-center justify-center rounded-lg bg-muted h-48 shadow-inner border border-border overflow-hidden">
             <Image 
-                src="https://placehold.co/200x150/0D9488/FFFFFF.png" // Teal background, white text placeholder
+                src="https://placehold.co/200x150/F59E0B/FFFFFF.png" // Accent background, white text placeholder
                 alt="Filter Preview Image" 
                 width={200} 
                 height={150} 
                 style={previewStyle} 
-                className="object-cover transition-all duration-300 ease-out"
-                data-ai-hint="colorful landscape photo"
+                className="object-cover transition-all duration-100 ease-out" // Faster transition
+                data-ai-hint="colorful abstract photo"
             />
           </div>
           
@@ -132,7 +132,7 @@ export function FilterEffectsEditor() {
               value={generatedCss}
               readOnly
               className="mt-1 min-h-[60px] font-mono text-xs bg-muted/50"
-              rows={2}
+              rows={3}
             />
             <Button onClick={handleCopyCss} variant="outline" size="sm" className="mt-2 w-full sm:w-auto">
               <Copy className="mr-2 h-4 w-4" /> Copy CSS
@@ -143,5 +143,3 @@ export function FilterEffectsEditor() {
     </Card>
   );
 }
-
-    

@@ -2,7 +2,7 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DraftingCompass, Layers, SlidersHorizontal, Type, Code, Eye, Zap, Settings, Move, Maximize, CircleDot, Sparkles, Pipette, Bot, Paintbrush, MountainSnow, Shapes, Blend, Film, Scaling, Wand2, CaseSensitive, Grid, Sigma, Palette as PaletteIcon } from "lucide-react";
+import { DraftingCompass, Layers, SlidersHorizontal, Type, Code, Eye, Zap, Settings, Move, Maximize, CircleDot, Sparkles, Pipette, Bot, Paintbrush, MountainSnow, Shapes, Blend, Film, Scaling, Wand2, CaseSensitive, Grid, Sigma, Palette as PaletteIcon, Code2Icon, Settings2, Wind, Puzzle, Brain, Lightbulb } from "lucide-react";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
