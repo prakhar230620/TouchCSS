@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Rocket, Lightbulb, Palette, Zap, Code, Brush } from "lucide-react";
+import { Rocket, Lightbulb, Palette as PaletteIcon, Zap, Code, Brush, Layers, Sparkles as SparklesIcon } from "lucide-react"; // Added Layers
 import Link from "next/link";
 import Image from "next/image";
 
@@ -64,16 +64,16 @@ export default function HomePage() {
         <Card className="rounded-2xl shadow-xl hover:shadow-primary/20 transition-all duration-300 ease-in-out transform hover:-translate-y-1.5">
           <CardHeader className="items-center text-center p-6">
             <div className="p-4 bg-primary/10 rounded-full mb-4">
-              <Code className="w-10 h-10 text-primary" />
+              <Layers className="w-10 h-10 text-primary" />
             </div>
-            <CardTitle className="text-2xl">Build & Export</CardTitle>
+            <CardTitle className="text-2xl">Explore CSS Features</CardTitle>
             <CardDescription>
-              Assemble UI components, generate themes, and export your work as clean HTML/CSS or Tailwind.
+              Discover hover effects, transitions, animations, and other modern CSS techniques with examples.
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center p-6 pt-0">
             <Button variant="secondary" className="w-full rounded-lg" asChild>
-              <Link href="/export">See Export Options</Link>
+              <Link href="/additional-features">See Features</Link>
             </Button>
           </CardContent>
         </Card>
@@ -86,7 +86,7 @@ export default function HomePage() {
         </p>
         <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-10 py-7 text-xl shadow-lg hover:shadow-accent/30 transition-all duration-300 transform hover:scale-105">
           <Link href="/tools/explain-css">
-            Try AI CSS Explainer <Zap className="ml-2 h-6 w-6"/>
+            Try AI CSS Explainer <SparklesIcon className="ml-2 h-6 w-6"/>
           </Link>
         </Button>
       </section>

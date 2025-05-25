@@ -3,15 +3,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, GraduationCap, LayoutGrid, Share2, Sparkles } from "lucide-react"; // Changed Settings2 to Sparkles
+import { Home, GraduationCap, LayoutGrid, Layers, Sparkles } from "lucide-react"; // Changed Share2 to Layers
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/learn", label: "Learn", icon: GraduationCap },
   { href: "/build", label: "Build", icon: LayoutGrid },
-  { href: "/export", label: "Export", icon: Share2 },
-  { href: "/tools/explain-css", label: "AI Tools", icon: Sparkles }, // Changed label and icon
+  { href: "/additional-features", label: "Features", icon: Layers }, // Changed from Export to Additional Features
+  { href: "/tools/explain-css", label: "AI Tools", icon: Sparkles },
 ];
 
 export function BottomNavigation() {
@@ -22,7 +22,10 @@ export function BottomNavigation() {
       <div className="container mx-auto h-full">
         <ul className="flex justify-around items-center h-full px-2">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href) && item.href !== "/tools/explain-css") || (item.href === "/tools/explain-css" && pathname.startsWith("/tools"));
+            const isActive = pathname === item.href || 
+                             (item.href !== "/" && pathname.startsWith(item.href) && item.href !== "/tools/explain-css" && item.href !== "/additional-features") ||
+                             (item.href === "/tools/explain-css" && pathname.startsWith("/tools")) ||
+                             (item.href === "/additional-features" && pathname === "/additional-features");
             return (
               <li key={item.label} className="flex-1">
                 <Link
