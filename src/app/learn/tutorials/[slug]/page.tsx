@@ -12,6 +12,7 @@ import { ChevronLeft, ChevronRight, LayoutGrid, Layers3, ListChecks, Wind, Targe
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton"; // Added import
 
 interface TutorialChapter {
   id: string;
@@ -834,9 +835,9 @@ export default function TutorialPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-4 sm:p-6 text-foreground leading-relaxed">
-                    <div className="prose prose-sm sm:prose-base dark:prose-invert !max-w-none">
-                        {currentChapter.content}
-                    </div>
+                  <div className="prose prose-sm sm:prose-base dark:prose-invert !max-w-none">
+                    {currentChapter.content}
+                  </div>
                 </CardContent>
               </Card>
             </ScrollArea>
