@@ -1,10 +1,9 @@
 
 "use client";
 
-import type { NextPage } from "next";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect, type ReactNode } from "react";
-import Image from "next/image"; // Added import for Next Image
+import Image from "next/image"; 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -373,27 +372,36 @@ const tutorialsData: Tutorial[] = [
 ];
 
 
-const TutorialPage: NextPage = () => {
+export default function TutorialPage() {
   const params = useParams();
   const router = useRouter();
-  const slug = params.slug as string;
+  
+  // Ensure params is not null and slug is a string before using it
+  const slug = params?.slug as string | undefined;
 
   const [tutorial, setTutorial] = useState<Tutorial | null>(null);
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   useEffect(() => {
-    const foundTutorial = tutorialsData.find((t) => t.slug === slug);
-    if (foundTutorial) {
-      setTutorial(foundTutorial);
-      setCurrentChapterIndex(0); 
-    } else {
-      router.push("/learn"); 
+    if (slug) {
+      const foundTutorial = tutorialsData.find((t) => t.slug === slug);
+      if (foundTutorial) {
+        setTutorial(foundTutorial);
+        setCurrentChapterIndex(0); 
+      } else {
+        router.push("/learn"); 
+      }
+    } else if (params && Object.keys(params).length > 0 && !slug) {
+      // If params exist but slug is not extracted as expected (e.g. if [slug] was not found)
+      // This case might indicate an issue with routing or params structure not matching [slug]
+      // For safety, redirect or show an error.
+      router.push("/learn");
     }
-  }, [slug, router]);
+    // Only run when slug or router changes. If params is included and it's a new object each render, it could cause infinite loops.
+  }, [slug, router, params]); // Added params to dependency array as per React's rules for exhaustive-deps, carefully.
 
   useEffect(() => {
-    // Scroll to top of content area when chapter changes
     const contentArea = document.getElementById("tutorial-content-area");
     if (contentArea) {
       contentArea.scrollTop = 0;
@@ -401,7 +409,7 @@ const TutorialPage: NextPage = () => {
   }, [currentChapterIndex, slug]);
 
 
-  if (!tutorial) {
+  if (!tutorial || !slug) { // Also check if slug is available
     return (
       <div className="flex items-center justify-center h-[calc(100vh-10rem)]">
         <LayoutGrid className="w-12 h-12 animate-spin text-primary" />
@@ -543,8 +551,4 @@ const TutorialPage: NextPage = () => {
       </main>
     </div>
   );
-};
-
-export default TutorialPage;
-
-    
+}
