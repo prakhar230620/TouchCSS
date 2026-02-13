@@ -1607,8 +1607,8 @@ ul li::marker {
               <LI><BoldText>Descendant Combinator (space):</BoldText> <Code>A B</Code> - Selects all elements <Code>B</Code> that are descendants (children, grandchildren, etc.) of element <Code>A</Code>.
                 <br />Example: <Code>article p</Code> selects all <Code>&lt;p&gt;</Code> elements inside any <Code>&lt;article&gt;</Code> element.
               </LI>
-              <LI><BoldText>Child Combinator (<Code>&gt;</Code>):</BoldText> <Code>A > B</Code> - Selects all elements <Code>B</Code> that are direct children of element <Code>A</Code>.
-                <br />Example: <Code>ul > li</Code> selects all <Code>&lt;li&gt;</Code> elements that are direct children of a <Code>&lt;ul&gt;</Code>.
+              <LI><BoldText>Child Combinator (<Code>&gt;</Code>):</BoldText> <Code>A &gt; B</Code> - Selects all elements <Code>B</Code> that are direct children of element <Code>A</Code>.
+                <br />Example: <Code>ul &gt; li</Code> selects all <Code>&lt;li&gt;</Code> elements that are direct children of a <Code>&lt;ul&gt;</Code>.
               </LI>
               <LI><BoldText>Adjacent Sibling Combinator (<Code>+</Code>):</BoldText> <Code>A + B</Code> - Selects element <Code>B</Code> if it immediately follows element <Code>A</Code>, and both are children of the same parent.
                 <br />Example: <Code>h2 + p</Code> selects the first <Code>&lt;p&gt;</Code> element that immediately follows an <Code>&lt;h2&gt;</Code> element.
