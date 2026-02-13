@@ -76,7 +76,7 @@ const ImageContainer: React.FC<{ src: string; alt: string; width: number; height
     {caption && <figcaption className="mt-2 text-xs text-muted-foreground italic text-center">{caption}</figcaption>}
   </figure>
 );
-const Tip: React.FC<{ children: ReactNode; className?: string }> = ({children, className}) => (
+const Tip: React.FC<{ children: ReactNode; className?: string }> = ({ children, className }) => (
   <div className={cn("my-4 p-4 border-l-4 border-accent bg-accent/10 rounded-r-md text-accent-darker", className)}>
     <BoldText>Tip:</BoldText> {children}
   </div>
@@ -154,7 +154,7 @@ const tutorialsData: Tutorial[] = [
               <LI><BoldText>Flex Items:</BoldText> These are the direct children of a flex container. As soon as their parent becomes a flex container, they automatically become flex items and gain special flex properties.</LI>
             </UL>
             <CodeBlock language="css">{
-`/* To make an element a flex container */
+              `/* To make an element a flex container */
 .flex-container {
   display: flex; /* Establishes a block-level flex container */
 }
@@ -189,7 +189,7 @@ const tutorialsData: Tutorial[] = [
             </UL>
             <ImageContainer src="https://placehold.co/600x250.png" alt="Visual examples of flex-direction row and column" width={600} height={250} data-ai-hint="flex direction example" caption="Illustrating flex-direction: row (items arranged horizontally) vs. column (items arranged vertically)." />
             <CodeBlock language="css">{
-`.container {
+              `.container {
   display: flex;
   flex-direction: column; /* Items will stack vertically */
 }`
@@ -204,7 +204,7 @@ const tutorialsData: Tutorial[] = [
             </UL>
             <ImageContainer src="https://placehold.co/550x200.png" alt="Flex items wrapping to a new line" width={550} height={200} data-ai-hint="flex wrap example" caption="flex-wrap: wrap allows items to flow onto subsequent lines." />
             <CodeBlock language="css">{
-`.container {
+              `.container {
   display: flex;
   flex-wrap: wrap; /* Items will wrap if they don't fit on one line */
   width: 200px; /* Container width to demonstrate wrapping */
@@ -214,7 +214,7 @@ const tutorialsData: Tutorial[] = [
             <H4><Code>flex-flow</Code></H4>
             <P>This is a shorthand property for setting both <Code>flex-direction</Code> and <Code>flex-wrap</Code> in one declaration.</P>
             <CodeBlock language="css">{
-`.container {
+              `.container {
   display: flex;
   flex-flow: row wrap; /* Equivalent to flex-direction: row; and flex-wrap: wrap; */
 }`
@@ -229,23 +229,23 @@ const tutorialsData: Tutorial[] = [
             <H4><Code>order</Code></H4>
             <P>Allows you to change the visual order of flex items, independent of their source order in the HTML. Items with lower <Code>order</Code> values appear first. The default is 0.</P>
             <CodeBlock language="css">{
-`.item-A { order: 2; } /* Will appear after item-B if item-B has order: 1 */
+              `.item-A { order: 2; } /* Will appear after item-B if item-B has order: 1 */
 .item-B { order: 1; }`
             }</CodeBlock>
 
             <H4><Code>flex-grow</Code></H4>
             <P>Dictates how much a flex item can <BoldText>grow</BoldText> relative to other items if there's extra space in the flex container. It's a unitless proportion. Default is 0 (does not grow).</P>
             <InteractiveFlexContainer
-              containerProps={{width: '300px'}}
+              containerProps={{ width: '300px' }}
               items={[
                 { text: 'Item 1 (grow 1)', style: { flexGrow: 1 } },
                 { text: 'Item 2 (grow 2)', style: { flexGrow: 2 } },
-                { text: 'Item 3', style: { flexGrow: 0} }, /* Default no grow */
+                { text: 'Item 3', style: { flexGrow: 0 } }, /* Default no grow */
               ]}
               height="80px"
             />
             <CodeBlock language="css">{
-`.item-can-grow {
+              `.item-can-grow {
   flex-grow: 1; /* This item will take up available space */
 }
 .item-grows-more {
@@ -255,8 +255,8 @@ const tutorialsData: Tutorial[] = [
 
             <H4><Code>flex-shrink</Code></H4>
             <P>Defines the ability of a flex item to <BoldText>shrink</BoldText> relative to other items if there isn't enough space in the container. Default is 1 (can shrink).</P>
-             <CodeBlock language="css">{
-`.item-no-shrink {
+            <CodeBlock language="css">{
+              `.item-no-shrink {
   flex-shrink: 0; /* This item will not shrink smaller than its basis size */
 }`
             }</CodeBlock>
@@ -264,7 +264,7 @@ const tutorialsData: Tutorial[] = [
             <H4><Code>flex-basis</Code></H4>
             <P>Specifies the <BoldText>initial main size</BoldText> of a flex item before free space is distributed according to <Code>flex-grow</Code> or <Code>flex-shrink</Code>. It can be a length (e.g., <Code>20%</Code>, <Code>100px</Code>), or <Code>auto</Code> (item's intrinsic size).</P>
             <CodeBlock language="css">{
-`.item {
+              `.item {
   flex-basis: 150px; /* This item wants to be 150px wide (if row) or tall (if column) initially */
 }`
             }</CodeBlock>
@@ -279,16 +279,16 @@ const tutorialsData: Tutorial[] = [
               <LI><Code>flex: 1;</Code> (equivalent to <Code>flex: 1 1 0%;</Code> - item takes proportional share of space)</LI>
             </UL>
             <CodeBlock language="css">{
-`.item {
+              `.item {
   flex: 1 0 100px; /* grow: 1, shrink: 0, basis: 100px */
 }`
             }</CodeBlock>
 
             <H4><Code>align-self</Code></H4>
             <P>Allows a single flex item to override the <Code>align-items</Code> value set on the flex container for itself. Possible values are similar to <Code>align-items</Code> (e.g., <Code>flex-start</Code>, <Code>flex-end</Code>, <Code>center</Code>, <Code>stretch</Code>, <Code>baseline</Code>).</P>
-            <ImageContainer src="https://placehold.co/400x150.png" alt="One item aligning itself differently" width={400} height={150} data-ai-hint="align self example" caption="align-self allows an individual item to break from the group's cross-axis alignment."/>
+            <ImageContainer src="https://placehold.co/400x150.png" alt="One item aligning itself differently" width={400} height={150} data-ai-hint="align self example" caption="align-self allows an individual item to break from the group's cross-axis alignment." />
             <CodeBlock language="css">{
-`.container {
+              `.container {
   display: flex;
   align-items: center; /* All items center by default */
 }
@@ -326,7 +326,7 @@ const tutorialsData: Tutorial[] = [
             />
             <P className="text-sm text-center text-muted-foreground -mt-2 mb-4">Above: <Code>justify-content: space-between;</Code></P>
             <CodeBlock language="css">{
-`.container {
+              `.container {
   display: flex;
   flex-direction: row; /* Main axis is horizontal */
   justify-content: center; /* Items will be centered horizontally */
@@ -337,7 +337,7 @@ const tutorialsData: Tutorial[] = [
 
             <H3><Code>align-items</Code>: Cross Axis Alignment (Single Line)</H3>
             <P>This property aligns flex items along the <BoldText>cross axis</BoldText> of the current line. The cross axis is always perpendicular to the main axis.</P>
-            <ImageContainer src="https://placehold.co/700x350.png" alt="Visual examples of align-items values" width={700} height={350} data-ai-hint="align items flexbox diagrams" caption="Examples of align-items: flex-start, center, stretch, baseline."/>
+            <ImageContainer src="https://placehold.co/700x350.png" alt="Visual examples of align-items values" width={700} height={350} data-ai-hint="align items flexbox diagrams" caption="Examples of align-items: flex-start, center, stretch, baseline." />
             <UL>
               <LI><Code>stretch</Code> (default): Flex items stretch to fill the container's height (if <Code>flex-direction: row</Code>) or width (if <Code>flex-direction: column</Code>), respecting their min/max sizes.</LI>
               <LI><Code>flex-start</Code>: Items are packed toward the start of the cross axis.</LI>
@@ -345,11 +345,11 @@ const tutorialsData: Tutorial[] = [
               <LI><Code>center</Code>: Items are centered along the cross axis.</LI>
               <LI><Code>baseline</Code>: Items are aligned such that their text baselines align. This is useful when items have different font sizes.</LI>
             </UL>
-             <H4>Interactive Example: <Code>align-items</Code></H4>
+            <H4>Interactive Example: <Code>align-items</Code></H4>
             <InteractiveFlexContainer
               containerProps={{ alignItems: 'center', flexDirection: 'row' }}
               items={[
-                { text: 'Tall', style: { height: '60px', fontSize: '0.7rem'} },
+                { text: 'Tall', style: { height: '60px', fontSize: '0.7rem' } },
                 { text: 'Short', style: { height: '30px', fontSize: '0.7rem' } },
                 { text: 'Medium', style: { height: '45px', fontSize: '0.7rem' } }
               ]}
@@ -357,7 +357,7 @@ const tutorialsData: Tutorial[] = [
             />
             <P className="text-sm text-center text-muted-foreground -mt-2 mb-4">Above: <Code>align-items: center;</Code></P>
             <CodeBlock language="css">{
-`.container {
+              `.container {
   display: flex;
   flex-direction: row; /* Cross axis is vertical */
   align-items: center; /* Items will be centered vertically */
@@ -370,18 +370,18 @@ const tutorialsData: Tutorial[] = [
             <H3><Code>align-content</Code>: Cross Axis Alignment (Multiple Lines)</H3>
             <P>This property comes into play when you have <BoldText>multiple lines of flex items</BoldText> (i.e., when <Code>flex-wrap: wrap;</Code> is active and items have wrapped). It aligns these lines within the flex container when there's extra space in the cross-axis, similar to how <Code>justify-content</Code> aligns items on the main axis.</P>
             <P><BoldText>Important:</BoldText> <Code>align-content</Code> has no effect when there's only one line of flex items.</P>
-            <ImageContainer src="https://placehold.co/600x400.png" alt="align-content distributing space between multiple lines" width={600} height={400} data-ai-hint="align content flexbox diagrams" caption="align-content distributes space between multiple lines of flex items (e.g., space-between, center)."/>
+            <ImageContainer src="https://placehold.co/600x400.png" alt="align-content distributing space between multiple lines" width={600} height={400} data-ai-hint="align content flexbox diagrams" caption="align-content distributes space between multiple lines of flex items (e.g., space-between, center)." />
             <UL>
-                <LI><Code>stretch</Code> (default): Lines stretch to take up the remaining space.</LI>
-                <LI><Code>flex-start</Code>: Lines packed to the start of the container's cross axis.</LI>
-                <LI><Code>flex-end</Code>: Lines packed to the end of the container's cross axis.</LI>
-                <LI><Code>center</Code>: Lines packed to the center of the container's cross axis.</LI>
-                <LI><Code>space-between</Code>: Lines evenly distributed; the first line is at the start, the last one at the end.</LI>
-                <LI><Code>space-around</Code>: Lines evenly distributed with equal space around each line.</LI>
-                <LI><Code>space-evenly</Code>: Lines are distributed so that the spacing between any two lines (and the space to the edges) is equal.</LI>
+              <LI><Code>stretch</Code> (default): Lines stretch to take up the remaining space.</LI>
+              <LI><Code>flex-start</Code>: Lines packed to the start of the container's cross axis.</LI>
+              <LI><Code>flex-end</Code>: Lines packed to the end of the container's cross axis.</LI>
+              <LI><Code>center</Code>: Lines packed to the center of the container's cross axis.</LI>
+              <LI><Code>space-between</Code>: Lines evenly distributed; the first line is at the start, the last one at the end.</LI>
+              <LI><Code>space-around</Code>: Lines evenly distributed with equal space around each line.</LI>
+              <LI><Code>space-evenly</Code>: Lines are distributed so that the spacing between any two lines (and the space to the edges) is equal.</LI>
             </UL>
             <CodeBlock language="css">{
-`/* Example for align-content */
+              `/* Example for align-content */
 .container-multi-line {
   display: flex;
   flex-wrap: wrap; /* Crucial for align-content */
@@ -398,7 +398,7 @@ const tutorialsData: Tutorial[] = [
   margin: 5px;
 }`
             }</CodeBlock>
-             <P>Mastering these three alignment properties (<Code>justify-content</Code>, <Code>align-items</Code>, and <Code>align-content</Code>) is the key to unlocking truly flexible and precise layouts with Flexbox. Don't hesitate to experiment with different values in a code editor to see their effects firsthand!</P>
+            <P>Mastering these three alignment properties (<Code>justify-content</Code>, <Code>align-items</Code>, and <Code>align-content</Code>) is the key to unlocking truly flexible and precise layouts with Flexbox. Don't hesitate to experiment with different values in a code editor to see their effects firsthand!</P>
           </>
         ),
       },
@@ -413,18 +413,18 @@ const tutorialsData: Tutorial[] = [
             <P>A classic challenge: centering an element both horizontally and vertically within its parent. Flexbox makes this trivial.</P>
             <div className="my-6 p-4 border rounded-lg bg-background shadow-md">
               <h4 className="text-center text-sm font-medium mb-2 text-muted-foreground">Live Preview: Perfectly Centered</h4>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '150px', border: '1px dashed hsl(var(--border))', backgroundColor: 'hsl(var(--muted)/0.5)', borderRadius: 'var(--radius)'}}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '150px', border: '1px dashed hsl(var(--border))', backgroundColor: 'hsl(var(--muted)/0.5)', borderRadius: 'var(--radius)' }}>
                 <div style={{ padding: '20px', backgroundColor: 'hsl(var(--accent))', color: 'hsl(var(--accent-foreground))', borderRadius: 'var(--radius)', boxShadow: '0 4px 12px hsla(var(--foreground)/0.1)' }}>Centered Box</div>
               </div>
             </div>
             <CodeBlock language="html">{
-`<!-- HTML Structure -->
+              `<!-- HTML Structure -->
 <div class="parent-container">
   <div class="child-element">Centered Box</div>
 </div>`
             }</CodeBlock>
             <CodeBlock language="css">{
-`/* CSS for Perfect Centering */
+              `/* CSS for Perfect Centering */
 .parent-container {
   display: flex;
   justify-content: center; /* Centers horizontally (along main axis by default) */
@@ -446,20 +446,20 @@ const tutorialsData: Tutorial[] = [
 
             <H3>Example 2: Responsive Navigation Bar</H3>
             <P>Creating a navigation bar where the logo is on the left and navigation links are grouped to the right. This pattern is very common.</P>
-             <div className="my-6 p-4 border rounded-lg bg-background shadow-md">
+            <div className="my-6 p-4 border rounded-lg bg-background shadow-md">
               <h4 className="text-center text-sm font-medium mb-2 text-muted-foreground">Live Preview: Navigation Bar</h4>
               <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'hsl(var(--card))', padding: '1rem', borderRadius: 'var(--radius)', border: '1px solid hsl(var(--border))' }}>
-                <div style={{fontWeight: 'bold', color: 'hsl(var(--primary))', fontSize: '1.2rem'}}>Logo.</div>
-                <ul style={{display: 'flex', gap: '1rem', listStyle: 'none', margin: 0, padding: 0}}>
-                  <li><a href="#" style={{textDecoration: 'none', color: 'hsl(var(--foreground))', padding: '0.5rem'}}>Home</a></li>
-                  <li><a href="#" style={{textDecoration: 'none', color: 'hsl(var(--foreground))', padding: '0.5rem'}}>About</a></li>
-                  <li><a href="#" style={{textDecoration: 'none', color: 'hsl(var(--foreground))', padding: '0.5rem'}}>Services</a></li>
-                  <li><a href="#" style={{padding: '0.5rem 1rem', textDecoration: 'none', backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))', borderRadius: 'calc(var(--radius) - 4px)'}}>Contact</a></li>
+                <div style={{ fontWeight: 'bold', color: 'hsl(var(--primary))', fontSize: '1.2rem' }}>Logo.</div>
+                <ul style={{ display: 'flex', gap: '1rem', listStyle: 'none', margin: 0, padding: 0 }}>
+                  <li><a href="#" style={{ textDecoration: 'none', color: 'hsl(var(--foreground))', padding: '0.5rem' }}>Home</a></li>
+                  <li><a href="#" style={{ textDecoration: 'none', color: 'hsl(var(--foreground))', padding: '0.5rem' }}>About</a></li>
+                  <li><a href="#" style={{ textDecoration: 'none', color: 'hsl(var(--foreground))', padding: '0.5rem' }}>Services</a></li>
+                  <li><a href="#" style={{ padding: '0.5rem 1rem', textDecoration: 'none', backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))', borderRadius: 'calc(var(--radius) - 4px)' }}>Contact</a></li>
                 </ul>
               </nav>
             </div>
             <CodeBlock language="html">{
-`<!-- HTML Structure -->
+              `<!-- HTML Structure -->
 <nav class="navbar">
   <div class="logo">Logo.</div>
   <ul class="nav-links">
@@ -471,7 +471,7 @@ const tutorialsData: Tutorial[] = [
 </nav>`
             }</CodeBlock>
             <CodeBlock language="css">{
-`/* CSS for Navigation Bar */
+              `/* CSS for Navigation Bar */
 .navbar {
   display: flex;
   justify-content: space-between; /* Pushes logo to left, links to right */
@@ -527,7 +527,7 @@ const tutorialsData: Tutorial[] = [
               <h4 className="text-center text-sm font-medium mb-2 text-muted-foreground">Live Preview: Card with Sticky Footer</h4>
               <div style={{ display: 'flex', flexDirection: 'column', width: '280px', height: '350px', border: '1px solid hsl(var(--border))', borderRadius: 'var(--radius)', backgroundColor: 'hsl(var(--card))', boxShadow: '0 4px 12px hsla(var(--foreground)/0.08)', overflow: 'hidden' }}>
                 <div style={{ padding: '1rem', borderBottom: '1px solid hsl(var(--border))' }}>
-                  <h5 style={{margin:0, fontWeight: '600', color: 'hsl(var(--card-foreground))' }}>Card Title</h5>
+                  <h5 style={{ margin: 0, fontWeight: '600', color: 'hsl(var(--card-foreground))' }}>Card Title</h5>
                 </div>
                 <div style={{ padding: '1rem', flexGrow: 1, color: 'hsl(var(--card-foreground))', fontSize: '0.9rem', overflowY: 'auto' }}>
                   <p>This is the main content of the card. If it's short, the footer still stays at the bottom.</p>
@@ -540,7 +540,7 @@ const tutorialsData: Tutorial[] = [
             </div>
 
             <CodeBlock language="html">{
-`<!-- HTML Structure -->
+              `<!-- HTML Structure -->
 <div class="card">
   <div class="card-header">Card Title</div>
   <div class="card-content">
@@ -551,8 +551,8 @@ const tutorialsData: Tutorial[] = [
   </div>
 </div>`
             }</CodeBlock>
-             <CodeBlock language="css">{
-`/* CSS for Card with Sticky Footer */
+            <CodeBlock language="css">{
+              `/* CSS for Card with Sticky Footer */
 .card {
   display: flex;
   flex-direction: column; /* Stack header, content, and footer vertically */
@@ -624,7 +624,7 @@ const tutorialsData: Tutorial[] = [
               <LI><BoldText>Grid Areas:</BoldText> A rectangular space defined by one or more grid cells, potentially spanning multiple rows or columns. Items can be placed into these named areas.</LI>
             </UL>
             <CodeBlock language="css">{
-`/* To make an element a grid container */
+              `/* To make an element a grid container */
 .grid-container {
   display: grid;
 
@@ -661,7 +661,7 @@ const tutorialsData: Tutorial[] = [
             </UL>
             <ImageContainer src="https://placehold.co/700x300.png" alt="CSS Grid track sizing examples" width={700} height={300} data-ai-hint="CSS Grid track sizing units" caption="Various ways to define column and row sizes using different units." />
             <CodeBlock language="css">{
-`.container {
+              `.container {
   display: grid;
   /* 3 columns: 1st fixed, 2nd takes remaining space, 3rd auto-sized */
   grid-template-columns: 150px 1fr auto;
@@ -682,7 +682,7 @@ const tutorialsData: Tutorial[] = [
             </UL>
             <ImageContainer src="https://placehold.co/500x250.png" alt="CSS Grid with gaps between tracks" width={500} height={250} data-ai-hint="CSS Grid gap property" caption="Illustrating row-gap, column-gap, and the shorthand gap property." />
             <CodeBlock language="css">{
-`.container-with-gaps {
+              `.container-with-gaps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 100px);
@@ -708,20 +708,20 @@ const tutorialsData: Tutorial[] = [
             <H3>Line-based Placement</H3>
             <P>You can position items by specifying the grid lines they should start and end on. Grid lines are numbered automatically, starting from 1.</P>
             <UL>
-                <LI><Code>grid-column-start</Code>: Defines the starting column line.</LI>
-                <LI><Code>grid-column-end</Code>: Defines the ending column line.</LI>
-                <LI><Code>grid-row-start</Code>: Defines the starting row line.</LI>
-                <LI><Code>grid-row-end</Code>: Defines the ending row line.</LI>
+              <LI><Code>grid-column-start</Code>: Defines the starting column line.</LI>
+              <LI><Code>grid-column-end</Code>: Defines the ending column line.</LI>
+              <LI><Code>grid-row-start</Code>: Defines the starting row line.</LI>
+              <LI><Code>grid-row-end</Code>: Defines the ending row line.</LI>
             </UL>
             <P>Shorthands:</P>
             <UL>
-                <LI><Code>grid-column: start-line / end-line;</Code></LI>
-                <LI><Code>grid-row: start-line / end-line;</Code></LI>
-                <LI><Code>grid-area: row-start / column-start / row-end / column-end;</Code> (a more general shorthand)</LI>
+              <LI><Code>grid-column: start-line / end-line;</Code></LI>
+              <LI><Code>grid-row: start-line / end-line;</Code></LI>
+              <LI><Code>grid-area: row-start / column-start / row-end / column-end;</Code> (a more general shorthand)</LI>
             </UL>
             <ImageContainer src="https://placehold.co/600x400.png" alt="Item spanning multiple grid cells using line numbers" width={600} height={400} data-ai-hint="CSS Grid line placement" caption="An item spanning from column line 1 to 3, and row line 1 to 2." />
             <CodeBlock language="css">{
-`.container {
+              `.container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 100px);
@@ -754,7 +754,7 @@ const tutorialsData: Tutorial[] = [
             <H3>Named Grid Lines</H3>
             <P>You can name your grid lines in <Code>grid-template-columns</Code> and <Code>grid-template-rows</Code> for more semantic placement.</P>
             <CodeBlock language="css">{
-`.container {
+              `.container {
   display: grid;
   grid-template-columns: [main-start] 1fr [content-start] 2fr [content-end] 1fr [main-end];
   grid-template-rows: [header-start] auto [header-end content-start] 1fr [content-end footer-start] auto [footer-end];
@@ -788,7 +788,7 @@ const tutorialsData: Tutorial[] = [
             </UL>
             <ImageContainer src="https://placehold.co/600x400.png" alt="CSS Grid Template Areas visualized" width={600} height={400} data-ai-hint="CSS Grid areas diagram" caption="A common webpage layout defined using grid-template-areas." />
             <CodeBlock language="css">{
-`/* Grid Container */
+              `/* Grid Container */
 .site-layout {
   display: grid;
   grid-template-columns: 1fr 3fr 1fr; /* Define column structure */
@@ -811,7 +811,7 @@ const tutorialsData: Tutorial[] = [
             }</CodeBlock>
             <P>Then, you assign individual grid items to these named areas using the <Code>grid-area</Code> property on the item itself:</P>
             <CodeBlock language="css">{
-`.item-header {
+              `.item-header {
   grid-area: header;
 }
 .item-sidebar {
@@ -820,9 +820,9 @@ const tutorialsData: Tutorial[] = [
             }</CodeBlock>
             <H3>Advantages of Grid Template Areas</H3>
             <UL>
-                <LI><BoldText>Readability:</BoldText> The layout structure is very clear directly in the CSS.</LI>
-                <LI><BoldText>Maintainability:</BoldText> It's easier to visualize and modify the layout.</LI>
-                <LI><BoldText>Responsiveness:</BoldText> You can redefine <Code>grid-template-areas</Code> within media queries to completely change the layout for different screen sizes without altering item placement logic heavily.</LI>
+              <LI><BoldText>Readability:</BoldText> The layout structure is very clear directly in the CSS.</LI>
+              <LI><BoldText>Maintainability:</BoldText> It's easier to visualize and modify the layout.</LI>
+              <LI><BoldText>Responsiveness:</BoldText> You can redefine <Code>grid-template-areas</Code> within media queries to completely change the layout for different screen sizes without altering item placement logic heavily.</LI>
             </UL>
             <Tip>When using <Code>grid-template-areas</Code>, the number of columns defined implicitly by your area strings must match the number of columns defined by <Code>grid-template-columns</Code> (if explicitly set).</Tip>
           </>
@@ -840,9 +840,9 @@ const tutorialsData: Tutorial[] = [
               <LI><Code>justify-items</Code>: Aligns items along the inline (row) axis within their cell. Values: <Code>start</Code>, <Code>end</Code>, <Code>center</Code>, <Code>stretch</Code> (default).</LI>
               <LI><Code>align-items</Code>: Aligns items along the block (column) axis within their cell. Values: <Code>start</Code>, <Code>end</Code>, <Code>center</Code>, <Code>stretch</Code> (default).</LI>
             </UL>
-            <ImageContainer src="https://placehold.co/600x300.png" alt="justify-items and align-items example" width={600} height={300} data-ai-hint="CSS Grid item alignment" caption="justify-items controls horizontal alignment, align-items controls vertical alignment within cells."/>
+            <ImageContainer src="https://placehold.co/600x300.png" alt="justify-items and align-items example" width={600} height={300} data-ai-hint="CSS Grid item alignment" caption="justify-items controls horizontal alignment, align-items controls vertical alignment within cells." />
             <CodeBlock language="css">{
-`.container {
+              `.container {
   display: grid;
   grid-template-columns: repeat(2, 150px);
   grid-template-rows: repeat(2, 100px);
@@ -855,12 +855,12 @@ const tutorialsData: Tutorial[] = [
 
             <H3>Aligning Individual Items (<Code>justify-self</Code> & <Code>align-self</Code>)</H3>
             <P>These properties are set on <BoldText>individual grid items</BoldText> to override the default alignment set by <Code>justify-items</Code> and <Code>align-items</Code> on the container.</P>
-             <UL>
+            <UL>
               <LI><Code>justify-self</Code>: Aligns a specific item along the inline (row) axis. Values: <Code>start</Code>, <Code>end</Code>, <Code>center</Code>, <Code>stretch</Code>.</LI>
               <LI><Code>align-self</Code>: Aligns a specific item along the block (column) axis. Values: <Code>start</Code>, <Code>end</Code>, <Code>center</Code>, <Code>stretch</Code>.</LI>
             </UL>
             <CodeBlock language="css">{
-`.item-special {
+              `.item-special {
   justify-self: start;  /* Override container's justify-items for this item */
   align-self: stretch; /* Override container's align-items for this item */
 }`
@@ -872,9 +872,9 @@ const tutorialsData: Tutorial[] = [
               <LI><Code>justify-content</Code>: Distributes grid tracks along the inline (row) axis if the sum of column widths is less than the container width. Values: <Code>start</Code>, <Code>end</Code>, <Code>center</Code>, <Code>space-around</Code>, <Code>space-between</Code>, <Code>space-evenly</Code>.</LI>
               <LI><Code>align-content</Code>: Distributes grid tracks along the block (column) axis if the sum of row heights is less than the container height. Values are the same as <Code>justify-content</Code>.</LI>
             </UL>
-            <ImageContainer src="https://placehold.co/700x350.png" alt="justify-content and align-content in CSS Grid" width={700} height={350} data-ai-hint="CSS Grid content alignment" caption="Distributing grid tracks within the container when there's extra space."/>
+            <ImageContainer src="https://placehold.co/700x350.png" alt="justify-content and align-content in CSS Grid" width={700} height={350} data-ai-hint="CSS Grid content alignment" caption="Distributing grid tracks within the container when there's extra space." />
             <CodeBlock language="css">{
-`.container {
+              `.container {
   display: grid;
   width: 600px;
   height: 400px;
@@ -902,7 +902,7 @@ const tutorialsData: Tutorial[] = [
         content: (
           <>
             <P>CSS Transitions allow you to create smooth animations between different states of an element. Instead of property changes happening instantly, transitions make them occur over a specified duration, creating a more polished and engaging user experience.</P>
-            <ImageContainer src="https://placehold.co/500x250.png" alt="Element transitioning from one state to another" width={500} height={250} data-ai-hint="CSS transition example animation" caption="A box smoothly changing its background color and size on hover."/>
+            <ImageContainer src="https://placehold.co/500x250.png" alt="Element transitioning from one state to another" width={500} height={250} data-ai-hint="CSS transition example animation" caption="A box smoothly changing its background color and size on hover." />
             <H3>How Transitions Work</H3>
             <P>Transitions are typically triggered by changes in an element's state, such as <Code>:hover</Code>, <Code>:focus</Code>, <Code>:active</Code>, or when a class is added/removed via JavaScript.</P>
             <P>The core properties for defining transitions are:</P>
@@ -915,7 +915,7 @@ const tutorialsData: Tutorial[] = [
             <H3>Shorthand <Code>transition</Code> Property</H3>
             <P>You can combine these properties using the shorthand <Code>transition</Code> property. The order is generally: <Code>property duration timing-function delay</Code>.</P>
             <CodeBlock language="css">{
-`/* Example of a button transitioning its background color and transform */
+              `/* Example of a button transitioning its background color and transform */
 .my-button {
   background-color: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
@@ -954,9 +954,9 @@ const tutorialsData: Tutorial[] = [
             <P>While transitions are great for simple state changes, CSS Animations offer more control for complex, multi-step animations. Animations are defined using <Code>@keyframes</Code> rules and then applied to elements using animation properties.</P>
             <H3>Defining <Code>@keyframes</Code></H3>
             <P>A <Code>@keyframes</Code> rule defines the stages of an animation sequence. You specify CSS styles at different points (keyframes) during the animation. Keyframes can be defined using percentages (from <Code>0%</Code> to <Code>100%</Code>) or the keywords <Code>from</Code> (equivalent to <Code>0%</Code>) and <Code>to</Code> (equivalent to <Code>100%</Code>).</P>
-            <ImageContainer src="https://placehold.co/600x300.png" alt="Timeline showing keyframes in an animation" width={600} height={300} data-ai-hint="CSS keyframes animation timeline" caption="An animation sequence defined with @keyframes, showing styles at 0%, 50%, and 100%."/>
+            <ImageContainer src="https://placehold.co/600x300.png" alt="Timeline showing keyframes in an animation" width={600} height={300} data-ai-hint="CSS keyframes animation timeline" caption="An animation sequence defined with @keyframes, showing styles at 0%, 50%, and 100%." />
             <CodeBlock language="css">{
-`/* Define a simple fade-in and move-up animation */
+              `/* Define a simple fade-in and move-up animation */
 @keyframes fadeInMoveUp {
   from { /* 0% */
     opacity: 0;
@@ -999,7 +999,7 @@ const tutorialsData: Tutorial[] = [
             <H3>Shorthand <Code>animation</Code> Property</H3>
             <P>Similar to transitions, there's an <Code>animation</Code> shorthand. A common order is: <Code>name duration timing-function delay iteration-count direction fill-mode play-state</Code>.</P>
             <CodeBlock language="css">{
-`.element-to-animate {
+              `.element-to-animate {
   /* Apply the fadeInMoveUp animation */
   /* animation-name: fadeInMoveUp; */
   /* animation-duration: 1s; */
@@ -1026,7 +1026,7 @@ const tutorialsData: Tutorial[] = [
             <P>While CSS animations and transitions are powerful, it's important to use them wisely to ensure smooth performance and avoid janky experiences, especially on less powerful devices.</P>
             <H3>Understanding the Browser's Rendering Pipeline</H3>
             <P>Browsers typically go through several steps to render changes on a page: Style Calculation, Layout, Paint, and Composite Layers. Some CSS properties are "cheaper" to animate than others because they can be handled primarily by the compositor, bypassing layout and paint recalculations.</P>
-            <ImageContainer src="https://placehold.co/700x300.png" alt="Browser rendering pipeline steps" width={700} height={300} data-ai-hint="browser rendering pipeline diagram" caption="Simplified browser rendering pipeline: Style -> Layout -> Paint -> Composite."/>
+            <ImageContainer src="https://placehold.co/700x300.png" alt="Browser rendering pipeline steps" width={700} height={300} data-ai-hint="browser rendering pipeline diagram" caption="Simplified browser rendering pipeline: Style -> Layout -> Paint -> Composite." />
             <H3>Properties to Animate for Smoothness</H3>
             <P>For the smoothest animations, prioritize animating these properties:</P>
             <UL>
@@ -1035,7 +1035,7 @@ const tutorialsData: Tutorial[] = [
             </UL>
             <P>Animating properties like <Code>width</Code>, <Code>height</Code>, <Code>margin</Code>, <Code>padding</Code>, <Code>top</Code>, <Code>left</Code>, or <Code>box-shadow</Code> can be more expensive as they often trigger layout recalculations (reflow) and repainting, which can lead to choppiness.</P>
             <CodeBlock language="css">{
-`/* Good: Animating transform and opacity */
+              `/* Good: Animating transform and opacity */
 .smooth-animation {
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -1059,7 +1059,7 @@ const tutorialsData: Tutorial[] = [
             <P>Animating <Code>transform</Code> (especially 3D transforms like <Code>translateZ(0)</Code> or <Code>translate3d(0,0,0)</Code>) and <Code>opacity</Code> often promotes the animated element to its own layer, allowing the GPU to handle its compositing. This is known as hardware acceleration.</P>
             <P>The <Code>will-change</Code> property can be used to hint to the browser about properties you intend to animate, allowing it to optimize ahead of time. However, use it sparingly, as overusing it can consume more resources.</P>
             <CodeBlock language="css">{
-`.element-getting-ready-to-animate {
+              `.element-getting-ready-to-animate {
   /* Hint to the browser that transform and opacity will change */
   will-change: transform, opacity;
 }
@@ -1076,8 +1076,8 @@ const tutorialsData: Tutorial[] = [
               <LI><BoldText>Use browser developer tools:</BoldText> Chrome DevTools (Performance and Layers panels) can help identify animation bottlenecks.</LI>
               <LI><BoldText>Respect <Code>prefers-reduced-motion</Code>:</BoldText> Provide alternatives or disable non-essential animations for users who prefer reduced motion.</LI>
             </UL>
-             <CodeBlock language="css">{
-`/* Example for prefers-reduced-motion */
+            <CodeBlock language="css">{
+              `/* Example for prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   .animated-element {
     animation: none;
@@ -1100,7 +1100,7 @@ const tutorialsData: Tutorial[] = [
         content: (
           <>
             <P>Responsive Web Design (RWD) is an approach to web design that makes web pages render well on a variety of devices and window or screen sizes. Content, design, and performance are necessary across all devices to ensure usability and satisfaction.</P>
-            <ImageContainer src="https://placehold.co/700x300.png" alt="Website layout adapting to desktop, tablet, and mobile screens" width={700} height={300} data-ai-hint="responsive design examples screens" caption="A single website adapting its layout across different screen sizes."/>
+            <ImageContainer src="https://placehold.co/700x300.png" alt="Website layout adapting to desktop, tablet, and mobile screens" width={700} height={300} data-ai-hint="responsive design examples screens" caption="A single website adapting its layout across different screen sizes." />
             <H3>Core Principles of RWD</H3>
             <P>Ethan Marcotte, who coined the term, identified three main technical ingredients:</P>
             <UL>
@@ -1111,7 +1111,7 @@ const tutorialsData: Tutorial[] = [
             <H3>The Viewport Meta Tag</H3>
             <P>To ensure your responsive design works correctly on mobile devices, you <BoldText>must</BoldText> include the viewport meta tag in the <Code>&lt;head&gt;</Code> of your HTML document. This tag tells the browser how to control the page's dimensions and scaling.</P>
             <CodeBlock language="html">{
-`<!-- Add this to the <head> of your HTML -->
+              `<!-- Add this to the <head> of your HTML -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">`
             }</CodeBlock>
             <UL>
@@ -1139,7 +1139,7 @@ const tutorialsData: Tutorial[] = [
             <H3>Basic Syntax</H3>
             <P>A media query consists of a media type (optional, defaults to <Code>all</Code>) and one or more expressions involving media features, such as <Code>width</Code>, <Code>height</Code>, or <Code>orientation</Code>.</P>
             <CodeBlock language="css">{
-`/* Basic Media Query Structure */
+              `/* Basic Media Query Structure */
 @media media-type and (media-feature: value) {
   /* CSS rules to apply when the condition is true */
   .selector {
@@ -1173,7 +1173,7 @@ const tutorialsData: Tutorial[] = [
               <LI><BoldText><Code>aspect-ratio</Code> (and <Code>min-aspect-ratio</Code>, <Code>max-aspect-ratio</Code>):</BoldText> Ratio of viewport width to height.</LI>
               <LI><BoldText><Code>resolution</Code> (and <Code>min-resolution</Code>, <Code>max-resolution</Code>):</BoldText> Pixel density of the output device (e.g., for high-DPI screens like Retina displays).</LI>
             </UL>
-            <ImageContainer src="https://placehold.co/700x250.png" alt="Visual breakpoints for media queries" width={700} height={250} data-ai-hint="media query breakpoints responsive" caption="Common breakpoints used in media queries to target different device categories (e.g., mobile, tablet, desktop)."/>
+            <ImageContainer src="https://placehold.co/700x250.png" alt="Visual breakpoints for media queries" width={700} height={250} data-ai-hint="media query breakpoints responsive" caption="Common breakpoints used in media queries to target different device categories (e.g., mobile, tablet, desktop)." />
             <H3>Logical Operators</H3>
             <P>You can combine multiple media features using logical operators:</P>
             <UL>
@@ -1183,7 +1183,7 @@ const tutorialsData: Tutorial[] = [
               <LI><BoldText>Comma ( <Code>,</Code> ):</BoldText> Acts as an OR operator. If any of the comma-separated queries are true, the styles apply.</LI>
             </UL>
             <CodeBlock language="css">{
-`/* Apply styles if screen is between 600px and 900px wide */
+              `/* Apply styles if screen is between 600px and 900px wide */
 @media (min-width: 600px) and (max-width: 900px) {
   .my-element {
     font-size: 18px;
@@ -1218,7 +1218,7 @@ const tutorialsData: Tutorial[] = [
             <P>A core tenet of responsive web design is the use of fluid layouts, which adapt to the available screen space. This is primarily achieved by using relative units for sizing and spacing elements, rather than fixed pixel values.</P>
             <H3>Why Relative Units?</H3>
             <P>Fixed units like pixels (<Code>px</Code>) create rigid layouts that don't adapt well. If a container is 300px wide, it will always be 300px wide, regardless of whether the screen is 320px or 1200px wide. Relative units, on the other hand, size elements in relation to something else, allowing them to scale.</P>
-            <ImageContainer src="https://placehold.co/600x300.png" alt="Comparison of fixed vs. fluid layout" width={600} height={300} data-ai-hint="fluid layout vs fixed layout" caption="A fluid layout (right) adapts to screen size, while a fixed layout (left) may break or cause scrolling."/>
+            <ImageContainer src="https://placehold.co/600x300.png" alt="Comparison of fixed vs. fluid layout" width={600} height={300} data-ai-hint="fluid layout vs fixed layout" caption="A fluid layout (right) adapts to screen size, while a fixed layout (left) may break or cause scrolling." />
             <H3>Common Relative Units</H3>
             <UL>
               <LI><BoldText>Percentages (<Code>%</Code>):</BoldText> Relative to the same property of the parent element (e.g., <Code>width: 50%;</Code> makes an element half the width of its parent). Percentages for <Code>padding</Code> and <Code>margin</Code> are often relative to the *width* of the containing block, which can be tricky for vertical spacing.</LI>
@@ -1229,7 +1229,7 @@ const tutorialsData: Tutorial[] = [
                   <LI><Code>vmin</Code>: 1vmin = 1% of the smaller viewport dimension (width or height).</LI>
                   <LI><Code>vmax</Code>: 1vmax = 1% of the larger viewport dimension.</LI>
                 </UL>
-              These are excellent for full-screen elements or sizing things relative to the overall screen real estate.
+                These are excellent for full-screen elements or sizing things relative to the overall screen real estate.
               </LI>
               <LI><BoldText>Font-relative Units (<Code>em</Code>, <Code>rem</Code>):</BoldText>
                 <UL>
@@ -1241,7 +1241,7 @@ const tutorialsData: Tutorial[] = [
               <LI><BoldText>Fractional Units (<Code>fr</Code>) in CSS Grid:</BoldText> As covered in the Grid tutorial, <Code>fr</Code> units distribute available space within a grid container, making them inherently fluid.</LI>
             </UL>
             <CodeBlock language="css">{
-`.container {
+              `.container {
   width: 80%; /* Takes 80% of its parent's width */
   margin: 0 auto; /* Center the container */
 }
@@ -1278,7 +1278,7 @@ h1 {
             <H3>The Basic Technique: <Code>max-width: 100%</Code></H3>
             <P>The most common and straightforward way to make images responsive is to apply the following CSS:</P>
             <CodeBlock language="css">{
-`img, video, iframe {
+              `img, video, iframe {
   max-width: 100%;
   height: auto;
 }`
@@ -1287,11 +1287,11 @@ h1 {
               <LI><Code>max-width: 100%;</Code>: Ensures the image will never be wider than its containing element. If the container shrinks, the image shrinks with it.</LI>
               <LI><Code>height: auto;</Code>: Maintains the image's aspect ratio as it scales. If you set a fixed height, the image might get distorted.</LI>
             </UL>
-            <ImageContainer src="https://placehold.co/600x300.png" alt="Responsive image scaling within its container" width={600} height={300} data-ai-hint="responsive image scaling" caption="An image scaling down gracefully as its container narrows, thanks to max-width: 100%."/>
+            <ImageContainer src="https://placehold.co/600x300.png" alt="Responsive image scaling within its container" width={600} height={300} data-ai-hint="responsive image scaling" caption="An image scaling down gracefully as its container narrows, thanks to max-width: 100%." />
             <H3>Art Direction with the <Code>&lt;picture&gt;</Code> Element</H3>
             <P>Sometimes, simply scaling an image isn't enough. You might want to show a different crop or an entirely different image for different screen sizes or resolutions. This is known as "art direction." The <Code>&lt;picture&gt;</Code> element allows you to provide multiple sources for an image.</P>
             <CodeBlock language="html">{
-`<picture>
+              `<picture>
   <source media="(min-width: 900px)" srcset="large-image.jpg">
   <source media="(min-width: 600px)" srcset="medium-image.jpg">
   <img src="small-image.jpg" alt="A descriptive alt text for the image">
@@ -1302,7 +1302,7 @@ h1 {
             <H3>Resolution Switching with <Code>srcset</Code> and <Code>sizes</Code></H3>
             <P>To serve different image sizes for different screen resolutions (e.g., for Retina displays) or viewport widths, you can use the <Code>srcset</Code> and <Code>sizes</Code> attributes on the <Code>&lt;img&gt;</Code> tag.</P>
             <CodeBlock language="html">{
-`<!-- Resolution switching for different pixel densities -->
+              `<!-- Resolution switching for different pixel densities -->
 <img srcset="image-1x.jpg 1x, image-2x.jpg 2x, image-3x.jpg 3x"
      src="image-1x.jpg" alt="Description">
 
@@ -1315,10 +1315,10 @@ h1 {
               <LI><Code>srcset</Code>: Provides a list of image sources and their intrinsic widths (e.g., <Code>small.jpg 480w</Code>) or pixel density descriptors (e.g., <Code>image-2x.jpg 2x</Code>).</LI>
               <LI><Code>sizes</Code>: Tells the browser how wide the image will be displayed at different viewport widths (using media conditions). This helps the browser pick the most appropriate image from <Code>srcset</Code>.</LI>
             </UL>
-             <H3>Responsive Background Images</H3>
+            <H3>Responsive Background Images</H3>
             <P>For background images, you can use media queries to serve different images or adjust properties like <Code>background-size</Code> and <Code>background-position</Code>.</P>
             <CodeBlock language="css">{
-`.hero-section {
+              `.hero-section {
   background-image: url('small-hero.jpg');
   background-size: cover;
   background-position: center;
@@ -1353,9 +1353,9 @@ h1 {
               <LI><BoldText>Universal Selector (<Code>*</Code>):</BoldText> Selects all elements. Often used in resets or with other selectors.</LI>
               <LI><BoldText>Attribute Selector:</BoldText> Selects elements based on the presence or value of an attribute. We'll cover these in more detail.</LI>
             </UL>
-            <ImageContainer src="https://placehold.co/600x250.png" alt="Examples of basic CSS selectors" width={600} height={250} data-ai-hint="CSS selectors basic examples" caption="Visual representation of type, class, and ID selectors targeting HTML elements."/>
+            <ImageContainer src="https://placehold.co/600x250.png" alt="Examples of basic CSS selectors" width={600} height={250} data-ai-hint="CSS selectors basic examples" caption="Visual representation of type, class, and ID selectors targeting HTML elements." />
             <CodeBlock language="css">{
-`/* Type Selector */
+              `/* Type Selector */
 p {
   color: blue;
 }
@@ -1378,7 +1378,7 @@ p {
             <H3>Grouping Selectors</H3>
             <P>You can apply the same styles to multiple selectors by grouping them with a comma.</P>
             <CodeBlock language="css">{
-`h1, h2, h3 {
+              `h1, h2, h3 {
   font-family: 'Arial', sans-serif;
   color: navy;
 }`
@@ -1396,17 +1396,17 @@ p {
             <P>Attribute selectors allow you to target elements based on the presence or value of their HTML attributes. This provides a powerful way to select elements without relying solely on classes or IDs.</P>
             <H3>Syntax Overview</H3>
             <UL>
-              <LI><Code>[attribute]</Code>: Selects elements that have the specified <Code>attribute</Code>, regardless of its value. <br/>Example: <Code>a[target]</Code> selects all <Code>&lt;a&gt;</Code> tags with a <Code>target</Code> attribute.</LI>
-              <LI><Code>[attribute="value"]</Code>: Selects elements where <Code>attribute</Code> has an exact value of <Code>"value"</Code>. <br/>Example: <Code>input[type="text"]</Code> selects input fields of type text.</LI>
-              <LI><Code>[attribute~="value"]</Code>: Selects elements where <Code>attribute</Code>'s value is a space-separated list, and one of those values is exactly <Code>"value"</Code>. <br/>Example: <Code>img[class~="icon"]</Code> selects images if "icon" is one of their classes (e.g., <Code>class="image icon featured"</Code>).</LI>
-              <LI><Code>[attribute|="value"]</Code>: Selects elements where <Code>attribute</Code>'s value is exactly <Code>"value"</Code> or starts with <Code>"value"</Code> immediately followed by a hyphen (<Code>-</Code>). Often used for language subcodes. <br/>Example: <Code>p[lang|="en"]</Code> selects paragraphs with <Code>lang="en"</Code> or <Code>lang="en-US"</Code>.</LI>
-              <LI><Code>[attribute^="value"]</Code>: Selects elements where <Code>attribute</Code>'s value <BoldText>starts with</BoldText> <Code>"value"</Code>. <br/>Example: <Code>a[href^="https://"]</Code> selects links whose href starts with "https://".</LI>
-              <LI><Code>[attribute$="value"]</Code>: Selects elements where <Code>attribute</Code>'s value <BoldText>ends with</BoldText> <Code>"value"</Code>. <br/>Example: <Code>a[href$=".pdf"]</Code> selects links whose href ends with ".pdf".</LI>
-              <LI><Code>[attribute*="value"]</Code>: Selects elements where <Code>attribute</Code>'s value <BoldText>contains</BoldText> the substring <Code>"value"</Code>. <br/>Example: <Code>img[alt*="important"]</Code> selects images whose alt text contains "important".</LI>
+              <LI><Code>[attribute]</Code>: Selects elements that have the specified <Code>attribute</Code>, regardless of its value. <br />Example: <Code>a[target]</Code> selects all <Code>&lt;a&gt;</Code> tags with a <Code>target</Code> attribute.</LI>
+              <LI><Code>[attribute="value"]</Code>: Selects elements where <Code>attribute</Code> has an exact value of <Code>"value"</Code>. <br />Example: <Code>input[type="text"]</Code> selects input fields of type text.</LI>
+              <LI><Code>[attribute~="value"]</Code>: Selects elements where <Code>attribute</Code>'s value is a space-separated list, and one of those values is exactly <Code>"value"</Code>. <br />Example: <Code>img[class~="icon"]</Code> selects images if "icon" is one of their classes (e.g., <Code>class="image icon featured"</Code>).</LI>
+              <LI><Code>[attribute|="value"]</Code>: Selects elements where <Code>attribute</Code>'s value is exactly <Code>"value"</Code> or starts with <Code>"value"</Code> immediately followed by a hyphen (<Code>-</Code>). Often used for language subcodes. <br />Example: <Code>p[lang|="en"]</Code> selects paragraphs with <Code>lang="en"</Code> or <Code>lang="en-US"</Code>.</LI>
+              <LI><Code>[attribute^="value"]</Code>: Selects elements where <Code>attribute</Code>'s value <BoldText>starts with</BoldText> <Code>"value"</Code>. <br />Example: <Code>a[href^="https://"]</Code> selects links whose href starts with "https://".</LI>
+              <LI><Code>[attribute$="value"]</Code>: Selects elements where <Code>attribute</Code>'s value <BoldText>ends with</BoldText> <Code>"value"</Code>. <br />Example: <Code>a[href$=".pdf"]</Code> selects links whose href ends with ".pdf".</LI>
+              <LI><Code>[attribute*="value"]</Code>: Selects elements where <Code>attribute</Code>'s value <BoldText>contains</BoldText> the substring <Code>"value"</Code>. <br />Example: <Code>img[alt*="important"]</Code> selects images whose alt text contains "important".</LI>
             </UL>
-            <ImageContainer src="https://placehold.co/700x350.png" alt="Examples of different attribute selectors" width={700} height={350} data-ai-hint="CSS attribute selectors syntax" caption="Demonstrating how different attribute selectors target specific elements."/>
+            <ImageContainer src="https://placehold.co/700x350.png" alt="Examples of different attribute selectors" width={700} height={350} data-ai-hint="CSS attribute selectors syntax" caption="Demonstrating how different attribute selectors target specific elements." />
             <CodeBlock language="css">{
-`/* Style links that open in a new tab */
+              `/* Style links that open in a new tab */
 a[target="_blank"] {
   background-image: url('external-link-icon.png');
   background-repeat: no-repeat;
@@ -1434,7 +1434,7 @@ a[href$=".pdf"]::before {
             <H3>Case Sensitivity (Optional <Code>i</Code> flag)</H3>
             <P>By default, attribute value matching is case-sensitive. You can add an <Code>i</Code> flag before the closing bracket <Code>]</Code> to make the matching case-insensitive for that specific selector (though browser support might vary for this flag historically, it's well-supported in modern browsers).</P>
             <CodeBlock language="css">{
-`/* Case-insensitive match for type="Text" or "text" or "TEXT" */
+              `/* Case-insensitive match for type="Text" or "text" or "TEXT" */
 input[type="text" i] {
   border-color: green;
 }`
@@ -1477,7 +1477,7 @@ input[type="text" i] {
                   <LI><Code>:in-range</Code> / <Code>:out-of-range</Code> - For inputs with min/max attributes.</LI>
                 </UL>
               </LI>
-               <LI><BoldText>Structural & Positional Pseudo-classes:</BoldText>
+              <LI><BoldText>Structural & Positional Pseudo-classes:</BoldText>
                 <UL>
                   <LI><Code>:root</Code> - Selects the root element of the document (usually <Code>&lt;html&gt;</Code>).</LI>
                   <LI><Code>:empty</Code> - Selects elements that have no children (including text nodes).</LI>
@@ -1492,15 +1492,15 @@ input[type="text" i] {
               </LI>
               <LI><BoldText>Logical Pseudo-classes:</BoldText>
                 <UL>
-                    <LI><Code>:not(selector)</Code> - Selects elements that do *not* match the provided selector. Example: <Code>p:not(.special)</Code> selects all paragraphs except those with class "special".</LI>
-                    <LI><Code>:is(selector-list)</Code> - Selects any element that matches any of the selectors in the comma-separated list. Useful for grouping. Example: <Code>:is(header, main, footer) p</Code>.</LI>
-                    <LI><Code>:where(selector-list)</Code> - Similar to <Code>:is()</Code>, but <Code>:where()</Code> and its arguments do not contribute to the specificity of the selector (always has zero specificity).</LI>
+                  <LI><Code>:not(selector)</Code> - Selects elements that do *not* match the provided selector. Example: <Code>p:not(.special)</Code> selects all paragraphs except those with class "special".</LI>
+                  <LI><Code>:is(selector-list)</Code> - Selects any element that matches any of the selectors in the comma-separated list. Useful for grouping. Example: <Code>:is(header, main, footer) p</Code>.</LI>
+                  <LI><Code>:where(selector-list)</Code> - Similar to <Code>:is()</Code>, but <Code>:where()</Code> and its arguments do not contribute to the specificity of the selector (always has zero specificity).</LI>
                 </UL>
               </LI>
             </UL>
-            <ImageContainer src="https://placehold.co/700x400.png" alt="Demonstration of various pseudo-classes" width={700} height={400} data-ai-hint="CSS pseudo classes examples" caption="Examples: :hover changing button style, :nth-child styling table rows, :focus highlighting an input."/>
+            <ImageContainer src="https://placehold.co/700x400.png" alt="Demonstration of various pseudo-classes" width={700} height={400} data-ai-hint="CSS pseudo classes examples" caption="Examples: :hover changing button style, :nth-child styling table rows, :focus highlighting an input." />
             <CodeBlock language="css">{
-`/* Style links */
+              `/* Style links */
 a:link { color: blue; }
 a:visited { color: purple; } /* Limited styling for privacy */
 a:hover { text-decoration: underline; }
@@ -1542,9 +1542,9 @@ p:not(:first-child) {
               <LI><BoldText><Code>::placeholder</Code>:</BoldText> Styles the placeholder text in an input or textarea element.</LI>
               <LI><BoldText><Code>::marker</Code>:</BoldText> Styles the marker box of a list item (e.g., the bullet or number).</LI>
             </UL>
-            <ImageContainer src="https://placehold.co/600x350.png" alt="Examples of pseudo-elements like ::before, ::first-letter" width={600} height={350} data-ai-hint="CSS pseudo elements examples" caption="Visuals: using ::before to add an icon, ::first-letter for a drop cap, ::selection for custom text highlight."/>
+            <ImageContainer src="https://placehold.co/600x350.png" alt="Examples of pseudo-elements like ::before, ::first-letter" width={600} height={350} data-ai-hint="CSS pseudo elements examples" caption="Visuals: using ::before to add an icon, ::first-letter for a drop cap, ::selection for custom text highlight." />
             <CodeBlock language="css">{
-`/* Add quotation marks around blockquotes */
+              `/* Add quotation marks around blockquotes */
 blockquote::before {
   content: "“";
   font-size: 3em;
@@ -1587,10 +1587,10 @@ ul li::marker {
             }</CodeBlock>
             <H3>Important Notes for <Code>::before</Code> and <Code>::after</Code></H3>
             <UL>
-                <LI>They are inline by default.</LI>
-                <LI>The <Code>content</Code> property is required, even if it's empty (<Code>content: "";</Code>) for them to be generated.</LI>
-                <LI>They are not part of the DOM, so they cannot be targeted by JavaScript directly as if they were real elements.</LI>
-                <LI>They are often used for creating decorative shapes, custom bullets, tooltips, or clearfixes.</LI>
+              <LI>They are inline by default.</LI>
+              <LI>The <Code>content</Code> property is required, even if it's empty (<Code>content: "";</Code>) for them to be generated.</LI>
+              <LI>They are not part of the DOM, so they cannot be targeted by JavaScript directly as if they were real elements.</LI>
+              <LI>They are often used for creating decorative shapes, custom bullets, tooltips, or clearfixes.</LI>
             </UL>
             <Tip>Pseudo-elements are powerful for adding stylistic embellishments without cluttering your HTML with extra elements.</Tip>
           </>
@@ -1605,21 +1605,21 @@ ul li::marker {
             <H3>Types of Combinators</H3>
             <UL>
               <LI><BoldText>Descendant Combinator (space):</BoldText> <Code>A B</Code> - Selects all elements <Code>B</Code> that are descendants (children, grandchildren, etc.) of element <Code>A</Code>.
-                <br/>Example: <Code>article p</Code> selects all <Code>&lt;p&gt;</Code> elements inside any <Code>&lt;article&gt;</Code> element.
+                <br />Example: <Code>article p</Code> selects all <Code>&lt;p&gt;</Code> elements inside any <Code>&lt;article&gt;</Code> element.
               </LI>
               <LI><BoldText>Child Combinator (<Code>&gt;</Code>):</BoldText> <Code>A > B</Code> - Selects all elements <Code>B</Code> that are direct children of element <Code>A</Code>.
-                <br/>Example: <Code>ul > li</Code> selects all <Code>&lt;li&gt;</Code> elements that are direct children of a <Code>&lt;ul&gt;</Code>.
+                <br />Example: <Code>ul > li</Code> selects all <Code>&lt;li&gt;</Code> elements that are direct children of a <Code>&lt;ul&gt;</Code>.
               </LI>
               <LI><BoldText>Adjacent Sibling Combinator (<Code>+</Code>):</BoldText> <Code>A + B</Code> - Selects element <Code>B</Code> if it immediately follows element <Code>A</Code>, and both are children of the same parent.
-                <br/>Example: <Code>h2 + p</Code> selects the first <Code>&lt;p&gt;</Code> element that immediately follows an <Code>&lt;h2&gt;</Code> element.
+                <br />Example: <Code>h2 + p</Code> selects the first <Code>&lt;p&gt;</Code> element that immediately follows an <Code>&lt;h2&gt;</Code> element.
               </LI>
               <LI><BoldText>General Sibling Combinator (<Code>~</Code>):</BoldText> <Code>A ~ B</Code> - Selects all elements <Code>B</Code> that follow element <Code>A</Code> (though not necessarily immediately), and both are children of the same parent.
-                <br/>Example: <Code>h2 ~ p</Code> selects all <Code>&lt;p&gt;</Code> elements that come after an <Code>&lt;h2&gt;</Code> and share the same parent.
+                <br />Example: <Code>h2 ~ p</Code> selects all <Code>&lt;p&gt;</Code> elements that come after an <Code>&lt;h2&gt;</Code> and share the same parent.
               </LI>
             </UL>
-            <ImageContainer src="https://placehold.co/700x450.png" alt="Visual examples of CSS combinators" width={700} height={450} data-ai-hint="CSS combinators relationship diagram" caption="Illustrating descendant, child, adjacent sibling, and general sibling combinators."/>
+            <ImageContainer src="https://placehold.co/700x450.png" alt="Visual examples of CSS combinators" width={700} height={450} data-ai-hint="CSS combinators relationship diagram" caption="Illustrating descendant, child, adjacent sibling, and general sibling combinators." />
             <CodeBlock language="css">{
-`/* Style paragraphs inside a div with class "content" */
+              `/* Style paragraphs inside a div with class "content" */
 .content p {
   line-height: 1.6;
 }
@@ -1659,15 +1659,15 @@ h3 + p {
               <LI><BoldText>C (Types, Pseudo-elements):</BoldText> Count 1 for each type selector (<Code>div</Code>) or pseudo-element (<Code>::before</Code>).</LI>
             </UL>
             <P>The universal selector (<Code>*</Code>) and combinators (<Code>+</Code>, <Code>&gt;</Code>, <Code>~</Code>, space) do not add to specificity. The negation pseudo-class <Code>:not()</Code> itself doesn't add specificity, but the selectors *inside* <Code>:not()</Code> do.</P>
-            <ImageContainer src="https://placehold.co/600x300.png" alt="Specificity calculation examples" width={600} height={300} data-ai-hint="CSS specificity calculation weight" caption="Comparing specificity scores: ID selectors are most powerful, followed by classes/attributes, then types."/>
+            <ImageContainer src="https://placehold.co/600x300.png" alt="Specificity calculation examples" width={600} height={300} data-ai-hint="CSS specificity calculation weight" caption="Comparing specificity scores: ID selectors are most powerful, followed by classes/attributes, then types." />
             <H4>Comparing Specificity Scores</H4>
             <P>When comparing, think of it like a version number: 1-0-0 is more specific than 0-10-0. A selector with a higher value in column A wins, regardless of B and C. If A is equal, compare B. If A and B are equal, compare C.</P>
             <UL>
-              <LI><Code>p</Code> -> Specificity: (0,0,1)</LI>
-              <LI><Code>.my-class</Code> -> Specificity: (0,1,0)</LI>
-              <LI><Code>#my-id</Code> -> Specificity: (1,0,0)</LI>
-              <LI><Code>div.my-class p</Code> -> Specificity: (0,1,2) (div=1, .my-class=1, p=1 -> sum for C, B)</LI>
-              <LI><Code>a:hover</Code> -> Specificity: (0,1,1) (a=1, :hover=1)</LI>
+              <LI><Code>p</Code> - Specificity: (0,0,1)</LI>
+              <LI><Code>.my-class</Code> - Specificity: (0,1,0)</LI>
+              <LI><Code>#my-id</Code> - Specificity: (1,0,0)</LI>
+              <LI><Code>div.my-class p</Code> - Specificity: (0,1,2) (div=1, .my-class=1, p=1)</LI>
+              <LI><Code>a:hover</Code> - Specificity: (0,1,1) (a=1, :hover=1)</LI>
             </UL>
             <H3>Special Cases</H3>
             <UL>
@@ -1676,7 +1676,7 @@ h3 + p {
               <LI><BoldText>Source Order:</BoldText> If two selectors have the exact same specificity, the one that appears later in the CSS (or later in the linked stylesheets) wins.</LI>
             </UL>
             <CodeBlock language="css">{
-`/* Example of Specificity Conflicts */
+              `/* Example of Specificity Conflicts */
 p { color: blue; }                 /* (0,0,1) */
 .content p { color: green; }       /* (0,1,1) - Wins over the first one */
 #main .content p { color: red; }   /* (1,1,1) - Wins over the second one */
@@ -1724,7 +1724,7 @@ export default function TutorialPage() {
         // Ensure chapter index is reset or valid if tutorial changes
         const chapterHash = window.location.hash.substring(1);
         const initialChapterIndex = foundTutorial.chapters.findIndex(ch => ch.id === chapterHash);
-        setCurrentChapterIndex(initialChapterIndex >=0 ? initialChapterIndex : 0);
+        setCurrentChapterIndex(initialChapterIndex >= 0 ? initialChapterIndex : 0);
 
       } else {
         // If slug is present but no tutorial found, redirect to learn page
@@ -1766,34 +1766,34 @@ export default function TutorialPage() {
         {/* Skeleton Sidebar */}
         <aside className="lg:w-80 lg:border-r border-border bg-card lg:sticky lg:top-[var(--header-height,4rem)] lg:h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem))]">
           <div className="p-4 border-b border-border flex items-center justify-between h-16">
-             <Skeleton className="h-4 w-24" />
-             <Skeleton className="h-6 w-6 lg:hidden" />
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-6 w-6 lg:hidden" />
           </div>
           <div className="p-4 space-y-3 hidden lg:block">
             <div className="flex items-start gap-3 mb-5">
-                <Skeleton className="w-10 h-10 rounded-lg" />
-                <div className="space-y-1.5">
-                    <Skeleton className="h-5 w-40" />
-                    <Skeleton className="h-3 w-48" />
-                </div>
+              <Skeleton className="w-10 h-10 rounded-lg" />
+              <div className="space-y-1.5">
+                <Skeleton className="h-5 w-40" />
+                <Skeleton className="h-3 w-48" />
+              </div>
             </div>
             {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-9 w-full" />)}
           </div>
         </aside>
         {/* Skeleton Main Content */}
         <main className="flex-1 bg-background">
-            <div className="h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem)-var(--pagination-height,4rem))] lg:h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem))] p-0 lg:m-2">
-                <div className="bg-card p-6 rounded-xl shadow-lg border border-border/50 h-full overflow-hidden">
-                    <Skeleton className="h-8 w-3/4 mb-2" />
-                    <Skeleton className="h-4 w-1/2 mb-6" />
-                    <Skeleton className="h-4 w-full mb-3" />
-                    <Skeleton className="h-4 w-full mb-3" />
-                    <Skeleton className="h-4 w-5/6 mb-3" />
-                    <Skeleton className="h-32 w-full my-6" />
-                     <Skeleton className="h-4 w-full mb-3" />
-                    <Skeleton className="h-4 w-5/6" />
-                </div>
+          <div className="h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem)-var(--pagination-height,4rem))] lg:h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem))] p-0 lg:m-2">
+            <div className="bg-card p-6 rounded-xl shadow-lg border border-border/50 h-full overflow-hidden">
+              <Skeleton className="h-8 w-3/4 mb-2" />
+              <Skeleton className="h-4 w-1/2 mb-6" />
+              <Skeleton className="h-4 w-full mb-3" />
+              <Skeleton className="h-4 w-full mb-3" />
+              <Skeleton className="h-4 w-5/6 mb-3" />
+              <Skeleton className="h-32 w-full my-6" />
+              <Skeleton className="h-4 w-full mb-3" />
+              <Skeleton className="h-4 w-5/6" />
             </div>
+          </div>
         </main>
       </div>
     );
@@ -1802,10 +1802,10 @@ export default function TutorialPage() {
   const currentChapter = tutorial.chapters[currentChapterIndex];
   if (!currentChapter) { // Graceful handling if chapter index is somehow out of bounds
     return (
-        <div className="flex items-center justify-center h-[calc(100vh-(var(--header-height,4rem))-var(--bottom-nav-height,5rem))]">
-            <LayoutGrid className="w-12 h-12 animate-spin text-primary" />
-            <p className="ml-4 text-xl text-muted-foreground">Error loading chapter...</p>
-        </div>
+      <div className="flex items-center justify-center h-[calc(100vh-(var(--header-height,4rem))-var(--bottom-nav-height,5rem))]">
+        <LayoutGrid className="w-12 h-12 animate-spin text-primary" />
+        <p className="ml-4 text-xl text-muted-foreground">Error loading chapter...</p>
+      </div>
     );
   }
 
@@ -1903,59 +1903,58 @@ export default function TutorialPage() {
 
       {/* Main Content Area */}
       <main className="flex-1 bg-background overflow-hidden"> {/* Added overflow-hidden to main */}
-         <div className="flex flex-col h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem))] lg:h-full"> {/* Flex container for scroll + pagination */}
-            <ScrollArea
-                id="tutorial-content-area"
-                className="flex-grow" // Takes up available space
-            >
-              <Card className="w-full rounded-none lg:rounded-xl shadow-none lg:shadow-lg overflow-hidden bg-card border-0 lg:border border-border/50 m-0 lg:m-2">
-                <CardHeader className="bg-gradient-to-r from-primary/5 via-transparent to-accent/5 p-4 sm:p-6 border-b border-border/50">
-                  <CardTitle className="text-2xl sm:text-3xl font-bold text-primary-dark">{currentChapter.title}</CardTitle>
-                  <CardDescription className="text-muted-foreground mt-1.5">
-                    Chapter {currentChapterIndex + 1} of {tutorial.chapters.length} in "{tutorial.title}"
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="p-4 sm:p-6 text-foreground leading-relaxed">
-                  {/* This inner div applies prose styling and ensures full width for the content */}
-                  <div className="w-full prose prose-sm sm:prose-base dark:prose-invert !max-w-none overflow-x-hidden">
-                    {currentChapter.content}
-                  </div>
-                </CardContent>
-              </Card>
-            </ScrollArea>
+        <div className="flex flex-col h-[calc(100vh-var(--header-height,4rem)-var(--bottom-nav-height,5rem))] lg:h-full"> {/* Flex container for scroll + pagination */}
+          <ScrollArea
+            id="tutorial-content-area"
+            className="flex-grow" // Takes up available space
+          >
+            <Card className="w-full rounded-none lg:rounded-xl shadow-none lg:shadow-lg overflow-hidden bg-card border-0 lg:border border-border/50 m-0 lg:m-2">
+              <CardHeader className="bg-gradient-to-r from-primary/5 via-transparent to-accent/5 p-4 sm:p-6 border-b border-border/50">
+                <CardTitle className="text-2xl sm:text-3xl font-bold text-primary-dark">{currentChapter.title}</CardTitle>
+                <CardDescription className="text-muted-foreground mt-1.5">
+                  Chapter {currentChapterIndex + 1} of {tutorial.chapters.length} in "{tutorial.title}"
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-4 sm:p-6 text-foreground leading-relaxed">
+                {/* This inner div applies prose styling and ensures full width for the content */}
+                <div className="w-full prose prose-sm sm:prose-base dark:prose-invert !max-w-none overflow-x-hidden">
+                  {currentChapter.content}
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollArea>
 
-            {/* Sticky Pagination Bar */}
-            <div
-                className="flex-shrink-0 flex justify-between items-center sticky bottom-0 bg-background/80 backdrop-blur-sm py-3 px-4 border-t border-border lg:static lg:bg-transparent lg:border-t-0 lg:mt-auto"
-                style={{ ['--pagination-height' as string]: '4rem' }}
+          {/* Sticky Pagination Bar */}
+          <div
+            className="flex-shrink-0 flex justify-between items-center sticky bottom-0 bg-background/80 backdrop-blur-sm py-3 px-4 border-t border-border lg:static lg:bg-transparent lg:border-t-0 lg:mt-auto"
+            style={{ ['--pagination-height' as string]: '4rem' }}
+          >
+            <Button
+              onClick={prevChapter}
+              disabled={currentChapterIndex === 0}
+              variant="outline"
+              className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary"
             >
-                <Button
-                onClick={prevChapter}
-                disabled={currentChapterIndex === 0}
-                variant="outline"
-                className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary"
-                >
-                <ChevronLeft className="w-4 h-4 mr-2" />
-                Previous
-                </Button>
-                <span className="text-sm text-muted-foreground hidden sm:inline">
-                Page {currentChapterIndex + 1} of {tutorial.chapters.length}
-                </span>
-                <Button
-                onClick={nextChapter}
-                disabled={currentChapterIndex === tutorial.chapters.length - 1}
-                variant="default"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground"
-                >
-                Next
-                <ChevronRight className="w-4 h-4 ml-2" />
-                </Button>
-            </div>
-         </div>
+              <ChevronLeft className="w-4 h-4 mr-2" />
+              Previous
+            </Button>
+            <span className="text-sm text-muted-foreground hidden sm:inline">
+              Page {currentChapterIndex + 1} of {tutorial.chapters.length}
+            </span>
+            <Button
+              onClick={nextChapter}
+              disabled={currentChapterIndex === tutorial.chapters.length - 1}
+              variant="default"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              Next
+              <ChevronRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        </div>
       </main>
     </div>
   );
 }
 
 
-    
