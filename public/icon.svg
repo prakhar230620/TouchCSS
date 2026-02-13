@@ -1,7 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="512" height="512" rx="128" fill="#3F51B5"/>
-    <path d="M256 128C181.9 128 122 187.9 122 262C122 336.1 181.9 396 256 396C330.1 396 390 336.1 390 262C390 187.9 330.1 128 256 128ZM256 366C198.1 366 152 319.9 152 262C152 204.1 198.1 158 256 158C313.9 158 360 204.1 360 262C360 319.9 313.9 366 256 366Z" fill="white"/>
-    <path d="M256 188C214.6 188 181 221.6 181 263C181 304.4 214.6 338 256 338C297.4 338 331 304.4 331 263C331 221.6 297.4 188 256 188ZM256 308C231.2 308 211 287.8 211 263C211 238.2 231.2 218 256 218C280.8 218 301 238.2 301 263C301 287.8 280.8 308 256 308Z" fill="white"/>
-    <circle cx="256" cy="263" r="30" fill="white"/>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#8B5CF6"/>
+            <stop offset="100%" style="stop-color:#6D28D9"/>
+        </linearGradient>
+        <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#C4B5FD"/>
+            <stop offset="100%" style="stop-color:#8B5CF6"/>
+        </linearGradient>
+        <filter id="dropshadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="15"/>
+            <feOffset dx="0" dy="10" result="offsetblur"/>
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="0.3"/>
+            </feComponentTransfer>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+
+    <!-- Background Shape (Squircle Keycap) -->
+    <rect x="64" y="64" width="384" height="384" rx="90" fill="url(#mainGradient)" filter="url(#dropshadow)"/>
+    
+    <!-- Inner Inset for Depth -->
+    <rect x="84" y="84" width="344" height="344" rx="70" fill="none" stroke="white" stroke-opacity="0.10" stroke-width="4"/>
+
+    <!-- Code Symbol / X Mark -->
+    <g transform="translate(256, 256) scale(1.1)">
+        <!-- Left Bracket (Purple-ish White) -->
+        <path d="M-80 -60 L-30 0 L-80 60" fill="none" stroke="white" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
+        
+        <!-- Right Bracket (Purple-ish White) -->
+        <path d="M80 -60 L30 0 L80 60" fill="none" stroke="white" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
+        
+        <!-- Slack/Slash forming the X (Styled) -->
+        <path d="M-40 90 L40 -90" fill="none" stroke="url(#glowGradient)" stroke-width="35" stroke-linecap="round" opacity="0.9"/>
+    </g>
 </svg>

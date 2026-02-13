@@ -1,7 +1,11 @@
 'use server';
 /**
- * @fileOverview Centralized AI instance creation with OpenAI SDK structure
- * This file defines and exports the AI functionality for API integration.
+ * @fileOverview DEPRECATED - Server-side AI instance
+ * @deprecated This file is no longer used. The app now uses client-side AI integration.
+ * All AI functionality has moved to client-side with user-provided API keys.
+ * See: src/lib/ai-providers.ts for the new implementation.
+ * 
+ * This file is kept for reference only and may be removed in future versions.
  */
 
 import OpenAI from 'openai';

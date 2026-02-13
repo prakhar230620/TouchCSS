@@ -1,109 +1,203 @@
+"use client";
 
+import { Rocket, TrendingUp, Sparkles, BookOpen, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Rocket, Lightbulb, Palette as PaletteIcon, Zap, Code, Brush, Layers, Sparkles as SparklesIcon } from "lucide-react"; // Added Layers
+import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import Image from "next/image";
+import { getActiveLanguages } from "@/lib/language-config";
+import { useLanguage } from "@/contexts/language-context";
+import { LanguageSelector } from "@/components/language-selector";
+import { Logo } from "@/components/logo";
 
 export default function HomePage() {
+  const { currentLanguage, setLanguage, progress } = useLanguage();
+  const activeLanguages = getActiveLanguages();
+
   return (
     <div className="space-y-16 sm:space-y-20 md:space-y-24">
+      {/* Hero Section */}
       <header className="text-center py-10 sm:py-12 md:py-16">
-        <Zap className="w-16 h-16 sm:w-20 sm:h-20 text-primary mx-auto mb-6 animate-pulse" />
-        <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-primary">
-          TouchCSS Studio
+        <div className="flex justify-center mb-6">
+          <Logo size="xl" showText={false} />
+        </div>
+        <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-primary mb-2">
+          KeyCodeX
         </h1>
-        <p className="mt-6 text-lg sm:text-xl leading-8 text-muted-foreground max-w-2xl mx-auto">
-          Visually build stunning UIs, master CSS interactively, and supercharge your development workflow.
+        <p className="text-sm sm:text-base text-muted-foreground mb-4">
+          Unlock Your Coding Potential
         </p>
-        <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
+        <p className="mt-4 text-lg sm:text-xl leading-8 text-muted-foreground max-w-2xl mx-auto">
+          Master programming languages with interactive tutorials, visual editors, and AI-powered learning.
+        </p>
+
+        {/* Quick Language Selector */}
+        <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <LanguageSelector
+            trigger={
+              <Button size="lg" variant="outline" className="rounded-full px-8 py-6 text-lg shadow-lg hover:shadow-primary/30 transition-all duration-300">
+                <span className="text-2xl mr-2">{activeLanguages.find(l => l.id === currentLanguage)?.icon}</span>
+                Choose Language
+              </Button>
+            }
+          />
           <Button asChild size="lg" className="rounded-full px-8 py-6 text-lg shadow-lg hover:shadow-primary/30 transition-all duration-300 transform hover:scale-105">
-            <Link href="/build">Start Building <Rocket className="ml-2 h-5 w-5" /></Link>
-          </Button>
-          <Button asChild variant="outline" size="lg" className="rounded-full px-8 py-6 text-lg shadow-sm hover:shadow-accent/20 transition-all duration-300 transform hover:scale-105">
-            <Link href="/learn">Learn CSS <Lightbulb className="ml-2 h-5 w-5" /></Link>
+            <Link href={`/${currentLanguage}/learn`}>
+              Start Learning <Rocket className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
         </div>
       </header>
 
+      {/* Available Languages */}
+      <section>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              Available Languages
+            </h2>
+            <p className="text-muted-foreground mt-2">
+              Choose from {activeLanguages.length} programming languages
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {activeLanguages.map((lang) => (
+            <Card
+              key={lang.id}
+              className={`rounded-2xl shadow-xl hover:shadow-primary/20 transition-all duration-300 ease-in-out transform hover:-translate-y-1.5 cursor-pointer ${currentLanguage === lang.id ? 'ring-2 ring-primary' : ''
+                }`}
+              onClick={() => setLanguage(lang.id)}
+            >
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-4xl">{lang.icon}</span>
+                    <div>
+                      <CardTitle className="text-2xl">{lang.displayName}</CardTitle>
+                      {lang.popularity >= 8 && (
+                        <Badge variant="secondary" className="mt-1 gap-1">
+                          <TrendingUp className="h-3 w-3" />
+                          Popular
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <CardDescription className="mt-2">
+                  {lang.description}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {/* Progress Bar */}
+                {progress[lang.id] > 0 && (
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
+                      <span>Your Progress</span>
+                      <span className="font-semibold">{progress[lang.id]}%</span>
+                    </div>
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-primary to-purple-600 transition-all duration-300"
+                        style={{ width: `${progress[lang.id]}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Features */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {lang.features.hasVisualEditor && (
+                    <Badge variant="outline">Visual Editor</Badge>
+                  )}
+                  {lang.features.hasCodeRunner && (
+                    <Badge variant="outline">Code Runner</Badge>
+                  )}
+                  {lang.features.hasAIExplainer && (
+                    <Badge variant="outline">AI Explainer</Badge>
+                  )}
+                </div>
+
+                <div className="flex gap-2">
+                  <Button asChild className="flex-1">
+                    <Link href={`/${lang.id}/learn`}>
+                      <BookOpen className="mr-2 h-4 w-4" />
+                      Learn
+                    </Link>
+                  </Button>
+                  {(lang.features.hasVisualEditor || lang.features.hasCodeRunner) && (
+                    <Button asChild variant="outline" className="flex-1">
+                      <Link href={`/${lang.id}/build`}>
+                        <Target className="mr-2 h-4 w-4" />
+                        Build
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Features Section */}
       <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="rounded-2xl shadow-xl hover:shadow-primary/20 transition-all duration-300 ease-in-out transform hover:-translate-y-1.5">
-          <CardHeader className="items-center text-center p-6">
-            <div className="p-4 bg-primary/10 rounded-full mb-4">
-              <Brush className="w-10 h-10 text-primary" />
-            </div>
-            <CardTitle className="text-2xl">Visual CSS Editors</CardTitle>
+        <Card className="rounded-2xl shadow-xl hover:shadow-accent/20 transition-all duration-300">
+          <CardHeader>
+            <BookOpen className="w-12 h-12 text-primary mb-4" />
+            <CardTitle className="text-2xl">Interactive Tutorials</CardTitle>
             <CardDescription>
-              Craft complex styles with intuitive editors. Perfect for shadows, gradients, typography, and more.
+              Step-by-step lessons with hands-on exercises and real-time feedback
             </CardDescription>
           </CardHeader>
-          <CardContent className="text-center p-6 pt-0">
-            <Button variant="secondary" className="w-full rounded-lg" asChild>
-              <Link href="/build">Try Visual Editors</Link>
-            </Button>
-          </CardContent>
         </Card>
 
-        <Card className="rounded-2xl shadow-xl hover:shadow-primary/20 transition-all duration-300 ease-in-out transform hover:-translate-y-1.5">
-          <CardHeader className="items-center text-center p-6">
-            <div className="p-4 bg-primary/10 rounded-full mb-4">
-             <Lightbulb className="w-10 h-10 text-primary" />
-            </div>
-            <CardTitle className="text-2xl">Interactive Learning</CardTitle>
+        <Card className="rounded-2xl shadow-xl hover:shadow-accent/20 transition-all duration-300">
+          <CardHeader>
+            <Target className="w-12 h-12 text-primary mb-4" />
+            <CardTitle className="text-2xl">Visual Editors</CardTitle>
             <CardDescription>
-              Engage with guided tutorials, hands-on exercises, and AI explanations to deeply understand CSS concepts.
+              Build and experiment with visual tools designed for each language
             </CardDescription>
           </CardHeader>
-          <CardContent className="text-center p-6 pt-0">
-            <Button variant="secondary" className="w-full rounded-lg" asChild>
-              <Link href="/learn">Explore Tutorials</Link>
-            </Button>
-          </CardContent>
         </Card>
 
-        <Card className="rounded-2xl shadow-xl hover:shadow-primary/20 transition-all duration-300 ease-in-out transform hover:-translate-y-1.5">
-          <CardHeader className="items-center text-center p-6">
-            <div className="p-4 bg-primary/10 rounded-full mb-4">
-              <Layers className="w-10 h-10 text-primary" />
-            </div>
-            <CardTitle className="text-2xl">Explore CSS Features</CardTitle>
+        <Card className="rounded-2xl shadow-xl hover:shadow-accent/20 transition-all duration-300">
+          <CardHeader>
+            <Sparkles className="w-12 h-12 text-primary mb-4" />
+            <CardTitle className="text-2xl">AI-Powered</CardTitle>
             <CardDescription>
-              Discover hover effects, transitions, animations, and other modern CSS techniques with examples.
+              Get instant explanations, debugging help, and code reviews from AI
             </CardDescription>
           </CardHeader>
-          <CardContent className="text-center p-6 pt-0">
-            <Button variant="secondary" className="w-full rounded-lg" asChild>
-              <Link href="/additional-features">See Features</Link>
-            </Button>
-          </CardContent>
         </Card>
       </section>
 
-      <section className="text-center py-12 sm:py-16 bg-card/80 rounded-3xl shadow-inner">
-        <h2 className="text-3xl sm:text-4xl font-bold text-primary mb-6">Ready to Elevate Your CSS Game?</h2>
-        <p className="text-muted-foreground mb-8 max-w-xl mx-auto text-lg">
-          Whether you're a beginner or a pro, TouchCSS Studio empowers your creativity and efficiency.
+      {/* CTA Section */}
+      <section className="text-center py-12 px-6 bg-gradient-to-r from-primary/10 to-purple-600/10 rounded-3xl">
+        <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          Ready to Start Learning?
+        </h2>
+        <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+          Join thousands of developers mastering programming languages with our interactive platform
         </p>
-        <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-10 py-7 text-xl shadow-lg hover:shadow-accent/30 transition-all duration-300 transform hover:scale-105">
-          <Link href="/tools/explain-css">
-            Try AI CSS Explainer <SparklesIcon className="ml-2 h-6 w-6"/>
-          </Link>
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button asChild size="lg" className="rounded-full px-8 py-6 text-lg">
+            <Link href={`/${currentLanguage}/learn`}>
+              <Rocket className="mr-2 h-5 w-5" />
+              Start Learning {activeLanguages.find(l => l.id === currentLanguage)?.displayName}
+            </Link>
+          </Button>
+          <LanguageSelector
+            trigger={
+              <Button size="lg" variant="outline" className="rounded-full px-8 py-6 text-lg">
+                Browse All Languages
+              </Button>
+            }
+          />
+        </div>
       </section>
-
-      <section className="py-10 sm:py-12">
-        <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-3xl font-semibold text-foreground">Powered by Modern Technologies</h2>
-            <p className="text-muted-foreground mt-2 text-lg">We leverage the best tools to bring you a seamless experience.</p>
-        </div>
-        <div className="flex justify-center items-center gap-x-6 gap-y-4 sm:gap-x-8 md:gap-x-12 flex-wrap grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-all duration-300">
-            <Image src="https://placehold.co/120x50.png?text=Next.js" alt="Next.js Logo" width={120} height={50} data-ai-hint="NextJS logo" />
-            <Image src="https://placehold.co/100x50.png?text=React" alt="React Logo" width={100} height={50} data-ai-hint="React logo"/>
-            <Image src="https://placehold.co/150x50.png?text=TailwindCSS" alt="Tailwind CSS Logo" width={150} height={50} data-ai-hint="TailwindCSS logo" />
-            <Image src="https://placehold.co/110x50.png?text=Genkit" alt="Genkit Logo" width={110} height={50} data-ai-hint="Genkit logo" />
-            <Image src="https://placehold.co/120x50.png?text=ShadCN+UI" alt="ShadCN UI Logo" width={120} height={50} data-ai-hint="ShadcnUI logo" />
-        </div>
-    </section>
     </div>
   );
 }

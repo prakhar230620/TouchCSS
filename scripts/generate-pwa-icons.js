@@ -39,6 +39,13 @@ async function generateIcons() {
       .resize(1125, 2436)
       .toFile(path.join(ICONS_DIR, 'splash-1125x2436.png'));
 
+    // Generate main logo.png for navbar/usage
+    await sharp(INPUT_ICON)
+      .resize(512, 512)
+      .toFile('./public/logo.png');
+
+    console.log('Main logo.png generated!');
+
     console.log('PWA icons generated successfully!');
   } catch (error) {
     console.error('Error generating PWA icons:', error);

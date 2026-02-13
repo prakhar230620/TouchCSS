@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -7,6 +6,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import OfflinePage from "./offline";
+import { LanguageProvider } from "@/contexts/language-context";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,21 +19,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "TouchCSS Studio",
-  description: "Visually build CSS, learn interactively, and export with TouchCSS Studio.",
-  manifest: "/manifest.json",
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
   themeColor: "#3F51B5",
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
+};
+
+export const metadata: Metadata = {
+  title: "KeyCodeX - Master Programming Languages",
+  description: "Master CSS, JavaScript, Python, and more with interactive tutorials, visual editors, and AI-powered learning.",
+  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "TouchCSS Studio",
+    title: "KeyCodeX",
     startupImage: [
       { url: "/icons/splash-640x1136.png", media: "(device-width: 320px) and (device-height: 568px)" },
       { url: "/icons/splash-750x1334.png", media: "(device-width: 375px) and (device-height: 667px)" },
@@ -70,17 +72,22 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        suppressHydrationWarning
       >
-        <SidebarProvider defaultOpen={false}> {/* Sidebar can be integrated later if needed */}
-          <div className="relative flex flex-col min-h-screen">            <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 sm:pb-22"> {/* Adjusted padding-bottom */}
-              {children}
-            </main>
-            <BottomNavigation />
-            <Toaster />
-            <PWAInstallPrompt />
-            <OfflinePage />
-          </div>
-        </SidebarProvider>
+        <LanguageProvider>
+          <SidebarProvider defaultOpen={false}>
+            <div className="relative flex flex-col min-h-screen">
+              <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 sm:pb-22">
+                {children}
+              </main>
+              <BottomNavigation />
+              <Toaster />
+              <PWAInstallPrompt />
+              <OfflinePage />
+              <Analytics />
+            </div>
+          </SidebarProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

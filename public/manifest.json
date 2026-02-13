@@ -1,33 +1,48 @@
 {
-  "name": "TouchCSS Studio",
-  "short_name": "TouchCSS",
-  "description": "Visually build CSS and learn interactively.",
+  "name": "KeyCodeX - Master Programming",
+  "short_name": "KeyCodeX",
+  "description": "Master CSS, JavaScript, Python and more with interactive tutorials and AI-powered learning.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#ECEFF1",
   "theme_color": "#3F51B5",
-  "categories": ["education", "development", "productivity"],
+  "categories": [
+    "education",
+    "development",
+    "productivity",
+    "programming"
+  ],
   "screenshots": [
     {
       "src": "/icons/splash-1242x2208.png",
       "sizes": "1242x2208",
       "type": "image/png",
       "platform": "narrow",
-      "label": "TouchCSS Studio on mobile"
+      "label": "KeyCodeX on mobile"
     }
   ],
   "shortcuts": [
     {
-      "name": "Visual Editors",
-      "url": "/build",
-      "description": "Open visual CSS editors"
+      "name": "Learn CSS",
+      "url": "/css/learn",
+      "description": "Start learning CSS"
     },
     {
-      "name": "Learn CSS",
-      "url": "/learn",
-      "description": "Start learning CSS"
+      "name": "Learn JavaScript",
+      "url": "/javascript/learn",
+      "description": "Start learning JavaScript"
+    },
+    {
+      "name": "Learn Python",
+      "url": "/python/learn",
+      "description": "Start learning Python"
+    },
+    {
+      "name": "AI Code Explainer",
+      "url": "/tools/explain-css",
+      "description": "Get AI explanations for code"
     }
   ],
   "icons": [
